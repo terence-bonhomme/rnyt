@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/script.js" defer></script>
+
+    <!-- RemNote -->
+    <script src="/rem.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/gh/remnoteio/remnote-api@latest/RemNoteAPI.js"></script>-->
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div
+      id="linkCont"
+      class="d-flex flex-column min-vh-100 justify-content-center align-items-center"
+    >
+      <input
+        id="linkInput"
+        type="search"
+        placeholder="Copy paste your Youtube video link : Ex:https://www.youtube.com/watch?v=E6xQtbEnXVc"
+        autocomplete="off"
+        class="w-50"
+      />
+      <div id="ok">OK</div>
+    </div>
+
+    <div id="viewCont" content="width=device-width, initial-scale=1">
+      <div id="global" class="row ">
+        <div id="left" class="">
+          <div id="ytplayer" class="rounded"></div>
+          <div id="line" class=""></div>
+          <div id="play_pointer" class="mt-2"></div>
+
+          <div id="commands" class="row row-cols-4 mt-3">
+            <div class="col">
+              <div id="takeNote" class="d-flex justify-content-center mt-1 ">
+                <img
+                  src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fedit-note-svgrepo-com.svg?v=1636316606765"
+                  height="15px"
+                  width="15px"
+                  class="me-2 mt-1 d-none d-md-block"
+                />
+
+                <img
+                  src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fedit-note-svgrepo-com.svg?v=1636316606765"
+                  height="18px"
+                  width="18px"
+                  class="mt-1 d-md-none"
+                />
+                <div class="d-none d-md-block">
+                  Take Note
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div id="delayed" class="d-flex justify-content-center mt-1">
+                <img
+                  src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Ftime-hand-drawn-interface-symbol-svgrepo-com.svg?v=1636318980817"
+                  height="18px"
+                  width="18px"
+                  class="me-2 mt-2 d-md-block"
+                />
+                <input
+                  id="delayInput"
+                  type="text"
+                  placeholder="Delay"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="col">
+              <div
+                id="keyboard_container"
+                class="form-check form-switch d-flex justify-content-center mt-2"
+              >
+                <input
+                  id="keyboard"
+                  class="form-check-input d-flex justify-content-center"
+                  type="checkbox"
+                />
+                <label
+                  id="keyboard_label"
+                  class="form-check-label ms-2 d-none d-md-block"
+                  for="keyboard"
+                  >Keyboard</label
+                >
+              </div>
+            </div>
+
+            <div class="col">
+              <div id="refresh" class="d-flex justify-content-center mt-1 ">
+                <img
+                  src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fnotepad-refresh-svgrepo-com.svg?v=1636318031101"
+                  height="18px"
+                  width="18px"
+                  class="me-2 mt-1 d-none d-md-block"
+                />
+                <img
+                  src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fnotepad-refresh-svgrepo-com.svg?v=1636318031101"
+                  height="20px"
+                  width="20px"
+                  class="mt-1 d-md-none"
+                />
+                <div class="d-none d-md-block">
+                  Refresh
+                </div>
+              </div>
+            </div>
+          </div>
+          <input id="noteInput" placeholder="Input Note" autocomplete="off" />
+        </div>
+
+        <div id="right">
+          <div id="note"></div>
+          <div id="placeholder" class="placeholder-glow">
+            <ul class="placeholder-ul">
+              <li class="placeholder-li">
+                <span class="placeholder col-11"></span>
+              </li>
+              <ul class="placeholder-ul">
+                <li class="placeholder-li">
+                  <span class="placeholder col-11"></span>
+                </li>
+                <li class="placeholder-li">
+                  <span class="placeholder col-10"></span>
+                </li>
+              </ul>
+              <li class="placeholder-li">
+                <span class="placeholder col-12"></span>
+              </li>
+              <ul class="placeholder-ul">
+                <li class="placeholder-li">
+                  <span class="placeholder col-9"></span>
+                </li>
+                <li class="placeholder-li">
+                  <span class="placeholder col-10"></span>
+                </li>
+                <li class="placeholder-li">
+                  <span class="placeholder col-7"></span>
+                </li>
+              </ul>
+              <ul class="placeholder-ul">
+                <li class="placeholder-li">
+                  <span class="placeholder col-11"></span>
+                </li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
