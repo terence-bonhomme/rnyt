@@ -1,0 +1,259 @@
+@media screen and (min-width: 0px) {
+  #delayInput {
+    width: 40px;
+  }
+
+  #keyboard {
+    position: relative;
+    left: 0%;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  #delayInput {
+    width: 80px;
+  }
+
+  #keyboard {
+    position: relative;
+    left: 0%;
+  }
+}
+
+label {
+  color: #63637B;
+  cursor: pointer;
+  user-select: none;
+}
+
+img {
+  filter: invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg)
+    brightness(82%) contrast(84%);
+}
+
+input[type="checkbox"] {
+  filter: hue-rotate(25deg);
+  cursor: pointer;
+}
+
+ul {
+  list-style: inside;
+  color: #202020;
+}
+
+li {
+  color: #202020;
+  margin-left: -10px;
+  margin-top: 5px;
+  list-style-position: outside;
+}
+
+input[type="button"] {
+  border-radius: 5px 5px 5px 5px;
+  border: none;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  background-image: url("https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fcancel-svgrepo-com.svg?v=1637610193117");
+}
+
+.row {
+  margin-top: 0px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+}
+
+.tooltip-inner::before {
+  background-color: #2a2832;
+}
+
+.tooltip-inner {
+  background-color: #2a2832 !important;
+
+  color: #f4f4fa !important;
+  white-space: pre-wrap;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: #2a2832;
+}
+
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-bottom-color: #2a2832;
+}
+
+.tooltip.bs-tooltip-start .tooltip-arrow::before {
+  border-left-color: #2a2832;
+}
+
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: #2a2832;
+}
+
+.ui-tooltip {
+  white-space: pre-line;
+}
+
+.ui-tooltip-content {
+  white-space: pre-line;
+}
+
+.placeholder {
+  color: #aaaabb;
+}
+
+.placeholder-ul {
+  color: #aaaabb;
+}
+
+.placeholder-li {
+  color: #aaaabb;
+}
+
+#viewCont {
+  display: none;
+}
+
+#ytplayer {
+  width: 65%;
+  position: relative;
+}
+
+#linkInput {
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
+#ok {
+  color: #897f7f;
+  display: none;
+  padding: 6px 5px 6px 5px;
+  text-align: center;
+  border-radius: 5px;
+  top: 70%;
+  border: none;
+  outline: none;
+  left: 45%;
+  right: 45%;
+  width: 10%;
+  position: fixed;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+#takeNote {
+  color: #63637B;
+  text-align: center;
+  display: block;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 5px;
+  display: flex;
+  user-select: none;
+}
+
+#takeNote:hover {
+  background: #f4f4fa;
+}
+
+#noteInput {
+  position: relative;
+  top: 55px;
+  display: none;
+  text-align: center;
+  background: #f4f4fa;
+  color: black;
+  padding: 3px 6px;
+  width: 65%;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+#note {
+  width: 100%;
+  color: black;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#delayed {
+  position: relative;
+  display: flex;
+  user-select: none;
+}
+
+#delayInput {
+  left: 5px;
+  position: relative;
+  text-align: center;
+  background: #f4f4fa;
+  color: #63637B;
+  padding: 3px 6px;
+  width: 80px;
+  border: none;
+  border-radius: 5px;
+}
+
+#refresh {
+  color: #63637B;
+  text-align: center;
+  display: block;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 5px;
+  display: flex;
+  user-select: none;
+}
+
+#refresh:hover {
+  background: #f4f4fa;
+}
+
+#keyboard_container {
+  user-select: none;
+  outline: none;
+  display: flex;
+}
+
+#line {
+  position: relative;
+  width: 100%;
+}
+
+.chapter {
+  position: fixed;
+  height: 40px;
+}
+
+#play_pointer {
+  background: #586cf4;
+  position: fixed;
+  height: 40px;
+  width: 5px;
+  z-index: 2;
+  color: #63637B;
+}
+
+#commands {
+  position: relative;
+  top: 40px;
+  width: 65%;
+  user-select: none;
+}
+
+#left {
+  position: fixed;
+}
+
+#right {
+  position: absolute;
+  left: 64%;
+  width: 36%;
+  z-index: 2;
+}
