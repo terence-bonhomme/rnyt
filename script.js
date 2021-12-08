@@ -1991,7 +1991,6 @@ async function onYouTubePlayerAPIReady() {
       temp_chapter.id = "c" + position;
 
       var rem = await RemNoteAPI.v0.get(child_array[position]);
-
       const clock = rem.name[0].text;  
 
       temp_chapter.delay = formatedTimeToDuration(clock);
