@@ -1523,7 +1523,6 @@ async function onYouTubePlayerAPIReady() {
     input0.value = durationToFormatedTime(
       player.playerInfo.currentTime
     );
-
     input0.rem = noteInput.value;
 
     $(input0).on("click", function() {
