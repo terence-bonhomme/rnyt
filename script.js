@@ -1521,7 +1521,7 @@ async function onYouTubePlayerAPIReady() {
     input0.id = position;
 
     input0.value = durationToFormatedTime(
-      player.playerInfo.currentTime - delay
+      player.playerInfo.currentTime
     );
     input0.rem = noteInput.value;
 
@@ -1749,7 +1749,7 @@ async function onYouTubePlayerAPIReady() {
       const input1 = document.createElement("input");
       input1.type = "button";
       input1.value = durationToFormatedTime(
-        player.playerInfo.currentTime - delay
+        player.playerInfo.currentTime
       );
       input1.rem = noteInput.value;
 
