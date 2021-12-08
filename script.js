@@ -978,7 +978,7 @@ async function onYouTubePlayerAPIReady() {
 
         setTimeout(function() {
           if (speed_parameter_value != null) {
-            player.setPlaybackRate(Number(speed_parameter_value));
+             player.setPlaybackRate(Number(speed_parameter_value));
           }
         }, 1000);
       }
@@ -1050,16 +1050,16 @@ async function onYouTubePlayerAPIReady() {
   async function timeline(refresh) {
     // playback speed
 
-    if (!refresh) {
-      if (enable_parameter) {
-        const speed_parameter_value = parameters.get("playback_speed");
+    if(!refresh){
+          if (enable_parameter) {
+      const speed_parameter_value = parameters.get("playback_speed");
 
-        setTimeout(function() {
-          if (speed_parameter_value != null) {
-            player.setPlaybackRate(parseFloat(speed_parameter_value));
-          }
-        }, 1000);
-      }
+      setTimeout(function() {
+        if (speed_parameter_value != null) {
+          player.setPlaybackRate(parseFloat(speed_parameter_value));
+        }
+      }, 1000);
+    }
     }
 
     // youtube
@@ -1520,7 +1520,9 @@ async function onYouTubePlayerAPIReady() {
     input0.type = "button";
     input0.id = position;
 
-    input0.value = durationToFormatedTime(player.playerInfo.currentTime);
+    input0.value = durationToFormatedTime(
+      player.playerInfo.currentTime
+    );
 
     input0.rem = noteInput.value;
 
@@ -1747,7 +1749,9 @@ async function onYouTubePlayerAPIReady() {
 
       const input1 = document.createElement("input");
       input1.type = "button";
-      input1.value = durationToFormatedTime(player.playerInfo.currentTime);
+      input1.value = durationToFormatedTime(
+        player.playerInfo.currentTime
+      );
       input1.rem = noteInput.value;
 
       const color = current_chapter;
@@ -1899,8 +1903,7 @@ async function onYouTubePlayerAPIReady() {
             (chapter[chapter.length - 1].delay / player_duration) *
               (player_width - 20) -
             (chapter[chapter.length - 2].delay / player_duration) *
-              (player_width - 20) +
-            2 +
+              (player_width - 20) + 2 +
             "px";
 
           chapter[chapter.length - 1].num = i;
@@ -1989,7 +1992,7 @@ async function onYouTubePlayerAPIReady() {
 
       var rem = await RemNoteAPI.v0.get(child_array[position]);
 
-      const clock = rem.name[0].text;
+      const clock = rem.name[0].text;  
 
       temp_chapter.delay = formatedTimeToDuration(clock);
 
