@@ -315,7 +315,7 @@ async function onYouTubePlayerAPIReady() {
   let first_rem;
   if (child_array.length != 0) {
     first_rem = await RemNoteAPI.v0.get(child_array[0]);
-    linkInput.value = first_rem.name[0].url;
+    linkInput.value = first_rem.name[0].text;
 
     linkCont.style.display = "none";
     viewCont.style.display = "block";
@@ -354,7 +354,7 @@ async function onYouTubePlayerAPIReady() {
 
   var url;
   if (child_array.length != 0) {
-    url = first_rem.name[0].url;
+    url = first_rem.name[0].text;
     if (url.includes("youtube.com")) {
       video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
     } else if (url.includes("youtu.be")) {
