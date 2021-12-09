@@ -778,9 +778,7 @@ async function onYouTubePlayerAPIReady() {
       "alt+Enter": "take a child note without a timestamp",
       "alt+NumpadEnter": "take a child note without a timestamp",
       "ctrl+Enter": "take a child note with a timestamp",
-      "ctrl+NumpadEnter": "take a child note with a timestamp",
-      "shift+Enter": "ask a question",
-      "ctrl+shift+Enter": "ask a child question"
+      "ctrl+NumpadEnter": "take a child note with a timestamp"
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -884,6 +882,8 @@ async function onYouTubePlayerAPIReady() {
       case "take a child note with a timestamp": {
         var delay = Number(document.getElementById("delayInput").value);
 
+        //rewind();
+
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
 
@@ -953,139 +953,6 @@ async function onYouTubePlayerAPIReady() {
         player.playVideo();
         break;
       }
-      case "ask a question": {
-        var delay = Number(document.getElementById("delayInput").value);
-
-        //rewind();
-
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
-        var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
-        )}) answer << ${noteInput.value}`;
-
-        var inserted = false;
-        for (position = 1; position < child_array.length; position++) {
-          const clock = (await RemNoteAPI.v0.get(child_array[position])).name[0]
-            .text;
-
-          if (clock === undefined) continue;
-
-          if (
-            formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
-          ) {
-            await RemNoteAPI.v0.create(text, pluginId, {
-              positionAmongstSiblings: position
-            });
-
-            inserted = true;
-            break;
-          }
-        }
-
-        if (!inserted) {
-          await RemNoteAPI.v0.create(text, pluginId);
-        }
-
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
-        update_timeline(position);
-
-        recoverFromNoteInput();
-
-        clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
-          $("html, body").animate(
-            {
-              scrollTop: $("#" + position).offset().top
-            },
-            0
-          );
-        }, 500);
-
-        player.playVideo();
-        break;
-      }
-      case "ask a child question": {
-        var delay = Number(document.getElementById("delayInput").value);
-
-        //rewind();
-
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
-        if (child_array.length > 1) rewind();
-
-        var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
-        )}) answer << ${noteInput.value}`;
-
-        var current_rem = plugin_rem.children[current_chapter];
-
-        var child_child_array = (await RemNoteAPI.v0.get(current_rem)).children;
-
-        var inserted = false;
-        let count_no_timestamp = 0;
-        for (position = 0; position < child_child_array.length; position++) {
-          if (
-            (await RemNoteAPI.v0.get(child_child_array[position])).name[0]
-              .text === undefined
-          )
-            count_no_timestamp++;
-        }
-
-        for (
-          position = 0;
-          position < child_child_array.length - count_no_timestamp;
-          position++
-        ) {
-          const clock = (await RemNoteAPI.v0.get(child_child_array[position]))
-            .name[0].text;
-          if (clock === undefined) continue;
-          if (
-            formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
-          ) {
-            await RemNoteAPI.v0.create(text, current_rem, {
-              positionAmongstSiblings: position
-            });
-
-            inserted = true;
-            break;
-          }
-        }
-
-        if (!inserted) {
-          await RemNoteAPI.v0.create(text, current_rem, {
-            positionAmongstSiblings: position
-          });
-        }
-
-        update_note_child(position);
-
-        recoverFromNoteInput();
-
-        clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
-          $("html, body").animate(
-            {
-              scrollTop: $("#" + current_chapter).offset().top
-            },
-            100
-          );
-        }, 500);
-
-        player.playVideo();
-        break;
-      }  
-     
       default: {
       }
     }
@@ -1111,7 +978,7 @@ async function onYouTubePlayerAPIReady() {
 
         setTimeout(function() {
           if (speed_parameter_value != null) {
-            player.setPlaybackRate(Number(speed_parameter_value));
+             player.setPlaybackRate(Number(speed_parameter_value));
           }
         }, 1000);
       }
@@ -1184,7 +1051,7 @@ async function onYouTubePlayerAPIReady() {
     // playback speed
 
     if(!refresh){
-      if (enable_parameter) {
+          if (enable_parameter) {
       const speed_parameter_value = parameters.get("playback_speed");
 
       setTimeout(function() {
@@ -1246,11 +1113,7 @@ async function onYouTubePlayerAPIReady() {
 
         if (rem.name.length > 1) {
           input0.value = rem.name[0].text;
-          if(rem.content != undefined){
-            input0.rem = rem.content[0];  
-          }else{
-            input0.rem = rem.name[1].substr(1);  
-          }          
+          input0.rem = rem.name[1].substr(1);
         }
       }
 
@@ -1279,12 +1142,7 @@ async function onYouTubePlayerAPIReady() {
       // text
       if (rem.name.length > 1) {
         li0.appendChild(input0);
-        if(rem.content != undefined){ 
-          var newContent0 = document.createTextNode(" " + rem.content[0]);
-        }else{
-          var newContent0 = document.createTextNode("" + rem.name[1]);
-        }
-        
+        var newContent0 = document.createTextNode("" + rem.name[1]);
       } else {
         var newContent0 = document.createTextNode("" + rem.name[0]);
       }
@@ -1312,11 +1170,7 @@ async function onYouTubePlayerAPIReady() {
 
             if (child1_rem.name.length > 1) {
               input1.value = child1_rem.name[0].text;
-              if(rem.content != undefined){
-                input1.rem = rem.content[0];  
-              }else{
-                input1.rem = rem.name[1].substr(1);  
-              }
+              input1.rem = child1_rem.name[1].substr(1);
             }
 
             $(input1).on("click", function() {
@@ -1343,12 +1197,9 @@ async function onYouTubePlayerAPIReady() {
 
             if (child1_rem.name.length > 1) {
               li1.appendChild(input1);
-              if(child1_rem.content != undefined){ 
-                var newContent1 = document.createTextNode(" " + child1_rem.content[0]);
-              }else{
-                var newContent1 = document.createTextNode("" + child1_rem.name[1]);
-              }
-              
+              var newContent1 = document.createTextNode(
+                "" + child1_rem.name[1]
+              );
             } else {
               var newContent1 = document.createTextNode(
                 "" + child1_rem.name[0]
@@ -1669,8 +1520,9 @@ async function onYouTubePlayerAPIReady() {
     input0.type = "button";
     input0.id = position;
 
-    input0.value = durationToFormatedTime(player.playerInfo.currentTime);
-    
+    input0.value = durationToFormatedTime(
+      player.playerInfo.currentTime
+    );
     input0.rem = noteInput.value;
 
     $(input0).on("click", function() {
@@ -1896,7 +1748,9 @@ async function onYouTubePlayerAPIReady() {
 
       const input1 = document.createElement("input");
       input1.type = "button";
-      input1.value = durationToFormatedTime(player.playerInfo.currentTime);
+      input1.value = durationToFormatedTime(
+        player.playerInfo.currentTime
+      );
       input1.rem = noteInput.value;
 
       const color = current_chapter;
@@ -2048,8 +1902,7 @@ async function onYouTubePlayerAPIReady() {
             (chapter[chapter.length - 1].delay / player_duration) *
               (player_width - 20) -
             (chapter[chapter.length - 2].delay / player_duration) *
-              (player_width - 20) +
-            2 +
+              (player_width - 20) + 2 +
             "px";
 
           chapter[chapter.length - 1].num = i;
