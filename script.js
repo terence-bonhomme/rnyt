@@ -220,7 +220,7 @@ async function onYouTubePlayerAPIReady() {
 
     dark_mode = parameters.get("dark_mode");
     if (dark_mode == 1) {
-      document.getElementById("html").style.background = "#f5f5f5"; //"#0d0d0d" /*";""#1a1a1a"*/;
+      document.getElementById("html").style.background = "#f5f5f5";
       $("#linkInput").css("background", "black");
       $("#linkInput").css("color", "#c0bdbd");
       $("#ok").css("color", "#c0bdbd");
@@ -978,7 +978,7 @@ async function onYouTubePlayerAPIReady() {
 
         setTimeout(function() {
           if (speed_parameter_value != null) {
-             player.setPlaybackRate(Number(speed_parameter_value));
+            player.setPlaybackRate(Number(speed_parameter_value));
           }
         }, 1000);
       }
@@ -1050,16 +1050,16 @@ async function onYouTubePlayerAPIReady() {
   async function timeline(refresh) {
     // playback speed
 
-    if(!refresh){
-          if (enable_parameter) {
-      const speed_parameter_value = parameters.get("playback_speed");
+    if (!refresh) {
+      if (enable_parameter) {
+        const speed_parameter_value = parameters.get("playback_speed");
 
-      setTimeout(function() {
-        if (speed_parameter_value != null) {
-          player.setPlaybackRate(parseFloat(speed_parameter_value));
-        }
-      }, 1000);
-    }
+        setTimeout(function() {
+          if (speed_parameter_value != null) {
+            player.setPlaybackRate(parseFloat(speed_parameter_value));
+          }
+        }, 1000);
+      }
     }
 
     // youtube
@@ -1520,9 +1520,7 @@ async function onYouTubePlayerAPIReady() {
     input0.type = "button";
     input0.id = position;
 
-    input0.value = durationToFormatedTime(
-      player.playerInfo.currentTime
-    );
+    input0.value = durationToFormatedTime(player.playerInfo.currentTime);
     input0.rem = noteInput.value;
 
     $(input0).on("click", function() {
@@ -1748,9 +1746,7 @@ async function onYouTubePlayerAPIReady() {
 
       const input1 = document.createElement("input");
       input1.type = "button";
-      input1.value = durationToFormatedTime(
-        player.playerInfo.currentTime
-      );
+      input1.value = durationToFormatedTime(player.playerInfo.currentTime);
       input1.rem = noteInput.value;
 
       const color = current_chapter;
@@ -1902,7 +1898,8 @@ async function onYouTubePlayerAPIReady() {
             (chapter[chapter.length - 1].delay / player_duration) *
               (player_width - 20) -
             (chapter[chapter.length - 2].delay / player_duration) *
-              (player_width - 20) + 2 +
+              (player_width - 20) +
+            2 +
             "px";
 
           chapter[chapter.length - 1].num = i;
@@ -2005,7 +2002,7 @@ async function onYouTubePlayerAPIReady() {
       temp_chapter.style.width =
         player_width -
         player_margin -
-        (temp_chapter.delay / player_duration) * player_width /*- 20*/ +
+        (temp_chapter.delay / player_duration) * player_width +
         10 +
         "px";
 
@@ -2110,8 +2107,8 @@ async function onYouTubePlayerAPIReady() {
       var next_chapter = document.querySelector("#" + "c" + position);
 
       temp_chapter.style.width =
-        (next_chapter.delay / player_duration) * player_width /*- 20*/ -
-        (temp_chapter.delay / player_duration) * player_width /*- 20*/ +
+        (next_chapter.delay / player_duration) * player_width -
+        (temp_chapter.delay / player_duration) * player_width +
         "px";
 
       temp_chapter.style.background = color_0[(position - 2) % color_0.length];
