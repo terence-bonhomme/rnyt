@@ -24,7 +24,9 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 
 ## Quick start
 
-https://streamable.com/iwc01j
+### Presentation
+
+https://www.youtube.com/watch?v=eUwJnBIlHsI
 
 ### How to add the plugin ?
 
@@ -99,7 +101,7 @@ https://streamable.com/iwc01j
 
 you can use qwerty and azerty
 
-## cautious
+## Cautious
 
 - don't delete the RemNote YT
   - deleted rems are not really deleted in RemNote
