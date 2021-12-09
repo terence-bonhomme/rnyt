@@ -39,7 +39,6 @@ https://streamable.com/iwc01j
 - copy paste your video link on RemNote (youtube.com or you.tube)
 - go into the rem
 - insert the plugin
-- reload your browser tab
 - click on the video to start
 - input a delay to rewind the video when you take a note
 
@@ -113,11 +112,6 @@ you can use qwerty and azerty
   - follow the chronological order
   - the child notes with a timestamp are inserted before child notes without a timestamp
 - the child notes are linked to the current chapter, you can change it into RemNote
-- be careful about the focus
-  - check the keyboard switch
-  - plugin in inline mode have issues, because RemNote takes the focus again and again, until you reload the tab
-  - RemNote won't let you use your keyboard into the plugin if you click on a sibbling rem : reload the tab
-  - if you edit the child rems : fold these after
 - show one plugin at a time to avoid duplicates
 - in the settings
   - only change the numbers
