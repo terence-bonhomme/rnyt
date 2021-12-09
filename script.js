@@ -1183,16 +1183,16 @@ async function onYouTubePlayerAPIReady() {
   async function timeline(refresh) {
     // playback speed
 
-    if (!refresh) {
+    if(!refresh){
       if (enable_parameter) {
-        const speed_parameter_value = parameters.get("playback_speed");
+      const speed_parameter_value = parameters.get("playback_speed");
 
-        setTimeout(function() {
-          if (speed_parameter_value != null) {
-            player.setPlaybackRate(parseFloat(speed_parameter_value));
-          }
-        }, 1000);
-      }
+      setTimeout(function() {
+        if (speed_parameter_value != null) {
+          player.setPlaybackRate(parseFloat(speed_parameter_value));
+        }
+      }, 1000);
+    }
     }
 
     // youtube
@@ -1250,8 +1250,7 @@ async function onYouTubePlayerAPIReady() {
             input0.rem = rem.content[0];  
           }else{
             input0.rem = rem.name[1].substr(1);  
-          }
-          
+          }          
         }
       }
 
