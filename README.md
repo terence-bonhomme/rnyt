@@ -93,6 +93,8 @@ https://streamable.com/iwc01j
 - enter : enter a parent note with a timestamp
 - ctrl + enter : enter a child note with a timestamp
 - alt + enter : enter a child note without a timestamp
+- shift + enter : enter a question to create a flashcard
+- ctrl + shift + enter : enter a child question to create a flashcard
 - left / right : you can use left and right before to type
 - cancel : erase and leave the text input
 
