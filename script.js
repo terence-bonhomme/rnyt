@@ -1520,7 +1520,9 @@ async function onYouTubePlayerAPIReady() {
     input0.type = "button";
     input0.id = position;
 
-    input0.value = durationToFormatedTime(player.playerInfo.currentTime);
+    input0.value = durationToFormatedTime(
+      player.playerInfo.currentTime - delay
+    );
     input0.rem = noteInput.value;
 
     $(input0).on("click", function() {
@@ -1746,7 +1748,9 @@ async function onYouTubePlayerAPIReady() {
 
       const input1 = document.createElement("input");
       input1.type = "button";
-      input1.value = durationToFormatedTime(player.playerInfo.currentTime);
+      input1.value = durationToFormatedTime(
+        player.playerInfo.currentTime - delay
+      );
       input1.rem = noteInput.value;
 
       const color = current_chapter;
