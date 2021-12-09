@@ -884,8 +884,6 @@ async function onYouTubePlayerAPIReady() {
       case "take a child note with a timestamp": {
         var delay = Number(document.getElementById("delayInput").value);
 
-        //rewind();
-
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
 
@@ -1248,13 +1246,9 @@ async function onYouTubePlayerAPIReady() {
 
         if (rem.name.length > 1) {
           input0.value = rem.name[0].text;
-          //console.log(rem)
           if(rem.content != undefined){
-            //console.log("content")
-            //console.log(rem.content[0])
             input0.rem = rem.content[0];  
           }else{
-            //console.log("name")
             input0.rem = rem.name[1].substr(1);  
           }
           
@@ -1355,9 +1349,6 @@ async function onYouTubePlayerAPIReady() {
               }else{
                 var newContent1 = document.createTextNode("" + child1_rem.name[1]);
               }
-              /*var newContent1 = document.createTextNode(
-                "" + child1_rem.name[1]
-              );*/
               
             } else {
               var newContent1 = document.createTextNode(
