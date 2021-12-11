@@ -220,51 +220,56 @@ async function onYouTubePlayerAPIReady() {
 
     dark_mode = parameters.get("dark_mode");
     if (dark_mode == 1) {
+      let gray1 = "#c0bdbd";
+      let gray2 = "#272525";
+      
       document.getElementById("html").style.background = "#f5f5f5";
       $("#linkInput").css("background", "black");
-      $("#linkInput").css("color", "#c0bdbd");
-      $("#ok").css("color", "#c0bdbd");
-      $("#takeNote").css("color", "#c0bdbd");
-      $("#keyboard_label").css("color", "#c0bdbd");
-      $("#refresh").css("color", "#c0bdbd");
+      $("#linkInput").css("color", gray1);
+      $("#ok").css("color", gray1);
+      $("#takeNote").css("color", gray1);
+      $("#keyboard_label").css("color", gray1);
+      $("#refresh").css("color", gray1);
+      
+      let filter_out = "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
+      let filter_over = "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)";
+      
       $("img").css(
         "filter",
-        "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)"
+        filter_out
       );
 
       $("#refresh").on("mouseover", function() {
-        $(this).css("color", "#272525");
+        $(this).css("color", gray2);
         $("#refresh > img").css(
           "filter",
-          "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)"
+          filter_over
         );
       });
       $("#refresh").on("mouseout", function() {
-        $(this).css("color", "#c0bdbd");
+        $(this).css("color", gray1);
         $("#refresh > img").css(
           "filter",
-          "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)"
+          filter_out
         );
       });
 
       $("#takeNote").on("mouseover", function() {
-        $(this).css("color", "#272525");
+        $(this).css("color", gray2);
         $("#takeNote > img").css(
           "filter",
-          "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)"
+          filter_over
         );
       });
       $("#takeNote").on("mouseout", function() {
-        $(this).css("color", "#c0bdbd");
+        $(this).css("color", gray1);
         $("#takeNote > img").css(
           "filter",
-          "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)"
+          filter_out
         );
       });
 
-      //$("#ytplayer").css("filter", "hue-rotate(180deg) invert(1)");
-      $("#left").css("filter", "hue-rotate(180deg) invert(1)");
-      $("#right").css("filter", "hue-rotate(180deg) invert(1)");
+      $("#global").css("filter", "hue-rotate(180deg) invert(1)");
     }
 
     // width %
@@ -322,9 +327,6 @@ async function onYouTubePlayerAPIReady() {
     $("#linkCont").removeClass(
       "d-flex flex-column min-vh-100 justify-content-center align-items-center"
     );
-  } else {
-    linkCont.style.display = "block";
-    viewCont.style.display = "none";
   }
 
   // show ok button
@@ -360,16 +362,14 @@ async function onYouTubePlayerAPIReady() {
     } else if (url.includes("youtu.be")) {
       video_id = url.split("youtu.be/")[1].slice(0, 11);
     }
-  } else {
-    if (linkInput.value != "") {
-      url = linkInput.value;
-      if (url.includes("youtube.com")) {
-        video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
-      } else if (url.includes("youtu.be")) {
-        video_id = url.split("youtu.be/")[1].slice(0, 11);
-      }
+  } else if (linkInput.value != "") {
+    url = linkInput.value;
+    if (url.includes("youtube.com")) {
+      video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
+    } else if (url.includes("youtu.be")) {
+      video_id = url.split("youtu.be/")[1].slice(0, 11);
     }
-  }
+  }  
 
   if (video_id != undefined) {
     // make the video
