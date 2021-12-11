@@ -601,7 +601,7 @@ async function onYouTubePlayerAPIReady() {
       Digit: "jump",
       Numpad: "jump",
       KeyK: "play/pause",
-      Semicolon: "mute",
+      m: "mute",
       "shift+Comma": "slower",
       "shift+Period": "faster"
     };
@@ -621,6 +621,9 @@ async function onYouTubePlayerAPIReady() {
       // without NumpadEnter
     } else if (event.code.substr(0, 6) == "Numpad" && event.code.length == 7) {
       shortcut += event.code.substr(0, 6);
+      // Internationalize the key
+    } else if (event.key == "m") {
+      shortcut += event.key;
     } else if (event.code) {
       shortcut += event.code;
     }
