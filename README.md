@@ -5,13 +5,15 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 
 ## Project
 
-- get a tool to learn with Youtube videos into RemNote
-- make something that can be useful for others
-- learn Javascript, jQuery, CSS, Bootstrap
-- use YouTube Player API for iframe Embeds (https://developers.google.com/youtube/iframe_api_reference)
-- use Glitch (https://glitch.com/) 
-  - my page : (https://glitch.com/@terence-bonhomme)
-- the plugin has weakness, read the cautious part
+### me
+- I get a tool to learn with Youtube videos into RemNote
+- I make something that can be useful for others
+- I learn Javascript, jQuery, CSS, Bootstrap
+
+### information
+- it uses YouTube Player API for iframe Embeds (https://developers.google.com/youtube/iframe_api_reference)
+- it uses Glitch (https://glitch.com/) 
+- the plugin has weakness, read the "Cautious" part
 
 ## Description
 
@@ -20,13 +22,14 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 - jump to the timestamps with your mouse or your keyboard
 - control the player with shortcuts
 - set the default settings when you use the plugin, so you don't have to do your settings again
+- put questions and get the answer with a video link
 - modify your rems in Remnote
 
 ## Quick start
 
-### Presentation
+### Short presentation video
 
-https://www.youtube.com/watch?v=eUwJnBIlHsI
+[![Watch the video](https://img.youtube.com/vi/eUwJnBIlHsI/0.jpg)](https://youtu.be/eUwJnBIlHsI)
 
 ### How to add the plugin ?
 
@@ -68,6 +71,7 @@ https://www.youtube.com/watch?v=eUwJnBIlHsI
 
 #### note
 - enter : input a note
+
 #### playing
 - left : rewind 5s
 - right : forward 5s
@@ -78,36 +82,57 @@ https://www.youtube.com/watch?v=eUwJnBIlHsI
 - 0-9 : n * 10% jump
 - shift + , : slower
 - shift + . : faster
+
+#### multimedia
+- media play pause : play/pause
+- media track previous : previous
+- media track next : next
+
 #### sound
 - m : mute
 - shift + up : volume up
 - shift + down : volume down
+
 #### jump
 - shift + chapter up : previous
 - shift + chapter down : next chapter
 - shift + home : first chapter
 - shift + end : last chapter
 - backspace : repeat the current chapter
+
 #### other
 - r : refresh
 
 #### You're taking a note
 
+##### note
 - enter : enter a parent note with a timestamp
+- shift + enter : enter a question to create a flashcard
+
+##### child note
 - ctrl + enter : enter a child note with a timestamp
 - alt + enter : enter a child note without a timestamp
-- shift + enter : enter a question to create a flashcard
 - ctrl + shift + enter : enter a child question to create a flashcard
+
+##### other
 - left / right : you can use left and right before to type
 - cancel : erase and leave the text input
+
+#### Note
 
 you can use qwerty and azerty
 
 ## Cautious
 
-- don't delete the RemNote YT
-  - deleted rems are not really deleted in RemNote
+### Project
+- the plugin is still in development
+- as a plugin, it could be broken after an update from RemNote (like every plugins with their software)
+
+### Usage
+- remember at least the shortcuts to input notes
+- don't delete the "RemNote YT" rem
 - plugin name
+  - always use the same name, but you can change the link
   - if you don't want the settings, use -np in the plugin name : example rnyt -np    
   - use an useless name like "rnyt" to avoid noise when you search in RemNote
 - the plugin can't modify the rems, so it won't correct the misplaced rems
@@ -120,3 +145,4 @@ you can use qwerty and azerty
 - in the settings
   - only change the numbers
   - don't write units
+- refresh could fix some displaying bugs
