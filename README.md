@@ -88,6 +88,8 @@ https://www.youtube.com/watch?v=eUwJnBIlHsI
 - shift + home : first chapter
 - shift + end : last chapter
 - backspace : repeat the current chapter
+#### other
+- r : refresh
 
 #### You're taking a note
 

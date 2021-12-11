@@ -603,7 +603,8 @@ async function onYouTubePlayerAPIReady() {
       KeyK: "play/pause",
       m: "mute",
       "shift+Comma": "slower",
-      "shift+Period": "faster"
+      "shift+Period": "faster",
+      KeyR: "refresh",
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -745,6 +746,11 @@ async function onYouTubePlayerAPIReady() {
         case "faster":
           if ($("#noteInput").is(":focus") == false) {
             player.setPlaybackRate(player.getPlaybackRate() + 0.25);
+          }
+          break;
+        case "refresh":
+          if ($("#noteInput").is(":focus") == false) {
+            timeline(true);
           }
           break;
         default:
