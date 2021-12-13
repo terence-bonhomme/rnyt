@@ -402,7 +402,7 @@ async function onYouTubePlayerAPIReady() {
 
         // player pointer
         play_pointer.style.left =
-          (player.playerInfo.currentTime / player.getDuration()) *
+          (player_current_time / player.getDuration()) *
             (ytplayer.getBoundingClientRect().width - 20) +
           20 +
           "px";
@@ -824,11 +824,13 @@ async function onYouTubePlayerAPIReady() {
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
+        
+        let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
+          time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
+          time
         )}) ${noteInput.value}`;
 
         var inserted = false;
@@ -840,7 +842,7 @@ async function onYouTubePlayerAPIReady() {
 
           if (
             formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
+            time
           ) {
             await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
@@ -858,7 +860,7 @@ async function onYouTubePlayerAPIReady() {
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
 
-        update_timeline(position);
+        update_timeline(position, time);
 
         recoverFromNoteInput();
 
@@ -918,11 +920,13 @@ async function onYouTubePlayerAPIReady() {
         child_array = plugin_rem.children;
 
         if (child_array.length > 1) rewind();
+        
+        let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
+          time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
+          time
         )}) ${noteInput.value}`;
 
         var current_rem = plugin_rem.children[chapter_note];
@@ -949,7 +953,7 @@ async function onYouTubePlayerAPIReady() {
           if (clock === undefined) continue;
           if (
             formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
+            time
           ) {
             await RemNoteAPI.v0.create(text, current_rem, {
               positionAmongstSiblings: position
@@ -966,7 +970,7 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
-        update_note_child(chapter_note, position);
+        update_note_child(chapter_note, position, time);
 
         recoverFromNoteInput();
 
@@ -988,11 +992,13 @@ async function onYouTubePlayerAPIReady() {
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
+        
+        let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
+          time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
+          time
         )}) answer << ${noteInput.value}`;
 
         var inserted = false;
@@ -1004,7 +1010,7 @@ async function onYouTubePlayerAPIReady() {
 
           if (
             formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
+            time
           ) {
             await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
@@ -1022,7 +1028,7 @@ async function onYouTubePlayerAPIReady() {
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
 
-        update_timeline(position);
+        update_timeline(position, time);
 
         recoverFromNoteInput();
 
@@ -1050,11 +1056,13 @@ async function onYouTubePlayerAPIReady() {
         child_array = plugin_rem.children;
 
         if (child_array.length > 1) rewind();
+        
+        let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
-          player.playerInfo.currentTime - delay
+          time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          player.playerInfo.currentTime - delay
+          time
         )}) answer << ${noteInput.value}`;
 
         var current_rem = plugin_rem.children[chapter_note];
@@ -1081,7 +1089,7 @@ async function onYouTubePlayerAPIReady() {
           if (clock === undefined) continue;
           if (
             formatedTimeToDuration(clock) >
-            player.playerInfo.currentTime - delay
+            time
           ) {
             await RemNoteAPI.v0.create(text, current_rem, {
               positionAmongstSiblings: position
@@ -1098,7 +1106,7 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
-        update_note_child(chapter_note, position);
+        update_note_child(chapter_note, position, time);
 
         recoverFromNoteInput();
 
@@ -1675,7 +1683,7 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  async function update_timeline(position) {
+  async function update_timeline(position, time) {
     const delay = Number(document.getElementById("delayInput").value);
     const div = document.getElementById("note");
 
@@ -1702,7 +1710,7 @@ async function onYouTubePlayerAPIReady() {
     input0.id = position;
 
     input0.value = durationToFormatedTime(
-      player.playerInfo.currentTime
+      time
     );
     input0.rem = noteInput.value;
 
@@ -1914,7 +1922,7 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  function update_note_child(chapterId, position) {
+  function update_note_child(chapterId, position, time) {
     const delay = Number(document.getElementById("delayInput").value);
     if(chapterId == undefined) chapterId = current_chapter;
     
@@ -1933,7 +1941,7 @@ async function onYouTubePlayerAPIReady() {
       const input1 = document.createElement("input");
       input1.type = "button";
       input1.value = durationToFormatedTime(
-        player.playerInfo.currentTime
+        time
       );
       input1.rem = noteInput.value;
 
