@@ -877,6 +877,8 @@ async function onYouTubePlayerAPIReady() {
       }
       case "take a child note without a timestamp": {
         var delay = Number(document.getElementById("delayInput").value);
+        
+        let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
@@ -894,7 +896,7 @@ async function onYouTubePlayerAPIReady() {
         scroll_timeout = setTimeout(function() {
           $("html, body").animate(
             {
-              scrollTop: $("#" + current_chapter).offset().top
+              scrollTop: $("#" + chapter_note).offset().top
             },
             100
           );
@@ -906,7 +908,7 @@ async function onYouTubePlayerAPIReady() {
       case "take a child note with a timestamp": {
         var delay = Number(document.getElementById("delayInput").value);
 
-        //rewind();
+        let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
@@ -919,7 +921,7 @@ async function onYouTubePlayerAPIReady() {
           player.playerInfo.currentTime - delay
         )}) ${noteInput.value}`;
 
-        var current_rem = plugin_rem.children[current_chapter];
+        var current_rem = plugin_rem.children[chapter_note];
 
         var child_child_array = (await RemNoteAPI.v0.get(current_rem)).children;
 
@@ -960,7 +962,7 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
-        update_note_child(position);
+        update_note_child(chapter_note, position);
 
         recoverFromNoteInput();
 
@@ -968,7 +970,7 @@ async function onYouTubePlayerAPIReady() {
         scroll_timeout = setTimeout(function() {
           $("html, body").animate(
             {
-              scrollTop: $("#" + current_chapter).offset().top
+              scrollTop: $("#" + chapter_note).offset().top
             },
             100
           );
@@ -1035,6 +1037,8 @@ async function onYouTubePlayerAPIReady() {
       }
       case "ask a child question": {
         var delay = Number(document.getElementById("delayInput").value);
+        
+        let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
@@ -1047,7 +1051,7 @@ async function onYouTubePlayerAPIReady() {
           player.playerInfo.currentTime - delay
         )}) answer << ${noteInput.value}`;
 
-        var current_rem = plugin_rem.children[current_chapter];
+        var current_rem = plugin_rem.children[chapter_note];
 
         var child_child_array = (await RemNoteAPI.v0.get(current_rem)).children;
 
@@ -1088,7 +1092,7 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
-        update_note_child(position);
+        update_note_child(chapter_note, position);
 
         recoverFromNoteInput();
 
@@ -1096,7 +1100,7 @@ async function onYouTubePlayerAPIReady() {
         scroll_timeout = setTimeout(function() {
           $("html, body").animate(
             {
-              scrollTop: $("#" + current_chapter).offset().top
+              scrollTop: $("#" + chapter_note).offset().top
             },
             100
           );
@@ -1904,18 +1908,21 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  function update_note_child(position) {
+  function update_note_child(chapterId, position) {
     const delay = Number(document.getElementById("delayInput").value);
+    if(chapterId == undefined) chapterId = current_chapter;
+    
+    
 
     var referenceNode = document.querySelector(
-      "#" + "_0-" + current_chapter + " > ul"
+      "#" + "_0-" + chapterId + " > ul"
     );
 
     const li1 = document.createElement("li");
 
     // ctrl + enter only
     if (position != undefined) {
-      li1.id = "_0-" + current_chapter + "_1-" + position;
+      li1.id = "_0-" + chapterId + "_1-" + position;
 
       const input1 = document.createElement("input");
       input1.type = "button";
@@ -1924,7 +1931,7 @@ async function onYouTubePlayerAPIReady() {
       );
       input1.rem = noteInput.value;
 
-      const color = current_chapter;
+      const color = chapterId;
 
       $(input1).on("click", function() {
         $("html, body").animate(
@@ -1938,7 +1945,7 @@ async function onYouTubePlayerAPIReady() {
         player.seekTo(formatedTimeToDuration(clock), true);
       });
 
-      input1.style.background = color_1[(current_chapter - 1) % color_1.length];
+      input1.style.background = color_1[(chapterId - 1) % color_1.length];
 
       $(input1).on("mouseenter", function() {
         $(this).css(
@@ -1961,52 +1968,52 @@ async function onYouTubePlayerAPIReady() {
     // ctrl + enter
     if (position != undefined) {
       var referenceNode = document.querySelector(
-        "#" + "_0-" + current_chapter + " > ul"
+        "#" + "_0-" + chapterId + " > ul"
       );
 
       if (position == 0 && referenceNode.children.length == 0) {
         var referenceNode = document.querySelector(
-          "#" + "_0-" + current_chapter + " > ul"
+          "#" + "_0-" + chapterId + " > ul"
         );
         referenceNode.appendChild(li1);
       } else if (position == 0 && referenceNode.children.length > 0) {
         var referenceNode = document.querySelector(
-          "#" + "_0-" + current_chapter + "_1-" + position
+          "#" + "_0-" + chapterId + "_1-" + position
         );
         referenceNode.parentNode.insertBefore(li1, referenceNode);
 
         var referenceNode = document.querySelector(
-          "#" + "_0-" + current_chapter + " > ul"
+          "#" + "_0-" + chapterId + " > ul"
         );
         let children = referenceNode.children;
         for (let i = 0; i < children.length; i++) {
-          children[i].id = "_0-" + current_chapter + "_1-" + i;
+          children[i].id = "_0-" + chapterId + "_1-" + i;
         }
       } else {
         var referenceNode = document.querySelector(
-          "#" + "_0-" + current_chapter + "_1-" + (position - 1)
+          "#" + "_0-" + chapterId + "_1-" + (position - 1)
         );
         referenceNode.parentNode.insertBefore(li1, referenceNode.nextSibling);
       }
 
       var referenceNode = document.querySelector(
-        "#" + "_0-" + current_chapter + " > ul"
+        "#" + "_0-" + chapterId + " > ul"
       );
       let children = referenceNode.children;
       for (let i = 0; i < children.length; i++) {
-        children[i].id = "_0-" + current_chapter + "_1-" + i;
+        children[i].id = "_0-" + chapterId + "_1-" + i;
       }
       // alt + enter
     } else {
       var referenceNode = document.querySelector(
-        "#" + "_0-" + current_chapter + " > ul"
+        "#" + "_0-" + chapterId + " > ul"
       );
 
       referenceNode.appendChild(li1);
 
       let children = referenceNode.children;
       for (let i = 0; i < children.length; i++) {
-        children[i].id = "_0-" + current_chapter + "_1-" + i;
+        children[i].id = "_0-" + chapterId + "_1-" + i;
       }
     }
 
