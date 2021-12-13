@@ -876,6 +876,8 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note without a timestamp": {
+        if(child_array.length <= 1 || current_chapter == 0) break;
+        
         var delay = Number(document.getElementById("delayInput").value);
         
         let chapter_note = current_chapter;
@@ -906,6 +908,8 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note with a timestamp": {
+        if(child_array.length <= 1 || current_chapter == 0) break;
+        
         var delay = Number(document.getElementById("delayInput").value);
 
         let chapter_note = current_chapter;
@@ -1036,6 +1040,8 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "ask a child question": {
+        if(child_array.length <= 1 || current_chapter == 0) break;
+        
         var delay = Number(document.getElementById("delayInput").value);
         
         let chapter_note = current_chapter;
