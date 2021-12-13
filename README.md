@@ -64,7 +64,7 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 
 - remember at least the shortcuts to input your notes and the left/right keys to move
 - you can rewind/forward while you have an empty text input to target the best time (it doesn't cancel the delay)
-- set delay to 0 if you want to make many notes in a row
+- enable/disable the delay with "d" if you want to make many notes in a row
 
 ## Commands
 
@@ -118,6 +118,7 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 #### other
 
 - r : refresh
+- d : enable/disable the delay
 
 #### You're taking a note
 
