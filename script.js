@@ -35,6 +35,7 @@ async function onYouTubePlayerAPIReady() {
   const clientHeight = document.getElementById("html").clientHeight;
 
   var delay = 0;
+  var no_delay = false;
 
   var current_chapter = 0;
 
@@ -616,6 +617,7 @@ async function onYouTubePlayerAPIReady() {
       "shift+Comma": "slower",
       "shift+Period": "faster",
       KeyR: "refresh",
+      KeyD: "delay switch",
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -764,6 +766,18 @@ async function onYouTubePlayerAPIReady() {
             timeline(true);
           }
           break;
+        case "delay switch":
+          if ($("#noteInput").is(":focus") == false) {
+            no_delay = !no_delay;
+            if(no_delay){
+              $("#delayInput").css("background", "#586cf4");
+              $("#delayInput").css("color", "white");
+            }else{
+              $("#delayInput").css("background", "#f4f4fa");
+              $("#delayInput").css("color", "#63637B");              
+            }
+          }
+          break;
         default:
       }
     }
@@ -819,6 +833,7 @@ async function onYouTubePlayerAPIReady() {
     switch (shortcuts.keys[shortcut]) {
       case "take a note": {
         var delay = Number(document.getElementById("delayInput").value);
+        if(no_delay) delay = 0;
 
         rewind();
 
@@ -881,6 +896,7 @@ async function onYouTubePlayerAPIReady() {
         if(child_array.length <= 1 || current_chapter == 0) break;
         
         var delay = Number(document.getElementById("delayInput").value);
+        if(no_delay) delay = 0;
         
         let chapter_note = current_chapter;
 
@@ -913,6 +929,7 @@ async function onYouTubePlayerAPIReady() {
         if(child_array.length <= 1 || current_chapter == 0) break;
         
         var delay = Number(document.getElementById("delayInput").value);
+        if(no_delay) delay = 0;
 
         let chapter_note = current_chapter;
 
@@ -989,6 +1006,7 @@ async function onYouTubePlayerAPIReady() {
       }
       case "ask a question": {
         var delay = Number(document.getElementById("delayInput").value);
+        if(no_delay) delay = 0;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
@@ -1049,6 +1067,7 @@ async function onYouTubePlayerAPIReady() {
         if(child_array.length <= 1 || current_chapter == 0) break;
         
         var delay = Number(document.getElementById("delayInput").value);
+        if(no_delay) delay = 0;
         
         let chapter_note = current_chapter;
 
@@ -1209,7 +1228,9 @@ async function onYouTubePlayerAPIReady() {
   }
 
   function rewind() {
-    const delay = Number(document.getElementById("delayInput").value);
+    delay = Number(document.getElementById("delayInput").value);
+    if(no_delay) delay = 0;
+    
     var currentTime = player.getCurrentTime();
 
     if (currentTime > delay) {
@@ -1684,7 +1705,9 @@ async function onYouTubePlayerAPIReady() {
   }
 
   async function update_timeline(position, time) {
-    const delay = Number(document.getElementById("delayInput").value);
+    delay = Number(document.getElementById("delayInput").value);
+    if(no_delay) delay = 0;
+    
     const div = document.getElementById("note");
 
     // ul level 0
@@ -1923,7 +1946,9 @@ async function onYouTubePlayerAPIReady() {
   }
 
   function update_note_child(chapterId, position, time) {
-    const delay = Number(document.getElementById("delayInput").value);
+    delay = Number(document.getElementById("delayInput").value);
+    if(no_delay) delay = 0;
+    
     if(chapterId == undefined) chapterId = current_chapter;
     
     
