@@ -877,6 +877,8 @@ async function onYouTubePlayerAPIReady() {
       }
       case "take a child note without a timestamp": {
         var delay = Number(document.getElementById("delayInput").value);
+        
+        let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
@@ -894,7 +896,7 @@ async function onYouTubePlayerAPIReady() {
         scroll_timeout = setTimeout(function() {
           $("html, body").animate(
             {
-              scrollTop: $("#" + current_chapter).offset().top
+              scrollTop: $("#" + chapter_note).offset().top
             },
             100
           );
