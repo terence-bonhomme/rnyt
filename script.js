@@ -517,13 +517,24 @@ async function onYouTubePlayerAPIReady() {
   // confirm link
 
   ok.onclick = async function() {
-    if (child_array.length == 0) {
+    url = linkInput.value;
+    if (url.includes("youtube.com")) {
+      video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
+    } else if (url.includes("youtu.be")) {
+      video_id = url.split("youtu.be/")[1].slice(0, 11);
+    }
+
+    if (child_array.length == 0 && (video_id != undefined && video_id.length == 11)) {
       await RemNoteAPI.v0.create(linkInput.value, pluginId, {
         positionAmongstSiblings: 0
       });
-    }
-
-    location.reload();
+      location.reload();
+    }else if(child_array.length > 0){
+      location.reload();    
+    }else{
+      var bsAlert = new bootstrap.Toast($("#myAlert"));
+      bsAlert.show();
+    }    
   };
 
   // take note
