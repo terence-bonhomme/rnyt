@@ -30,6 +30,22 @@
   </head>
 
   <body>
+    <div aria-atomic="true" aria-live="assertive" class="toast position-absolute end-0 top-0 m-3" role="alert" id="myAlert">
+      <div class="toast-header">
+        <strong class="me-auto">Error</strong>
+        <button aria-label="Close" class="btn-close" 
+                data-bs-dismiss="toast" type="button">
+        </button>
+      </div>
+      <div class="toast-body">
+          The video link is wrong.<br>
+          Example :<br>
+          https://www.youtube.com/watch?v=E6xQtbEnXVc<br>
+          or<br>
+          https://youtu.be/E6xQtbEnXVc
+      </div>
+    </div>
+    
     <div
       id="linkCont"
       class="d-flex flex-column min-vh-100 justify-content-center align-items-center"
