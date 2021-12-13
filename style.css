@@ -61,6 +61,15 @@ input[type="search"]::-webkit-search-cancel-button {
   background-image: url("https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fcancel-svgrepo-com.svg?v=1637610193117");
 }
 
+input.delay_placeholder:-webkit-input-placeholder {
+   color: white;
+}
+
+input.delay_placeholder::-webkit-input-placeholder {
+   color: white;
+}
+
+
 .row {
   margin-top: 0px !important;
   margin-right: 0px !important;

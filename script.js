@@ -569,14 +569,23 @@ async function onYouTubePlayerAPIReady() {
       delay = 0;
     }
   });
-
+  
   $(delayInput).on("mouseenter", function() {
-    $(this).css("background", "#eeeef7");
+     if(no_delay){
+        $(this).css("background", "#1044ec");
+     }else{
+      $(this).css("background", "#eeeef7");  
+     }    
     $(this).css("font-weight", "bold");
   });
 
   $(delayInput).on("mouseleave", function() {
-    $(this).css("background", "#f4f4fa");
+     if(no_delay){
+        $(this).css("background", "#586cf4");
+     }else{
+       $(this).css("background", "#f4f4fa");
+     }
+    
     $(this).css("font-weight", "normal");
   });
 
@@ -772,9 +781,11 @@ async function onYouTubePlayerAPIReady() {
             if(no_delay){
               $("#delayInput").css("background", "#586cf4");
               $("#delayInput").css("color", "white");
+              $("#delayInput").addClass('delay_placeholder');
             }else{
               $("#delayInput").css("background", "#f4f4fa");
-              $("#delayInput").css("color", "#63637B");              
+              $("#delayInput").css("color", "#63637B");     
+              $("#delayInput").removeClass('delay_placeholder');
             }
           }
           break;
