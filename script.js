@@ -223,7 +223,7 @@ async function onYouTubePlayerAPIReady() {
     if (dark_mode == 1) {
       let gray1 = "#c0bdbd";
       let gray2 = "#272525";
-      
+
       document.getElementById("html").style.background = "#f5f5f5";
       $("#linkInput").css("background", "black");
       $("#linkInput").css("color", gray1);
@@ -231,43 +231,30 @@ async function onYouTubePlayerAPIReady() {
       $("#takeNote").css("color", gray1);
       $("#keyboard_label").css("color", gray1);
       $("#refresh").css("color", gray1);
-      
-      let filter_out = "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
-      let filter_over = "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)";
-      
-      $("img").css(
-        "filter",
-        filter_out
-      );
+
+      let filter_out =
+        "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
+      let filter_over =
+        "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)";
+
+      $("img").css("filter", filter_out);
 
       $("#refresh").on("mouseover", function() {
         $(this).css("color", gray2);
-        $("#refresh > img").css(
-          "filter",
-          filter_over
-        );
+        $("#refresh > img").css("filter", filter_over);
       });
       $("#refresh").on("mouseout", function() {
         $(this).css("color", gray1);
-        $("#refresh > img").css(
-          "filter",
-          filter_out
-        );
+        $("#refresh > img").css("filter", filter_out);
       });
 
       $("#takeNote").on("mouseover", function() {
         $(this).css("color", gray2);
-        $("#takeNote > img").css(
-          "filter",
-          filter_over
-        );
+        $("#takeNote > img").css("filter", filter_over);
       });
       $("#takeNote").on("mouseout", function() {
         $(this).css("color", gray1);
-        $("#takeNote > img").css(
-          "filter",
-          filter_out
-        );
+        $("#takeNote > img").css("filter", filter_out);
       });
 
       $("#global").css("filter", "hue-rotate(180deg) invert(1)");
@@ -370,7 +357,7 @@ async function onYouTubePlayerAPIReady() {
     } else if (url.includes("youtu.be")) {
       video_id = url.split("youtu.be/")[1].slice(0, 11);
     }
-  }  
+  }
 
   if (video_id != undefined) {
     // make the video
@@ -525,17 +512,20 @@ async function onYouTubePlayerAPIReady() {
       video_id = url.split("youtu.be/")[1].slice(0, 11);
     }
 
-    if (child_array.length == 0 && (video_id != undefined && video_id.length == 11)) {
+    if (
+      child_array.length == 0 &&
+      (video_id != undefined && video_id.length == 11)
+    ) {
       await RemNoteAPI.v0.create(linkInput.value, pluginId, {
         positionAmongstSiblings: 0
       });
       location.reload();
-    }else if(child_array.length > 0){
-      location.reload();    
-    }else{
+    } else if (child_array.length > 0) {
+      location.reload();
+    } else {
       var bsAlert = new bootstrap.Toast($("#myAlert"));
       bsAlert.show();
-    }    
+    }
   };
 
   // take note
@@ -569,23 +559,23 @@ async function onYouTubePlayerAPIReady() {
       delay = 0;
     }
   });
-  
+
   $(delayInput).on("mouseenter", function() {
-     if(no_delay){
-        $(this).css("background", "#1044ec");
-     }else{
-      $(this).css("background", "#eeeef7");  
-     }    
+    if (no_delay) {
+      $(this).css("background", "#1044ec");
+    } else {
+      $(this).css("background", "#eeeef7");
+    }
     $(this).css("font-weight", "bold");
   });
 
   $(delayInput).on("mouseleave", function() {
-     if(no_delay){
-        $(this).css("background", "#586cf4");
-     }else{
-       $(this).css("background", "#f4f4fa");
-     }
-    
+    if (no_delay) {
+      $(this).css("background", "#586cf4");
+    } else {
+      $(this).css("background", "#f4f4fa");
+    }
+
     $(this).css("font-weight", "normal");
   });
 
@@ -626,7 +616,7 @@ async function onYouTubePlayerAPIReady() {
       "shift+Comma": "slower",
       "shift+Period": "faster",
       KeyR: "refresh",
-      KeyD: "delay switch",
+      KeyD: "delay switch"
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -778,14 +768,14 @@ async function onYouTubePlayerAPIReady() {
         case "delay switch":
           if ($("#noteInput").is(":focus") == false) {
             no_delay = !no_delay;
-            if(no_delay){
+            if (no_delay) {
               $("#delayInput").css("background", "#586cf4");
               $("#delayInput").css("color", "white");
-              $("#delayInput").addClass('delay_placeholder');
-            }else{
+              $("#delayInput").addClass("delay_placeholder");
+            } else {
               $("#delayInput").css("background", "#f4f4fa");
-              $("#delayInput").css("color", "#63637B");     
-              $("#delayInput").removeClass('delay_placeholder');
+              $("#delayInput").css("color", "#63637B");
+              $("#delayInput").removeClass("delay_placeholder");
             }
           }
           break;
@@ -844,20 +834,20 @@ async function onYouTubePlayerAPIReady() {
     switch (shortcuts.keys[shortcut]) {
       case "take a note": {
         var delay = Number(document.getElementById("delayInput").value);
-        if(no_delay) delay = 0;
+        if (no_delay) delay = 0;
 
         rewind();
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
-        
+
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
           time
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          time
-        )}) ${noteInput.value}`;
+        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
+          noteInput.value
+        }`;
 
         var inserted = false;
         for (position = 1; position < child_array.length; position++) {
@@ -866,10 +856,7 @@ async function onYouTubePlayerAPIReady() {
 
           if (clock === undefined) continue;
 
-          if (
-            formatedTimeToDuration(clock) >
-            time
-          ) {
+          if (formatedTimeToDuration(clock) > time) {
             await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
             });
@@ -904,11 +891,11 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note without a timestamp": {
-        if(child_array.length <= 1 || current_chapter == 0) break;
-        
+        if (child_array.length <= 1 || current_chapter == 0) break;
+
         var delay = Number(document.getElementById("delayInput").value);
-        if(no_delay) delay = 0;
-        
+        if (no_delay) delay = 0;
+
         let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
@@ -937,10 +924,10 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note with a timestamp": {
-        if(child_array.length <= 1 || current_chapter == 0) break;
-        
+        if (child_array.length <= 1 || current_chapter == 0) break;
+
         var delay = Number(document.getElementById("delayInput").value);
-        if(no_delay) delay = 0;
+        if (no_delay) delay = 0;
 
         let chapter_note = current_chapter;
 
@@ -948,14 +935,14 @@ async function onYouTubePlayerAPIReady() {
         child_array = plugin_rem.children;
 
         if (child_array.length > 1) rewind();
-        
+
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
           time
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
-          time
-        )}) ${noteInput.value}`;
+        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
+          noteInput.value
+        }`;
 
         var current_rem = plugin_rem.children[chapter_note];
 
@@ -979,10 +966,7 @@ async function onYouTubePlayerAPIReady() {
           const clock = (await RemNoteAPI.v0.get(child_child_array[position]))
             .name[0].text;
           if (clock === undefined) continue;
-          if (
-            formatedTimeToDuration(clock) >
-            time
-          ) {
+          if (formatedTimeToDuration(clock) > time) {
             await RemNoteAPI.v0.create(text, current_rem, {
               positionAmongstSiblings: position
             });
@@ -1017,11 +1001,11 @@ async function onYouTubePlayerAPIReady() {
       }
       case "ask a question": {
         var delay = Number(document.getElementById("delayInput").value);
-        if(no_delay) delay = 0;
+        if (no_delay) delay = 0;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
-        
+
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
@@ -1037,10 +1021,7 @@ async function onYouTubePlayerAPIReady() {
 
           if (clock === undefined) continue;
 
-          if (
-            formatedTimeToDuration(clock) >
-            time
-          ) {
+          if (formatedTimeToDuration(clock) > time) {
             await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
             });
@@ -1075,18 +1056,18 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "ask a child question": {
-        if(child_array.length <= 1 || current_chapter == 0) break;
-        
+        if (child_array.length <= 1 || current_chapter == 0) break;
+
         var delay = Number(document.getElementById("delayInput").value);
-        if(no_delay) delay = 0;
-        
+        if (no_delay) delay = 0;
+
         let chapter_note = current_chapter;
 
         plugin_rem = await RemNoteAPI.v0.get(pluginId);
         child_array = plugin_rem.children;
 
         if (child_array.length > 1) rewind();
-        
+
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
@@ -1117,10 +1098,7 @@ async function onYouTubePlayerAPIReady() {
           const clock = (await RemNoteAPI.v0.get(child_child_array[position]))
             .name[0].text;
           if (clock === undefined) continue;
-          if (
-            formatedTimeToDuration(clock) >
-            time
-          ) {
+          if (formatedTimeToDuration(clock) > time) {
             await RemNoteAPI.v0.create(text, current_rem, {
               positionAmongstSiblings: position
             });
@@ -1240,8 +1218,8 @@ async function onYouTubePlayerAPIReady() {
 
   function rewind() {
     delay = Number(document.getElementById("delayInput").value);
-    if(no_delay) delay = 0;
-    
+    if (no_delay) delay = 0;
+
     var currentTime = player.getCurrentTime();
 
     if (currentTime > delay) {
@@ -1717,8 +1695,8 @@ async function onYouTubePlayerAPIReady() {
 
   async function update_timeline(position, time) {
     delay = Number(document.getElementById("delayInput").value);
-    if(no_delay) delay = 0;
-    
+    if (no_delay) delay = 0;
+
     const div = document.getElementById("note");
 
     // ul level 0
@@ -1743,9 +1721,7 @@ async function onYouTubePlayerAPIReady() {
     input0.type = "button";
     input0.id = position;
 
-    input0.value = durationToFormatedTime(
-      time
-    );
+    input0.value = durationToFormatedTime(time);
     input0.rem = noteInput.value;
 
     $(input0).on("click", function() {
@@ -1958,11 +1934,9 @@ async function onYouTubePlayerAPIReady() {
 
   function update_note_child(chapterId, position, time) {
     delay = Number(document.getElementById("delayInput").value);
-    if(no_delay) delay = 0;
-    
-    if(chapterId == undefined) chapterId = current_chapter;
-    
-    
+    if (no_delay) delay = 0;
+
+    if (chapterId == undefined) chapterId = current_chapter;
 
     var referenceNode = document.querySelector(
       "#" + "_0-" + chapterId + " > ul"
@@ -1976,9 +1950,7 @@ async function onYouTubePlayerAPIReady() {
 
       const input1 = document.createElement("input");
       input1.type = "button";
-      input1.value = durationToFormatedTime(
-        time
-      );
+      input1.value = durationToFormatedTime(time);
       input1.rem = noteInput.value;
 
       const color = chapterId;
