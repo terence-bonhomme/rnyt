@@ -62,13 +62,12 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 input.delay_placeholder:-webkit-input-placeholder {
-   color: white;
+  color: white;
 }
 
 input.delay_placeholder::-webkit-input-placeholder {
-   color: white;
+  color: white;
 }
-
 
 .row {
   margin-top: 0px !important;
