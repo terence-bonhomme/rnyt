@@ -31,7 +31,7 @@ img {
     brightness(82%) contrast(84%);
 }
 
-input[type="checkbox"] {
+input[type="checkbox"]:disabled {
   filter: hue-rotate(25deg);
   cursor: pointer;
 }
