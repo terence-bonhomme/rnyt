@@ -156,7 +156,11 @@ async function onYouTubePlayerAPIReady() {
   const documentId = await RemNoteAPI.v0.get_context();
   const pluginId = documentId.remId;
   var plugin_rem = await RemNoteAPI.v0.get(pluginId);
-  var child_array = plugin_rem.children;
+
+  // cache
+
+  var rem_tree;
+  await create_rem_tree();
 
   // parameters
 
@@ -306,8 +310,9 @@ async function onYouTubePlayerAPIReady() {
   // show the needed panel
 
   let first_rem;
-  if (child_array.length != 0) {
-    first_rem = await RemNoteAPI.v0.get(child_array[0]);
+  if (rem_tree.length != 0) {
+    first_rem = rem_tree[0];
+
     linkInput.value = first_rem.name[0].text;
 
     linkCont.style.display = "none";
@@ -329,7 +334,7 @@ async function onYouTubePlayerAPIReady() {
   const rem_title = await RemNoteAPI.v0.get(documentId.documentId);
   const index_title = rem_title.nameAsMarkdown.indexOf("](https://");
 
-  if (index_title != -1 && child_array.length == 0) {
+  if (index_title != -1 && rem_tree.length == 0) {
     linkInput.value = rem_title.nameAsMarkdown.slice(index_title + 2, -2);
     if (linkInput.value) {
       ok.style.display = "block";
@@ -343,7 +348,8 @@ async function onYouTubePlayerAPIReady() {
   // recognize the youtube link
 
   var url;
-  if (child_array.length != 0) {
+
+  if (rem_tree.length != 0) {
     url = first_rem.name[0].text;
     if (url.includes("youtube.com")) {
       video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
@@ -397,7 +403,7 @@ async function onYouTubePlayerAPIReady() {
 
         // chapter
         let chapter_found = false;
-        for (let i = 1; i < child_array.length; i++) {
+        for (let i = 1; i < rem_tree.length; i++) {
           if (document.getElementById(String(i)) !== null) {
             if (document.getElementById(String(i)).value == "0") break;
             if (
@@ -414,7 +420,7 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!chapter_found) {
-          current_chapter = child_array.length - 1;
+          current_chapter = rem_tree.length - 1;
         }
       }
     }, 200);
@@ -424,7 +430,7 @@ async function onYouTubePlayerAPIReady() {
       if (typeof player.getDuration === "function") {
         let player_current_time = parseInt(player.playerInfo.currentTime);
 
-        for (let i = 1; i < child_array.length; i++) {
+        for (let i = 1; i < rem_tree.length; i++) {
           if (document.getElementById(String(i)) !== null) {
             if (document.getElementById(String(i)).value == "0") break;
             if (
@@ -513,14 +519,14 @@ async function onYouTubePlayerAPIReady() {
     }
 
     if (
-      child_array.length == 0 &&
+      rem_tree.length == 0 &&
       (video_id != undefined && video_id.length == 11)
     ) {
       await RemNoteAPI.v0.create(linkInput.value, pluginId, {
         positionAmongstSiblings: 0
       });
       location.reload();
-    } else if (child_array.length > 0) {
+    } else if (rem_tree.length > 0) {
       location.reload();
     } else {
       var bsAlert = new bootstrap.Toast($("#myAlert"));
@@ -581,7 +587,7 @@ async function onYouTubePlayerAPIReady() {
 
   // refresh
   refresh.onclick = function() {
-    timeline(true);
+    timeline(1);
   };
 
   // keyboard shortcuts
@@ -670,13 +676,10 @@ async function onYouTubePlayerAPIReady() {
         case "next chapter":
           current_chapter++;
 
-          plugin_rem = await RemNoteAPI.v0.get(pluginId);
-          child_array = plugin_rem.children;
-
-          if (current_chapter < child_array.length) {
+          if (current_chapter < rem_tree.length) {
             document.getElementById(String(current_chapter)).click();
           } else {
-            current_chapter = child_array.length - 1;
+            current_chapter = rem_tree.length - 1;
           }
           break;
         case "first chapter":
@@ -684,15 +687,13 @@ async function onYouTubePlayerAPIReady() {
           document.getElementById(String(current_chapter)).click();
           break;
         case "last chapter":
-          plugin_rem = await RemNoteAPI.v0.get(pluginId);
-          child_array = plugin_rem.children;
-          current_chapter = child_array.length - 1;
+          current_chapter = rem_tree.length - 1;
           document.getElementById(String(current_chapter)).click();
           break;
         case "repeat":
           if ($("#noteInput").is(":focus") == false) {
             if (document.activeElement != noteInput) {
-              if (current_chapter > 0 && current_chapter < child_array.length) {
+              if (current_chapter > 0 && current_chapter < rem_tree.length) {
                 document.getElementById(String(current_chapter)).click();
               }
             }
@@ -838,9 +839,6 @@ async function onYouTubePlayerAPIReady() {
 
         rewind();
 
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
@@ -850,16 +848,21 @@ async function onYouTubePlayerAPIReady() {
         }`;
 
         var inserted = false;
-        for (position = 1; position < child_array.length; position++) {
-          const clock = (await RemNoteAPI.v0.get(child_array[position])).name[0]
-            .text;
+        for (position = 1; position < rem_tree.length; position++) {
+          const clock = rem_tree[position].name[0].text;
 
           if (clock === undefined) continue;
 
           if (formatedTimeToDuration(clock) > time) {
-            await RemNoteAPI.v0.create(text, pluginId, {
+            const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
             });
+
+            rem_tree.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
 
             inserted = true;
             break;
@@ -867,11 +870,11 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!inserted) {
-          await RemNoteAPI.v0.create(text, pluginId);
+          const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
+            positionAmongstSiblings: position
+          });
+          rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
         }
-
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
 
         update_timeline(position, time);
 
@@ -891,20 +894,25 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note without a timestamp": {
-        if (child_array.length <= 1 || current_chapter == 0) break;
+        if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
         let chapter_note = current_chapter;
 
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-        var current_rem = plugin_rem.children[current_chapter];
+        var current_rem = rem_tree[chapter_note];
 
-        if (child_array.length > 1) rewind();
+        if (rem_tree.length > 1) rewind();
 
-        await RemNoteAPI.v0.create(noteInput.value, current_rem);
+        const last_rem = await RemNoteAPI.v0.create(
+          noteInput.value,
+          current_rem._id
+        );
+
+        rem_tree[current_chapter].children.push(
+          await RemNoteAPI.v0.get(last_rem.remId)
+        );
 
         update_note_child();
 
@@ -924,17 +932,14 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note with a timestamp": {
-        if (child_array.length <= 1 || current_chapter == 0) break;
+        if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
         let chapter_note = current_chapter;
 
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
-        if (child_array.length > 1) rewind();
+        if (rem_tree.length > 1) rewind();
 
         let time = player.playerInfo.currentTime - delay;
 
@@ -944,17 +949,14 @@ async function onYouTubePlayerAPIReady() {
           noteInput.value
         }`;
 
-        var current_rem = plugin_rem.children[chapter_note];
+        var current_rem = rem_tree[chapter_note];
 
-        var child_child_array = (await RemNoteAPI.v0.get(current_rem)).children;
+        var child_child_array = current_rem.children;
 
         var inserted = false;
         let count_no_timestamp = 0;
         for (position = 0; position < child_child_array.length; position++) {
-          if (
-            (await RemNoteAPI.v0.get(child_child_array[position])).name[0]
-              .text === undefined
-          )
+          if (child_child_array[position].name[0].text === undefined)
             count_no_timestamp++;
         }
 
@@ -963,13 +965,17 @@ async function onYouTubePlayerAPIReady() {
           position < child_child_array.length - count_no_timestamp;
           position++
         ) {
-          const clock = (await RemNoteAPI.v0.get(child_child_array[position]))
-            .name[0].text;
+          const clock = child_child_array[position].name[0].text;
           if (clock === undefined) continue;
           if (formatedTimeToDuration(clock) > time) {
-            await RemNoteAPI.v0.create(text, current_rem, {
+            const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
               positionAmongstSiblings: position
             });
+            rem_tree[chapter_note].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
 
             inserted = true;
             break;
@@ -977,9 +983,14 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!inserted) {
-          await RemNoteAPI.v0.create(text, current_rem, {
+          const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
             positionAmongstSiblings: position
           });
+          rem_tree[chapter_note].children.splice(
+            position,
+            0,
+            await RemNoteAPI.v0.get(last_rem.remId)
+          );
         }
 
         update_note_child(chapter_note, position, time);
@@ -1003,9 +1014,6 @@ async function onYouTubePlayerAPIReady() {
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
         let time = player.playerInfo.currentTime - delay;
 
         var text = `[${durationToFormatedTime(
@@ -1015,16 +1023,20 @@ async function onYouTubePlayerAPIReady() {
         )}) answer << ${noteInput.value}`;
 
         var inserted = false;
-        for (position = 1; position < child_array.length; position++) {
-          const clock = (await RemNoteAPI.v0.get(child_array[position])).name[0]
-            .text;
+        for (position = 1; position < rem_tree.length; position++) {
+          const clock = rem_tree[position].name[0].text;
 
           if (clock === undefined) continue;
 
           if (formatedTimeToDuration(clock) > time) {
-            await RemNoteAPI.v0.create(text, pluginId, {
+            const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position
             });
+            rem_tree.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
 
             inserted = true;
             break;
@@ -1032,11 +1044,9 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!inserted) {
-          await RemNoteAPI.v0.create(text, pluginId);
+          const last_rem = await RemNoteAPI.v0.create(text, pluginId);
+          rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
         }
-
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
 
         update_timeline(position, time);
 
@@ -1056,17 +1066,14 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "ask a child question": {
-        if (child_array.length <= 1 || current_chapter == 0) break;
+        if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
         let chapter_note = current_chapter;
 
-        plugin_rem = await RemNoteAPI.v0.get(pluginId);
-        child_array = plugin_rem.children;
-
-        if (child_array.length > 1) rewind();
+        if (rem_tree.length > 1) rewind();
 
         let time = player.playerInfo.currentTime - delay;
 
@@ -1076,17 +1083,14 @@ async function onYouTubePlayerAPIReady() {
           time
         )}) answer << ${noteInput.value}`;
 
-        var current_rem = plugin_rem.children[chapter_note];
+        var current_rem = rem_tree[chapter_note];
 
-        var child_child_array = (await RemNoteAPI.v0.get(current_rem)).children;
+        var child_child_array = current_rem.children;
 
         var inserted = false;
         let count_no_timestamp = 0;
         for (position = 0; position < child_child_array.length; position++) {
-          if (
-            (await RemNoteAPI.v0.get(child_child_array[position])).name[0]
-              .text === undefined
-          )
+          if (child_child_array[position].name[0].text === undefined)
             count_no_timestamp++;
         }
 
@@ -1095,13 +1099,18 @@ async function onYouTubePlayerAPIReady() {
           position < child_child_array.length - count_no_timestamp;
           position++
         ) {
-          const clock = (await RemNoteAPI.v0.get(child_child_array[position]))
-            .name[0].text;
+          const clock = child_child_array[position].name[0].text;
           if (clock === undefined) continue;
           if (formatedTimeToDuration(clock) > time) {
-            await RemNoteAPI.v0.create(text, current_rem, {
+            const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
               positionAmongstSiblings: position
             });
+
+            rem_tree[chapter_note].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
 
             inserted = true;
             break;
@@ -1109,9 +1118,15 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!inserted) {
-          await RemNoteAPI.v0.create(text, current_rem, {
+          const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
             positionAmongstSiblings: position
           });
+
+          rem_tree[chapter_note].children.splice(
+            position,
+            0,
+            await RemNoteAPI.v0.get(last_rem.remId)
+          );
         }
 
         update_note_child(chapter_note, position, time);
@@ -1230,8 +1245,7 @@ async function onYouTubePlayerAPIReady() {
   // function to load when the youtube video is ready
   async function timeline(refresh) {
     // playback speed
-
-    if (!refresh) {
+    if (refresh != 1) {
       if (enable_parameter) {
         const speed_parameter_value = parameters.get("playback_speed");
 
@@ -1250,15 +1264,16 @@ async function onYouTubePlayerAPIReady() {
 
     // rem
 
-    plugin_rem = await RemNoteAPI.v0.get(pluginId);
-    child_array = plugin_rem.children;
+    if (refresh == 1) {
+      await create_rem_tree();
+    }
 
     //notes
 
     const div = document.getElementById("note");
     div.innerHTML = "";
 
-    if (child_array.length < 2) {
+    if (rem_tree.length < 2) {
       create_chapter();
       return;
     }
@@ -1267,7 +1282,7 @@ async function onYouTubePlayerAPIReady() {
     div.appendChild(ul0);
     const child_list = document.createElement("div");
 
-    for (let i = 1; i <= child_array.length; i++) {
+    for (let i = 1; i <= rem_tree.length; i++) {
       if (i > 1) var previous_rem = rem;
 
       // level 0
@@ -1276,7 +1291,7 @@ async function onYouTubePlayerAPIReady() {
       let id0 = "_0-" + i;
       li0.id = id0;
 
-      if (i < child_array.length) ul0.appendChild(li0);
+      if (i < rem_tree.length) ul0.appendChild(li0);
 
       // input
 
@@ -1289,8 +1304,8 @@ async function onYouTubePlayerAPIReady() {
       input0.style.background = color_0[(i - 1) % color_0.length];
 
       // list children
-      if (i < child_array.length) {
-        var rem = await RemNoteAPI.v0.get(child_array[i]);
+      if (i < rem_tree.length) {
+        var rem = rem_tree[i];
 
         if (rem.name.length > 1) {
           input0.value = rem.name[0].text;
@@ -1339,8 +1354,8 @@ async function onYouTubePlayerAPIReady() {
       li0.appendChild(newContent0);
 
       // list children
-      if (i < child_array.length) {
-        const child0_rem = await RemNoteAPI.v0.get(child_array[i]);
+      if (i < rem_tree.length) {
+        const child0_rem = rem_tree[i];
 
         // level 1
         const ul1 = document.createElement("ul");
@@ -1349,7 +1364,8 @@ async function onYouTubePlayerAPIReady() {
             const li1 = document.createElement("li");
             let id1 = id0 + "_1-" + n1;
             li1.id = id1;
-            const child1_rem = await RemNoteAPI.v0.get(child0_rem.children[n1]);
+
+            const child1_rem = child0_rem.children[n1];
 
             const input1 = document.createElement("input");
             input1.type = "button";
@@ -1415,9 +1431,8 @@ async function onYouTubePlayerAPIReady() {
                 const li2 = document.createElement("li");
                 let id2 = id1 + "_2-" + n2;
                 li2.id = id2;
-                const child2_rem = await RemNoteAPI.v0.get(
-                  child1_rem.children[n2]
-                );
+
+                const child2_rem = child1_rem.children[n2];
 
                 const input2 = document.createElement("input");
                 input2.type = "button";
@@ -1473,9 +1488,8 @@ async function onYouTubePlayerAPIReady() {
                     const li3 = document.createElement("li");
                     let id3 = id2 + "_3-" + n3;
                     li3.id = id3;
-                    const child3_rem = await RemNoteAPI.v0.get(
-                      child2_rem.children[n3]
-                    );
+
+                    const child3_rem = child2_rem.children[n3];
 
                     const input3 = document.createElement("input");
                     input3.type = "button";
@@ -1534,9 +1548,8 @@ async function onYouTubePlayerAPIReady() {
                         const li4 = document.createElement("li");
                         let id4 = id3 + "_4-" + n4;
                         li4.id = id4;
-                        const child4_rem = await RemNoteAPI.v0.get(
-                          child3_rem.children[n4]
-                        );
+
+                        const child4_rem = child3_rem.children[n4];
 
                         const input4 = document.createElement("input");
                         input4.type = "button";
@@ -1601,9 +1614,7 @@ async function onYouTubePlayerAPIReady() {
                             let id5 = id4 + "_5-" + n5;
                             li5.id = id5;
 
-                            const child5_rem = await RemNoteAPI.v0.get(
-                              child4_rem.children[n5]
-                            );
+                            const child5_rem = child4_rem.children[n5];
 
                             const input5 = document.createElement("input");
                             input5.type = "button";
@@ -1683,7 +1694,7 @@ async function onYouTubePlayerAPIReady() {
     // last tasks before the end
 
     // inputs
-    for (let i = 1; i < child_array.length; i++) {
+    for (let i = 1; i < rem_tree.length; i++) {
       $("input#" + i).attr("class", "me-2 ");
     }
 
@@ -1768,7 +1779,7 @@ async function onYouTubePlayerAPIReady() {
 
     // level 0
 
-    for (let i = 1; i <= child_array.length; i++) {
+    for (let i = 1; i <= rem_tree.length; i++) {
       let line0 = "#tree > li:nth-child(" + i + ")";
       let id0 = "_0-" + i;
       let input0 = line0 + " > input";
@@ -2049,23 +2060,18 @@ async function onYouTubePlayerAPIReady() {
     const player_duration = player.getDuration();
     const player_width = ytplayer.getBoundingClientRect().width;
 
-    var plugin_rem = await RemNoteAPI.v0.get(pluginId);
-
-    child_array = plugin_rem.children;
-
     $("#line").html("");
 
     line_div.innerHTML = "";
 
     chapter = [];
 
-    if (child_array.length < 2) return;
+    if (rem_tree.length < 2) return;
 
-    for (let i = 1; i <= child_array.length; i++) {
+    for (let i = 1; i <= rem_tree.length; i++) {
       if (i > 1) var previous_rem = rem;
 
-      if (i < child_array.length)
-        var rem = await RemNoteAPI.v0.get(child_array[i]);
+      if (i < rem_tree.length) var rem = rem_tree[i];
 
       if (rem.name.length > 1) {
         chapter.push(document.createElement("div"));
@@ -2109,7 +2115,7 @@ async function onYouTubePlayerAPIReady() {
           chapter[chapter.length - 1].num = i;
 
           // last chapter
-          if (i == child_array.length) {
+          if (i == rem_tree.length) {
             $(chapter[chapter.length - 1]).attr(
               "class",
               "rounded-end mt-2 chapter"
@@ -2125,7 +2131,7 @@ async function onYouTubePlayerAPIReady() {
           }
 
           // one chapter only
-          if (child_array.length == 2)
+          if (rem_tree.length == 2)
             $(chapter[chapter.length - 1]).attr(
               "class",
               "rounded-start rounded-end mt-2 chapter"
@@ -2186,11 +2192,11 @@ async function onYouTubePlayerAPIReady() {
     const player_width = ytplayer.getBoundingClientRect().width;
 
     // unique
-    if (child_array.length == 2) {
+    if (rem_tree.length == 2) {
       var temp_chapter = document.createElement("div");
       temp_chapter.id = "c" + position;
 
-      var rem = await RemNoteAPI.v0.get(child_array[position]);
+      var rem = rem_tree[position];
 
       const clock = rem.name[0].text;
 
@@ -2241,7 +2247,7 @@ async function onYouTubePlayerAPIReady() {
 
       var temp_chapter = document.createElement("div");
 
-      var rem = await RemNoteAPI.v0.get(child_array[position]);
+      var rem = rem_tree[position];
 
       const clock = rem.name[0].text;
 
@@ -2283,13 +2289,13 @@ async function onYouTubePlayerAPIReady() {
       referenceNode.parentNode.insertBefore(temp_chapter, referenceNode);
 
       //insert in middle
-    } else if (position < child_array.length - 1) {
+    } else if (position < rem_tree.length - 1) {
       var referenceNode = document.querySelector("#" + "c" + (position - 1));
 
       var temp_chapter = document.createElement("div");
       temp_chapter.id = "c" + position;
 
-      var rem = await RemNoteAPI.v0.get(child_array[position]);
+      var rem = rem_tree[position];
 
       const clock = rem.name[0].text;
 
@@ -2347,7 +2353,7 @@ async function onYouTubePlayerAPIReady() {
       var temp_chapter = document.createElement("div");
       temp_chapter.id = "c" + position;
 
-      var rem = await RemNoteAPI.v0.get(child_array[position]);
+      var rem = rem_tree[position];
 
       const clock = rem.name[0].text;
 
@@ -2407,14 +2413,14 @@ async function onYouTubePlayerAPIReady() {
     }
 
     // update style
-    for (let i = 1; i < child_array.length; i++) {
+    for (let i = 1; i < rem_tree.length; i++) {
       var referenceNode = document.querySelector("#" + "c" + i);
 
       $(referenceNode).removeClass();
 
-      if (child_array.length == 2) {
+      if (rem_tree.length == 2) {
         $(referenceNode).addClass("rounded-start rounded-end mt-2 chapter");
-      } else if (i == child_array.length - 1) {
+      } else if (i == rem_tree.length - 1) {
         $(referenceNode).addClass("rounded-end mt-2 chapter");
       } else if (i == 1) {
         $(referenceNode).addClass("rounded-start mt-2 chapter");
@@ -2439,5 +2445,60 @@ async function onYouTubePlayerAPIReady() {
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
     });
+  }
+
+  async function create_rem_tree() {
+    plugin_rem = await RemNoteAPI.v0.get(pluginId);
+
+    rem_tree = [];
+
+    for (let i = 0; i < plugin_rem.children.length; i++) {
+      let rem = await RemNoteAPI.v0.get(plugin_rem.children[i]);
+      for (let j = 0; j < rem.children.length; j++) {
+        rem.children[j] = await RemNoteAPI.v0.get(rem.children[j]);
+        for (let k = 0; k < rem.children[j].children.length; k++) {
+          rem.children[j].children[k] = await RemNoteAPI.v0.get(
+            rem.children[j].children[k]
+          );
+          for (
+            let l = 0;
+            l < rem.children[j].children[k].children.length;
+            l++
+          ) {
+            rem.children[j].children[k].children[l] = await RemNoteAPI.v0.get(
+              rem.children[j].children[k].children[l]
+            );
+            for (
+              let m = 0;
+              m < rem.children[j].children[k].children[l].children.length;
+              m++
+            ) {
+              rem.children[j].children[k].children[l].children[
+                m
+              ] = await RemNoteAPI.v0.get(
+                rem.children[j].children[k].children[l].children[m]
+              );
+              for (
+                let n = 0;
+                n <
+                rem.children[j].children[k].children[l].children[m].children
+                  .length;
+                n++
+              ) {
+                rem.children[j].children[k].children[l].children[m].children[
+                  n
+                ] = await RemNoteAPI.v0.get(
+                  rem.children[j].children[k].children[l].children[m].children[
+                    n
+                  ]
+                );
+              }
+            }
+          }
+        }
+      }
+      rem_tree.push(rem);
+    }
+    return await true;
   }
 }
