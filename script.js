@@ -1013,6 +1013,8 @@ async function onYouTubePlayerAPIReady() {
       case "ask a question": {
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
+        
+        rewind();
 
         let time = player.playerInfo.currentTime - delay;
 
