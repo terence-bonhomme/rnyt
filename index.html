@@ -78,7 +78,12 @@
 
           <div id="commands" class="row row-cols-4 mt-3">
             <div class="col">
-              <div id="takeNote" class="d-flex justify-content-center mt-1 ">
+              <div
+                id="takeNote"
+                class="d-flex justify-content-center mt-1 "
+                data-toggle="tooltip"
+                title="Input your note and type enter."
+              >
                 <img
                   src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fedit-note-svgrepo-com.svg?v=1636316606765"
                   height="15px"
@@ -99,7 +104,12 @@
             </div>
 
             <div class="col">
-              <div id="delayed" class="d-flex justify-content-center mt-1">
+              <div
+                id="delayed"
+                class="d-flex justify-content-center mt-1"
+                data-toggle="tooltip"
+                title="Rewind n seconds when you take a note."
+              >
                 <img
                   src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Ftime-hand-drawn-interface-symbol-svgrepo-com.svg?v=1636318980817"
                   height="18px"
@@ -118,14 +128,12 @@
             <div class="col">
               <div
                 id="keyboard_container"
-                class="form-check form-switch d-flex justify-content-center mt-2"
+                class="d-flex justify-content-center mt-2"
+                data-toggle="tooltip"
+                title="Check if you can use the plugin's keyboard shortcuts."
               >
-                <input
-                  id="keyboard"
-                  class="form-check-input d-flex justify-content-center"
-                  type="checkbox"
-                  disabled
-                />
+                <div id="keyboard" class="d-flex justify-content-center mt-1">                  
+                </div>
                 <label
                   id="keyboard_label"
                   class="form-check-label ms-2 d-none d-md-block"
@@ -136,7 +144,12 @@
             </div>
 
             <div class="col">
-              <div id="refresh" class="d-flex justify-content-center mt-1 ">
+              <div
+                id="refresh"
+                class="d-flex justify-content-center mt-1 "
+                data-toggle="tooltip"
+                title="Edit the plugin's rems and refresh to display them."
+              >
                 <img
                   src="https://cdn.glitch.me/cc7980bc-6980-45da-a79b-3fbfdb89c67b%2Fnotepad-refresh-svgrepo-com.svg?v=1636318031101"
                   height="18px"
