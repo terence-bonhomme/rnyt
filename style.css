@@ -4,8 +4,8 @@
   }
 
   #keyboard {
-    position: relative;
-    left: 0%;
+    left: 30%;
+    margin: 0 auto;
   }
 }
 
@@ -15,14 +15,13 @@
   }
 
   #keyboard {
-    position: relative;
     left: 0%;
+    margin: 0;
   }
 }
 
 label {
   color: #63637B;
-  cursor: pointer;
   user-select: none;
 }
 
@@ -226,6 +225,15 @@ input.delay_placeholder::-webkit-input-placeholder {
 #keyboard_container {
   user-select: none;
   outline: none;
+  display: flex;
+}
+
+#keyboard {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: #A6FBDE;
+  border-radius: 50%;
   display: flex;
 }
 

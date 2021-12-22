@@ -475,19 +475,13 @@ async function onYouTubePlayerAPIReady() {
     create_chapter();
   });
 
-  // keyboard switch
-
-  $("input#keyboard").on("change", function() {
-    $("input#keyboard").prop("checked", true);
-  });
+  // keyboard state
 
   $(window).on("blur", function() {
-    document.body.classList.add("paused");
-    $("input#keyboard").prop("checked", false);
+    $("#keyboard").css("background-color", "#f4f4fa");    
   });
   $(window).on("focus", function() {
-    document.body.classList.remove("paused");
-    $("input#keyboard").prop("checked", true);
+    $("#keyboard").css("background-color", "#A6FBDE");
   });
 
   // link input
@@ -537,6 +531,10 @@ async function onYouTubePlayerAPIReady() {
   // take note
 
   takeNote.onclick = function() {
+    $('[data-toggle="tooltip"]').on("click", function() {
+      $(this).tooltip("hide");
+    });
+
     player.pauseVideo();
 
     noteInput.style.display = "block";
@@ -548,6 +546,9 @@ async function onYouTubePlayerAPIReady() {
   // delay input
 
   delayInput.onclick = function() {
+    $('[data-toggle="tooltip"]').on("click", function() {
+      $(this).tooltip("hide");
+    });
     delayInput.value = "";
     delay = 0;
   };
@@ -587,6 +588,15 @@ async function onYouTubePlayerAPIReady() {
 
   // refresh
   refresh.onclick = function() {
+    $('[data-toggle="tooltip"]').on("click", function() {
+      $(this).tooltip("hide");
+    });
+    
+    $(this).css("font-weight", "bold");
+    setTimeout(function() { 
+      $("#refresh").css("font-weight", "normal"); 
+    }, 750);
+
     timeline(1);
   };
 
@@ -1013,7 +1023,7 @@ async function onYouTubePlayerAPIReady() {
       case "ask a question": {
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
-        
+
         rewind();
 
         let time = player.playerInfo.currentTime - delay;
