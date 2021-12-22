@@ -478,7 +478,7 @@ async function onYouTubePlayerAPIReady() {
   // keyboard state
 
   $(window).on("blur", function() {
-    $("#keyboard").css("background-color", "#f4f4fa");    
+    $("#keyboard").css("background-color", "#f4f4fa");
   });
   $(window).on("focus", function() {
     $("#keyboard").css("background-color", "#A6FBDE");
@@ -547,7 +547,7 @@ async function onYouTubePlayerAPIReady() {
 
   delayInput.onclick = function() {
     $('[data-toggle="tooltip"]').on("click", function() {
-      $(this).tooltip("hide");
+      $(this).tooltip();
     });
     delayInput.value = "";
     delay = 0;
@@ -589,12 +589,12 @@ async function onYouTubePlayerAPIReady() {
   // refresh
   refresh.onclick = function() {
     $('[data-toggle="tooltip"]').on("click", function() {
-      $(this).tooltip("hide");
+      $(this).tooltip();
     });
-    
+
     $(this).css("font-weight", "bold");
-    setTimeout(function() { 
-      $("#refresh").css("font-weight", "normal"); 
+    setTimeout(function() {
+      $("#refresh").css("font-weight", "normal");
     }, 750);
 
     timeline(1);
@@ -797,7 +797,6 @@ async function onYouTubePlayerAPIReady() {
     switch (shortcuts.keys[shortcut]) {
       case "take a note":
         player.pauseVideo();
-        takeNote.style.display = "none";
         noteInput.style.display = "flex";
         commands.style.display = "none";
         noteInput.focus();
