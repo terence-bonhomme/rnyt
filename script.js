@@ -230,11 +230,9 @@ async function onYouTubePlayerAPIReady() {
 
       document.getElementById("html").style.background = "#f5f5f5";
       $("#linkInput").css("background", "black");
-      $("#linkInput").css("color", gray1);
-      $("#ok").css("color", gray1);
-      $("#takeNote").css("color", gray1);
-      $("#keyboard_label").css("color", gray1);
-      $("#refresh").css("color", gray1);
+      $(
+        "#linkInput, #ok, #takeNote, #keyboard_label, #refresh, #shortcuts"
+      ).css("color", gray1);
 
       let filter_out =
         "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
@@ -243,22 +241,13 @@ async function onYouTubePlayerAPIReady() {
 
       $("img").css("filter", filter_out);
 
-      $("#refresh").on("mouseover", function() {
+      $("#refresh, #takenote, #shortcuts").on("mouseover", function() {
         $(this).css("color", gray2);
         $("#refresh > img").css("filter", filter_over);
       });
-      $("#refresh").on("mouseout", function() {
+      $("#refresh, #takenote, #shortcuts").on("mouseout", function() {
         $(this).css("color", gray1);
         $("#refresh > img").css("filter", filter_out);
-      });
-
-      $("#takeNote").on("mouseover", function() {
-        $(this).css("color", gray2);
-        $("#takeNote > img").css("filter", filter_over);
-      });
-      $("#takeNote").on("mouseout", function() {
-        $(this).css("color", gray1);
-        $("#takeNote > img").css("filter", filter_out);
       });
 
       $("#global").css("filter", "hue-rotate(180deg) invert(1)");
@@ -600,6 +589,26 @@ async function onYouTubePlayerAPIReady() {
     timeline(1);
   };
 
+  // shortcuts
+  $("#shortcuts").on("click", function() {
+    $('[data-toggle="tooltip"]').on("click", function() {
+      $(this).tooltip();
+    });
+
+    $(this).css("font-weight", "bold");
+    setTimeout(function() {
+      $("#shortcuts").css("font-weight", "normal");
+    }, 750);
+
+    show_shortcuts();
+  });
+
+  // modal
+  $("#close_modal, .btn-close").on("click", function() {
+    $(".modal").hide();
+    $("#note").css("display", "block");
+  });
+
   // keyboard shortcuts
 
   document.onkeydown = async function(event) {
@@ -632,7 +641,8 @@ async function onYouTubePlayerAPIReady() {
       "shift+Comma": "slower",
       "shift+Period": "faster",
       KeyR: "refresh",
-      KeyD: "delay switch"
+      KeyD: "delay switch",
+      F1: "help"
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -789,6 +799,10 @@ async function onYouTubePlayerAPIReady() {
               $("#delayInput").removeClass("delay_placeholder");
             }
           }
+          break;
+        case "help":
+          event.preventDefault();
+          show_shortcuts();
           break;
         default:
       }
@@ -1250,6 +1264,33 @@ async function onYouTubePlayerAPIReady() {
 
     if (currentTime > delay) {
       player.seekTo(currentTime - delay, true);
+    }
+  }
+
+  function show_shortcuts() {
+    const modal_options = {
+      backdrop: false,
+      keyboard: true
+    };
+
+    const modals = document.getElementsByClassName("modal");
+    for (let i = 0; i < modals.length; i++) {
+      new bootstrap.Modal(document.getElementById(modals[i].id), modal_options);
+
+      document.getElementById(modals[i].id).style.position = "relative";
+    }
+
+    var mainModal = new bootstrap.Modal(
+      document.getElementById("mainModalToggle"),
+      modal_options
+    );
+
+    if ($("#note").css("display") == "none") {
+      $("#note").css("display", "block");
+      $(".modal").hide();
+    } else {
+      $("#note").css("display", "none");
+      mainModal.toggle();
     }
   }
 
