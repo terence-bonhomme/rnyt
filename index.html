@@ -76,7 +76,7 @@
           <div id="line" class=""></div>
           <div id="play_pointer" class="mt-2"></div>
 
-          <div id="commands" class="row row-cols-4 mt-3">
+          <div id="commands" class="row row-cols-5 mt-3">
             <div class="col">
               <div
                 id="takeNote"
@@ -132,11 +132,13 @@
                 data-toggle="tooltip"
                 title="Check if you can use the plugin's keyboard shortcuts."
               >
-                <div id="keyboard" class="d-flex justify-content-center mt-1">                  
-                </div>
+                <div
+                  id="keyboard"
+                  class="d-flex justify-content-center mt-1"
+                ></div>
                 <label
                   id="keyboard_label"
-                  class="form-check-label ms-2 d-none d-md-block"
+                  class="form-check-label ms-2 d-none d-lg-block"
                   for="keyboard"
                   >Keyboard</label
                 >
@@ -164,6 +166,25 @@
                 />
                 <div class="d-none d-md-block">
                   Refresh
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div
+                id="shortcuts"
+                class="d-flex justify-content-center mt-1 "
+                data-toggle="tooltip"
+                title="Read the keyboard shortcuts."
+              >
+                <img
+                  src="https://cdn.glitch.me/be28f3c3-fd03-4a8f-b93a-e1fdc84bea7d/keyboard-svgrepo-com.svg?v=1640533839007"
+                  height="15px"
+                  width="15px"
+                  class="me-2 mt-1 d-none d-md-block"
+                />
+                <div class="d-none d-md-block">
+                  Shortcuts
                 </div>
               </div>
             </div>
@@ -206,6 +227,913 @@
                 </li>
               </ul>
             </ul>
+          </div>
+
+          <!-- help modals -->
+
+          <!-- main -->
+          <div
+            class="help-page modal fade"
+            id="mainModalToggle"
+            aria-hidden="true"
+            aria-labelledby="mainModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="mainModalToggle">
+                    Shortcuts
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>
+                    You can use qwerty and azerty.
+                  </p>
+                  <p>
+                    You may ask for another popular keyboard layout on the forum
+                    if you have an issue.
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" id="close_modal">
+                    Close
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#noteModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Input Note
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play Video
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- takenote -->
+          <div
+            class="modal fade"
+            id="noteModalToggle"
+            aria-hidden="true"
+            aria-labelledby="noteModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="noteModalToggle">
+                    Note
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">
+                          Enter
+                        </span>
+                      </td>
+                      <td>enter a parent note with a timestamp</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Ctrl</span>
+                        <span class="key">Enter</span>
+                      </td>
+                      <td>enter a child note with a timestamp</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Alt</span>
+                        <span class="key">Enter</span>
+                      </td>
+
+                      <td>enter a child note without a timestamp</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Note
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#questionModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Question
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#other2ModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="other2ModalToggle"
+            aria-hidden="true"
+            aria-labelledby="noteModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="other2ModalToggle">
+                    Other
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">🡄</span>
+                      </td>
+                      <td>rewind 5s before to type</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">🡆</span>
+                      </td>
+                      <td>forward 5s before to type</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Space</span>
+                      </td>
+                      <td>play/pause before to type</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">Esc</span></td>
+                      <td>erase and leave the text input</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#noteModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Note
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#questionModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Question
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="questionModalToggle"
+            aria-hidden="true"
+            aria-labelledby="noteModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="questionModalToggle">
+                    Question
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">Enter</span>
+                      </td>
+                      <td>enter a question to create a flashcard</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Ctrl</span>
+                        <span class="key">Shift</span>
+                        <span class="key">Enter</span>
+                      </td>
+                      <td>enter a child question to create a flashcard</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#noteModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Note
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Question
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#other2ModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- playvideo -->
+
+          <div
+            class="modal fade"
+            id="playModalToggle"
+            aria-hidden="true"
+            aria-labelledby="playModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="playModalToggle">
+                    Play
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td><span class="key">Space</span></td>
+                      <td>play/pause</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">K</span></td>
+                      <td>play/pause</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Play
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#jumpModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Jump
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#soundModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Sound
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#multimediaModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Multimedia
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#chapterModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Chapter
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#otherModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="jumpModalToggle"
+            aria-hidden="true"
+            aria-labelledby="jumpModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="jumpModalToggle">
+                    Jump
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td><span class="key">🡄</span></td>
+                      <td>rewind 5s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">🡆</span></td>
+                      <td>forward 5s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">J</span></td>
+                      <td>rewind 10s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">L</span></td>
+                      <td>forward 10s</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">0</span> -
+                        <span class="key">9</span>
+                      </td>
+                      <td>n ✕ 10% jump</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Jump
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#soundModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Sound
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#multimediaModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Multimedia
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#chapterModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Chapter
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#otherModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="soundModalToggle"
+            aria-hidden="true"
+            aria-labelledby="soundModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="soundModalToggle">
+                    Sound
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td><span class="key">M</span></td>
+                      <td>mute</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡅</span>
+                      </td>
+                      <td>volume up</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡇</span>
+                      </td>
+                      <td>volume down</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#jumpModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Jump
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Sound
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#multimediaModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Multimedia
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#chapterModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Chapter
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#otherModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="chapterModalToggle"
+            aria-hidden="true"
+            aria-labelledby="chapterModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="chapterModalToggle">
+                    Chapter
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">Page Up</span>
+                      </td>
+                      <td>previous chapter</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">Page Down</span>
+                      </td>
+                      <td>next chapter</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">Home</span>
+                      </td>
+                      <td>first chapter</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">End</span>
+                      </td>
+                      <td>last chapter</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">Backspace</span></td>
+                      <td>repeat the current chapter</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#jumpModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Jump
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#soundModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Sound
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#multimediaModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Multimedia
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Chapter
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#otherModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="multimediaModalToggle"
+            aria-hidden="true"
+            aria-labelledby="multimediaModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="multimediaModalToggle">
+                    Multimedia
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td><span class="key">⏯</span></td>
+                      <td>play/pause</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">⏮</span></td>
+                      <td>previous chapter</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">⏭</span></td>
+                      <td>next chapter</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#jumpModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Jump
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#soundModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Sound
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Multimedia
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#chapterModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Chapter
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#otherModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="otherModalToggle"
+            aria-hidden="true"
+            aria-labelledby="chapterModalToggleabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="chapterModalToggle">
+                    Other
+                  </h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td><span class="key">R</span></td>
+                      <td>refresh</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">D</span></td>
+                      <td>enable/disable the delay</td>
+                    </tr>
+                    <tr>
+                      <td><span class="key">F1</span></td>
+                      <td>show/hide help</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#playModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Play
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#jumpModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Jump
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#soundModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Sound
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#multimediaModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Multimedia
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#chapterModalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    data-bs-backdrop="false"
+                  >
+                    Chapter
+                  </button>
+                  <button class="btn btn-light disabled">
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -121,6 +121,23 @@ input.delay_placeholder::-webkit-input-placeholder {
   color: #aaaabb;
 }
 
+.modal-title {
+  font-size: 18px;
+}
+
+.modal-dialog {
+  top: -10px;
+}
+
+.key {
+  padding: 1px 3px;
+  color: gray;
+  font-size: 14px;
+  font-weight: bold;
+  border: solid 1px gray;
+  border-radius: 5px;
+}
+
 #viewCont {
   display: none;
 }
@@ -272,4 +289,19 @@ input.delay_placeholder::-webkit-input-placeholder {
   left: 64%;
   width: 36%;
   z-index: 2;
+}
+
+#shortcuts {
+  color: #63637B;
+  text-align: center;
+  display: block;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 5px;
+  display: flex;
+  user-select: none;
+}
+
+#shortcuts:hover {
+  background: #f4f4fa;
 }
