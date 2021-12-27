@@ -42,6 +42,12 @@ async function onYouTubePlayerAPIReady() {
   var w_parameter = 0;
   var dark_mode = 0;
 
+  var shortcuts_displayed = false;
+  var mainModal;
+  var ytplayer_width;
+
+  var modal_list = [];
+
   // color
 
   const color_0 = [
@@ -383,10 +389,12 @@ async function onYouTubePlayerAPIReady() {
       if (typeof player.getDuration === "function") {
         const player_current_time = parseInt(player.playerInfo.currentTime);
 
+        if (!shortcuts_displayed)
+          ytplayer_width = ytplayer.getBoundingClientRect().width;
+
         // player pointer
         play_pointer.style.left =
-          (player_current_time / player.getDuration()) *
-            (ytplayer.getBoundingClientRect().width - 20) +
+          (player_current_time / player.getDuration()) * (ytplayer_width - 20) +
           20 +
           "px";
 
@@ -604,10 +612,12 @@ async function onYouTubePlayerAPIReady() {
   });
 
   // modal
-  $("#close_modal, .btn-close").on("click", function() {
-    $(".modal").hide();
-    $("#note").css("display", "block");
-  });
+
+  $("#close_modal, .btn-close")
+    .not("#close-link-error")
+    .on("click", function() {
+      show_shortcuts();
+    });
 
   // keyboard shortcuts
 
@@ -1267,31 +1277,54 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  function show_shortcuts() {
+  async function update_modal() {
     const modal_options = {
       backdrop: false,
       keyboard: true
     };
 
+    for (let i = 0; i < modal_list.length; i++) {
+      modal_list[i].hide();
+    }
+
+    modal_list = [];
     const modals = document.getElementsByClassName("modal");
     for (let i = 0; i < modals.length; i++) {
-      new bootstrap.Modal(document.getElementById(modals[i].id), modal_options);
+      if (modals[i].id == "mainModalToggle") {
+        modal_list.push(
+          new bootstrap.Modal(
+            document.getElementById("mainModalToggle"),
+            modal_options
+          )
+        );
+        mainModal = modal_list[modal_list.length - 1];
+      } else {
+        modal_list.push(
+          new bootstrap.Modal(
+            document.getElementById(modals[i].id),
+            modal_options
+          )
+        );
+      }
 
       document.getElementById(modals[i].id).style.position = "relative";
     }
+  }
 
-    var mainModal = new bootstrap.Modal(
-      document.getElementById("mainModalToggle"),
-      modal_options
-    );
+  async function show_shortcuts() {
+    await update_modal();
 
     if ($("#note").css("display") == "none") {
       $("#note").css("display", "block");
+      shortcuts_displayed = false;
       $(".modal").hide();
     } else {
       $("#note").css("display", "none");
-      mainModal.toggle();
+      shortcuts_displayed = true;
+      mainModal.show();
     }
+
+    $(".modal-open").css("overflow-y", "auto");
   }
 
   // function to load when the youtube video is ready

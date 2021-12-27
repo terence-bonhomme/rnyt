@@ -125,10 +125,6 @@ input.delay_placeholder::-webkit-input-placeholder {
   font-size: 18px;
 }
 
-.modal-dialog {
-  top: -10px;
-}
-
 .key {
   padding: 1px 3px;
   color: gray;
@@ -136,6 +132,10 @@ input.delay_placeholder::-webkit-input-placeholder {
   font-weight: bold;
   border: solid 1px gray;
   border-radius: 5px;
+}
+
+.modal-dialog {
+  top: -10px;
 }
 
 #viewCont {

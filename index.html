@@ -42,6 +42,7 @@
         <button
           aria-label="Close"
           class="btn-close"
+          id="close-link-error"
           data-bs-dismiss="toast"
           type="button"
         ></button>
@@ -233,7 +234,7 @@
 
           <!-- main -->
           <div
-            class="help-page modal fade"
+            class="modal fade"
             id="mainModalToggle"
             aria-hidden="true"
             aria-labelledby="mainModalToggleLabel"
@@ -264,8 +265,6 @@
                     class="btn btn-light"
                     data-bs-target="#noteModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Input Note
                   </button>
@@ -273,8 +272,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play Video
                   </button>
@@ -335,7 +332,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -346,8 +342,6 @@
                     class="btn btn-light"
                     data-bs-target="#questionModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Question
                   </button>
@@ -355,8 +349,6 @@
                     class="btn btn-light"
                     data-bs-target="#other2ModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -415,7 +407,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -423,8 +414,6 @@
                     class="btn btn-light"
                     data-bs-target="#noteModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Note
                   </button>
@@ -432,8 +421,6 @@
                     class="btn btn-light"
                     data-bs-target="#questionModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Question
                   </button>
@@ -488,7 +475,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -496,8 +482,6 @@
                     class="btn btn-light"
                     data-bs-target="#noteModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Note
                   </button>
@@ -508,8 +492,6 @@
                     class="btn btn-light"
                     data-bs-target="#other2ModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -556,7 +538,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -567,8 +548,6 @@
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Jump
                   </button>
@@ -576,8 +555,6 @@
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Sound
                   </button>
@@ -585,8 +562,6 @@
                     class="btn btn-light"
                     data-bs-target="#multimediaModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Multimedia
                   </button>
@@ -594,8 +569,6 @@
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Chapter
                   </button>
@@ -603,8 +576,6 @@
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -664,7 +635,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -672,8 +642,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play
                   </button>
@@ -684,8 +652,6 @@
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Sound
                   </button>
@@ -693,8 +659,6 @@
                     class="btn btn-light"
                     data-bs-target="#multimediaModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Multimedia
                   </button>
@@ -702,8 +666,6 @@
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Chapter
                   </button>
@@ -711,8 +673,6 @@
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -767,7 +727,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -775,8 +734,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play
                   </button>
@@ -784,8 +741,6 @@
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Jump
                   </button>
@@ -796,8 +751,6 @@
                     class="btn btn-light"
                     data-bs-target="#multimediaModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Multimedia
                   </button>
@@ -805,8 +758,6 @@
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Chapter
                   </button>
@@ -814,8 +765,6 @@
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -884,7 +833,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -892,8 +840,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play
                   </button>
@@ -901,8 +847,6 @@
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Jump
                   </button>
@@ -910,8 +854,6 @@
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Sound
                   </button>
@@ -920,7 +862,6 @@
                     data-bs-target="#multimediaModalToggle"
                     data-bs-toggle="modal"
                     data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Multimedia
                   </button>
@@ -931,8 +872,6 @@
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -954,7 +893,6 @@
                   <h5 class="modal-title" id="multimediaModalToggle">
                     Multimedia
                   </h5>
-                  <button type="button" class="btn-close"></button>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -982,7 +920,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -990,8 +927,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play
                   </button>
@@ -999,8 +934,6 @@
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Jump
                   </button>
@@ -1008,8 +941,6 @@
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Sound
                   </button>
@@ -1020,8 +951,6 @@
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Chapter
                   </button>
@@ -1029,8 +958,6 @@
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Other
                   </button>
@@ -1079,7 +1006,6 @@
                     class="btn btn-secondary"
                     data-bs-target="#mainModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
                   >
                     Back
                   </button>
@@ -1087,8 +1013,6 @@
                     class="btn btn-light"
                     data-bs-target="#playModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Play
                   </button>
@@ -1096,8 +1020,6 @@
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Jump
                   </button>
@@ -1105,8 +1027,6 @@
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Sound
                   </button>
@@ -1114,8 +1034,6 @@
                     class="btn btn-light"
                     data-bs-target="#multimediaModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Multimedia
                   </button>
@@ -1123,8 +1041,6 @@
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
                     data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    data-bs-backdrop="false"
                   >
                     Chapter
                   </button>
