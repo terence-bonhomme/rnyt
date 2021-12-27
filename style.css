@@ -249,7 +249,7 @@ input.delay_placeholder::-webkit-input-placeholder {
   position: relative;
   height: 18px;
   width: 18px;
-  background-color: #A6FBDE;
+  background-color: #f4f4fa;
   border-radius: 50%;
   display: flex;
 }
