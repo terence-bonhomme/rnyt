@@ -611,6 +611,12 @@ async function onYouTubePlayerAPIReady() {
     show_shortcuts();
   });
 
+  // tooltips
+
+  $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
   // modal
 
   $("#close_modal, .btn-close")
