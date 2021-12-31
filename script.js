@@ -46,6 +46,10 @@ async function onYouTubePlayerAPIReady() {
   var mainModal;
   var ytplayer_width;
 
+  var text_input = "";
+  var writing_rem = false;
+  var just_noted = false;
+
   var modal_list = [];
 
   // color
@@ -540,6 +544,14 @@ async function onYouTubePlayerAPIReady() {
     noteInput.focus();
   };
 
+  // note input
+
+  $("#noteInput").focusout(function() {
+    setTimeout(function() {
+      just_noted = false;
+    }, 500);
+  });
+
   // delay input
 
   delayInput.onclick = function() {
@@ -664,6 +676,10 @@ async function onYouTubePlayerAPIReady() {
     if (event.ctrlKey) shortcut += "ctrl+";
     if (event.altKey) shortcut += "alt+";
     if (event.shiftKey) shortcut += "shift+";
+
+    if (event.repeat && event.code == "Enter") {
+      return;
+    }
 
     if (
       event.key == "MediaTrackPrevious" ||
@@ -826,10 +842,12 @@ async function onYouTubePlayerAPIReady() {
 
     switch (shortcuts.keys[shortcut]) {
       case "take a note":
-        player.pauseVideo();
-        noteInput.style.display = "flex";
-        commands.style.display = "none";
-        noteInput.focus();
+        if (!just_noted || text_input == "") {
+          player.pauseVideo();
+          noteInput.style.display = "flex";
+          commands.style.display = "none";
+          noteInput.focus();
+        }
         break;
       case "cancel":
         player.pauseVideo();
@@ -866,13 +884,22 @@ async function onYouTubePlayerAPIReady() {
 
     if (event.shiftKey) shortcut += "shift+";
 
+    if (event.repeat && event.code == "Enter") {
+      return;
+    }
+
     if (event.code) {
       shortcut += event.code;
     }
 
     // different ways to take a note
     switch (shortcuts.keys[shortcut]) {
-      case "take a note": {
+      case "take a note": {                       
+        while (writing_rem) {          
+          if(writing_rem) await sleep(100)
+        }
+
+        writing_rem = true;
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
@@ -885,6 +912,14 @@ async function onYouTubePlayerAPIReady() {
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
           noteInput.value
         }`;
+
+        text_input = noteInput.value;
+
+        player.playVideo();
+
+        recoverFromNoteInput();
+
+        just_noted = true;
 
         var inserted = false;
         for (position = 1; position < rem_tree.length; position++) {
@@ -915,9 +950,7 @@ async function onYouTubePlayerAPIReady() {
           rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
         }
 
-        update_timeline(position, time);
-
-        recoverFromNoteInput();
+        update_timeline(position, time, text_input);
 
         clearTimeout(scroll_timeout);
         scroll_timeout = setTimeout(function() {
@@ -929,10 +962,17 @@ async function onYouTubePlayerAPIReady() {
           );
         }, 500);
 
-        player.playVideo();
+        text_input = "";
+        writing_rem = false;
+
         break;
       }
       case "take a child note without a timestamp": {
+        while (writing_rem) {          
+          if(writing_rem) await sleep(100)
+        }
+
+        writing_rem = true;
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
@@ -944,8 +984,16 @@ async function onYouTubePlayerAPIReady() {
 
         if (rem_tree.length > 1) rewind();
 
+        let text_input = noteInput.value;
+
+        player.playVideo();
+
+        recoverFromNoteInput();
+
+        just_noted = true;
+
         const last_rem = await RemNoteAPI.v0.create(
-          noteInput.value,
+          text_input,
           current_rem._id
         );
 
@@ -953,9 +1001,7 @@ async function onYouTubePlayerAPIReady() {
           await RemNoteAPI.v0.get(last_rem.remId)
         );
 
-        update_note_child();
-
-        recoverFromNoteInput();
+        update_note_child(null, null, null, text_input);
 
         clearTimeout(scroll_timeout);
         scroll_timeout = setTimeout(function() {
@@ -967,10 +1013,17 @@ async function onYouTubePlayerAPIReady() {
           );
         }, 500);
 
-        player.playVideo();
+        text_input = "";
+        writing_rem = false;
+
         break;
       }
       case "take a child note with a timestamp": {
+        while (writing_rem) {          
+          if(writing_rem) await sleep(100)
+        }
+
+        writing_rem = true;
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
@@ -987,6 +1040,12 @@ async function onYouTubePlayerAPIReady() {
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
           noteInput.value
         }`;
+
+        text_input = noteInput.value;
+
+        player.playVideo();
+
+        recoverFromNoteInput();
 
         var current_rem = rem_tree[chapter_note];
 
@@ -1032,9 +1091,7 @@ async function onYouTubePlayerAPIReady() {
           );
         }
 
-        update_note_child(chapter_note, position, time);
-
-        recoverFromNoteInput();
+        update_note_child(chapter_note, position, time, text_input);
 
         clearTimeout(scroll_timeout);
         scroll_timeout = setTimeout(function() {
@@ -1046,10 +1103,17 @@ async function onYouTubePlayerAPIReady() {
           );
         }, 500);
 
-        player.playVideo();
+        text_input = "";
+        writing_rem = false;
+
         break;
       }
       case "ask a question": {
+        while (writing_rem) {          
+          if(writing_rem) await sleep(100)
+        }
+
+        writing_rem = true;
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
@@ -1062,6 +1126,14 @@ async function onYouTubePlayerAPIReady() {
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
           time
         )}) answer << ${noteInput.value}`;
+
+        text_input = noteInput.value;
+
+        player.playVideo();
+
+        recoverFromNoteInput();
+
+        just_noted = true;
 
         var inserted = false;
         for (position = 1; position < rem_tree.length; position++) {
@@ -1089,9 +1161,7 @@ async function onYouTubePlayerAPIReady() {
           rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
         }
 
-        update_timeline(position, time);
-
-        recoverFromNoteInput();
+        update_timeline(position, time, text_input);
 
         clearTimeout(scroll_timeout);
         scroll_timeout = setTimeout(function() {
@@ -1103,10 +1173,18 @@ async function onYouTubePlayerAPIReady() {
           );
         }, 500);
 
-        player.playVideo();
+        text_input = "";
+        writing_rem = false;
+
         break;
       }
       case "ask a child question": {
+        while (writing_rem) {          
+          if(writing_rem) await sleep(100)
+        }
+        
+        writing_rem = true;
+        
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
@@ -1123,6 +1201,14 @@ async function onYouTubePlayerAPIReady() {
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
           time
         )}) answer << ${noteInput.value}`;
+
+        text_input = noteInput.value;
+
+        recoverFromNoteInput();
+
+        just_noted = true;
+
+        player.playVideo();
 
         var current_rem = rem_tree[chapter_note];
 
@@ -1154,6 +1240,7 @@ async function onYouTubePlayerAPIReady() {
             );
 
             inserted = true;
+
             break;
           }
         }
@@ -1170,9 +1257,7 @@ async function onYouTubePlayerAPIReady() {
           );
         }
 
-        update_note_child(chapter_note, position, time);
-
-        recoverFromNoteInput();
+        update_note_child(chapter_note, position, time, text_input);
 
         clearTimeout(scroll_timeout);
         scroll_timeout = setTimeout(function() {
@@ -1184,7 +1269,9 @@ async function onYouTubePlayerAPIReady() {
           );
         }, 500);
 
-        player.playVideo();
+        text_input = "";
+        writing_rem = false;
+
         break;
       }
 
@@ -1194,6 +1281,10 @@ async function onYouTubePlayerAPIReady() {
   };
 
   // FUNCTIONS
+  
+  function sleep(delay){
+    return new Promise((resolve) => setTimeout(resolve, delay));
+  }
 
   function recoverFromNoteInput() {
     noteInput.value = "";
@@ -1795,7 +1886,7 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  async function update_timeline(position, time) {
+  async function update_timeline(position, time, text) {
     delay = Number(document.getElementById("delayInput").value);
     if (no_delay) delay = 0;
 
@@ -1824,7 +1915,7 @@ async function onYouTubePlayerAPIReady() {
     input0.id = position;
 
     input0.value = durationToFormatedTime(time);
-    input0.rem = noteInput.value;
+    input0.rem = text;
 
     $(input0).on("click", function() {
       $("html, body").animate(
@@ -1852,7 +1943,7 @@ async function onYouTubePlayerAPIReady() {
       $(this).css("background", color_0[(position - 1) % color_0.length]);
     });
 
-    var newContent0 = document.createTextNode(" " + noteInput.value);
+    var newContent0 = document.createTextNode(" " + text);
 
     li0.appendChild(input0);
     li0.appendChild(newContent0);
@@ -2034,7 +2125,7 @@ async function onYouTubePlayerAPIReady() {
     }
   }
 
-  function update_note_child(chapterId, position, time) {
+  function update_note_child(chapterId, position, time, text) {
     delay = Number(document.getElementById("delayInput").value);
     if (no_delay) delay = 0;
 
@@ -2053,7 +2144,7 @@ async function onYouTubePlayerAPIReady() {
       const input1 = document.createElement("input");
       input1.type = "button";
       input1.value = durationToFormatedTime(time);
-      input1.rem = noteInput.value;
+      input1.rem = text;
 
       const color = chapterId;
 
@@ -2085,7 +2176,7 @@ async function onYouTubePlayerAPIReady() {
       li1.appendChild(input1);
     }
 
-    var newContent1 = document.createTextNode(" " + noteInput.value);
+    var newContent1 = document.createTextNode(" " + text);
 
     li1.appendChild(newContent1);
 
