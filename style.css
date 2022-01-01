@@ -2,21 +2,11 @@
   #delayInput {
     width: 40px;
   }
-
-  #keyboard {
-    left: 30%;
-    margin: 0 auto;
-  }
 }
 
 @media screen and (min-width: 750px) {
   #delayInput {
     width: 80px;
-  }
-
-  #keyboard {
-    left: 0%;
-    margin: 0;
   }
 }
 
@@ -251,7 +241,7 @@ input.delay_placeholder::-webkit-input-placeholder {
   width: 18px;
   background-color: #f4f4fa;
   border-radius: 50%;
-  display: flex;
+  display: inline;
 }
 
 #line {
