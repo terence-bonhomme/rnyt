@@ -50,6 +50,8 @@ async function onYouTubePlayerAPIReady() {
   var writing_rem = false;
   var just_noted = false;
 
+  var scroll_visible = false;
+
   var modal_list = [];
 
   // color
@@ -459,6 +461,9 @@ async function onYouTubePlayerAPIReady() {
     viewCont.style.display = "block";
     linkCont.style.display = "none";
 
+    // scrollbar
+    updateTimelineScrollbar();
+
     // erase the loading placeholder
     setTimeout(function() {
       $("#placeholder").html("");
@@ -607,6 +612,8 @@ async function onYouTubePlayerAPIReady() {
     }, 750);
 
     timeline(1);
+
+    updateTimelineScrollbar();
   };
 
   // shortcuts
@@ -894,9 +901,9 @@ async function onYouTubePlayerAPIReady() {
 
     // different ways to take a note
     switch (shortcuts.keys[shortcut]) {
-      case "take a note": {                       
-        while (writing_rem) {          
-          if(writing_rem) await sleep(100)
+      case "take a note": {
+        while (writing_rem) {
+          if (writing_rem) await sleep(100);
         }
 
         writing_rem = true;
@@ -965,11 +972,13 @@ async function onYouTubePlayerAPIReady() {
         text_input = "";
         writing_rem = false;
 
+        updateTimelineScrollbar();
+
         break;
       }
       case "take a child note without a timestamp": {
-        while (writing_rem) {          
-          if(writing_rem) await sleep(100)
+        while (writing_rem) {
+          if (writing_rem) await sleep(100);
         }
 
         writing_rem = true;
@@ -1019,8 +1028,8 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "take a child note with a timestamp": {
-        while (writing_rem) {          
-          if(writing_rem) await sleep(100)
+        while (writing_rem) {
+          if (writing_rem) await sleep(100);
         }
 
         writing_rem = true;
@@ -1109,8 +1118,8 @@ async function onYouTubePlayerAPIReady() {
         break;
       }
       case "ask a question": {
-        while (writing_rem) {          
-          if(writing_rem) await sleep(100)
+        while (writing_rem) {
+          if (writing_rem) await sleep(100);
         }
 
         writing_rem = true;
@@ -1176,15 +1185,17 @@ async function onYouTubePlayerAPIReady() {
         text_input = "";
         writing_rem = false;
 
+        updateTimelineScrollbar();
+
         break;
       }
       case "ask a child question": {
-        while (writing_rem) {          
-          if(writing_rem) await sleep(100)
+        while (writing_rem) {
+          if (writing_rem) await sleep(100);
         }
-        
+
         writing_rem = true;
-        
+
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
@@ -1281,9 +1292,25 @@ async function onYouTubePlayerAPIReady() {
   };
 
   // FUNCTIONS
-  
-  function sleep(delay){
-    return new Promise((resolve) => setTimeout(resolve, delay));
+
+  function updateTimelineScrollbar() {
+    if (
+      !scroll_visible &&
+      document.documentElement.scrollHeight !==
+        document.documentElement.clientHeight
+    ) {
+      create_chapter();
+      scroll_visible = true;
+    } else if (
+      document.documentElement.scrollHeight ==
+      document.documentElement.clientHeight
+    ) {
+      scroll_visible = false;
+    }
+  }
+
+  function sleep(delay) {
+    return new Promise(resolve => setTimeout(resolve, delay));
   }
 
   function recoverFromNoteInput() {
