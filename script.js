@@ -11,6 +11,7 @@ $("#html").hide();
 async function onYouTubePlayerAPIReady() {
   var player;
   var chapter;
+  var previous_chapter;
   var video_id;
 
   var scroll_timeout;
@@ -38,6 +39,27 @@ async function onYouTubePlayerAPIReady() {
   var no_delay = false;
 
   var current_chapter = 0;
+  var level = 1;
+  var last_level = 1;
+  var tree_position = [];
+  var last_tree_position = [];
+
+  var line_position1 = 0;
+  var line_position2 = 0;
+  var line_position3 = 0;
+  var line_position4 = 0;
+  var line_max_position1 = 0;
+  var line_max_position2 = 0;
+  var line_max_position3 = 0;
+  var line_max_position4 = 0;
+  var last_line_position1 = 0;
+  var last_line_position2 = 0;
+  var last_line_position3 = 0;
+  var last_line_position4 = 0;
+  var last_line_max_position1 = 0;
+  var last_line_max_position2 = 0;
+  var last_line_max_position3 = 0;
+  var last_line_max_position4 = 0;
 
   var w_parameter = 0;
   var dark_mode = 0;
@@ -49,10 +71,14 @@ async function onYouTubePlayerAPIReady() {
   var text_input = "";
   var writing_rem = false;
   var just_noted = false;
+  var just_clicked = false;
 
   var scroll_visible = false;
 
   var modal_list = [];
+
+  var last_referenceNode;
+  var navigation_disabled = false;
 
   // color
 
@@ -62,7 +88,7 @@ async function onYouTubePlayerAPIReady() {
     "#A6FBDE",
     "#FFD9C7",
     "#ECDCFF",
-    "#D4F0FF"
+    "#D4F0FF",
   ];
 
   const color_1 = [
@@ -71,7 +97,7 @@ async function onYouTubePlayerAPIReady() {
     "#AEFFE6",
     "#FFDECC",
     "#F1E1FF",
-    "#D9F5FF"
+    "#D9F5FF",
   ];
 
   const color_2 = [
@@ -80,7 +106,7 @@ async function onYouTubePlayerAPIReady() {
     "#B5FFED",
     "#FFE3D1",
     "#F6E6FF",
-    "#DEFAFF"
+    "#DEFAFF",
   ];
 
   const color_3 = [
@@ -89,7 +115,7 @@ async function onYouTubePlayerAPIReady() {
     "#BDFFF5",
     "#FFE8D6",
     "#FBEBFF",
-    "#E3FFFF"
+    "#E3FFFF",
   ];
 
   const color_4 = [
@@ -98,7 +124,7 @@ async function onYouTubePlayerAPIReady() {
     "#C5FFFD",
     "#FFEDDB",
     "#FFF0FF",
-    "#E8FFFF"
+    "#E8FFFF",
   ];
 
   const color_5 = [
@@ -107,7 +133,7 @@ async function onYouTubePlayerAPIReady() {
     "#CCFFFF",
     "#FFF3E1",
     "#FFF6FF",
-    "#EEFFFF"
+    "#EEFFFF",
   ];
 
   const color_0_hover = [
@@ -116,7 +142,7 @@ async function onYouTubePlayerAPIReady() {
     "#6DF8CA",
     "#FFB999",
     "#C799FF",
-    "#99DBFF"
+    "#99DBFF",
   ];
 
   const color_1_hover = [
@@ -125,7 +151,7 @@ async function onYouTubePlayerAPIReady() {
     "#7AFFD7",
     "#FFC6A6",
     "#D4A6FF",
-    "#A6E8FF"
+    "#A6E8FF",
   ];
 
   const color_2_hover = [
@@ -134,7 +160,7 @@ async function onYouTubePlayerAPIReady() {
     "#87FFE4",
     "#FFD3B3",
     "#E1B3FF",
-    "#B3F5FF"
+    "#B3F5FF",
   ];
 
   const color_3_hover = [
@@ -143,7 +169,7 @@ async function onYouTubePlayerAPIReady() {
     "#93FFF0",
     "#FFDFBF",
     "#EDBFFF",
-    "#BFFFFF"
+    "#BFFFFF",
   ];
 
   const color_4_hover = [
@@ -152,7 +178,7 @@ async function onYouTubePlayerAPIReady() {
     "#A0FFFD",
     "#FFECCC",
     "#FACCFF",
-    "#CCFFFF"
+    "#CCFFFF",
   ];
 
   const color_5_hover = [
@@ -161,7 +187,7 @@ async function onYouTubePlayerAPIReady() {
     "#ADFFFF",
     "#FFF9D9",
     "#FFD9FF",
-    "#D9FFFF"
+    "#D9FFFF",
   ];
 
   // read the rem's children
@@ -253,11 +279,11 @@ async function onYouTubePlayerAPIReady() {
 
       $("img").css("filter", filter_out);
 
-      $("#refresh, #takenote, #shortcuts").on("mouseover", function() {
+      $("#refresh, #takenote, #shortcuts").on("mouseover", function () {
         $(this).css("color", gray2);
         $("#refresh > img").css("filter", filter_over);
       });
-      $("#refresh, #takenote, #shortcuts").on("mouseout", function() {
+      $("#refresh, #takenote, #shortcuts").on("mouseout", function () {
         $(this).css("color", gray1);
         $("#refresh > img").css("filter", filter_out);
       });
@@ -341,7 +367,7 @@ async function onYouTubePlayerAPIReady() {
       ok.style.display = "block";
       ok.style.opacity = "1";
     }
-    setTimeout(function() {
+    setTimeout(function () {
       ok.click();
     }, 100);
   }
@@ -381,13 +407,13 @@ async function onYouTubePlayerAPIReady() {
         modestbranding: 1,
         playsinline: 1,
         rel: 0,
-        showsearch: 0
+        showsearch: 0,
       },
       events: {
         // load the content
         onReady: timeline,
-        onStateChange: onPlayerStateChange
-      }
+        onStateChange: onPlayerStateChange,
+      },
     });
 
     // updates
@@ -443,11 +469,11 @@ async function onYouTubePlayerAPIReady() {
               if (!cancel_auto_scroll) {
                 $("html, body").animate(
                   {
-                    scrollTop: $("#" + i).offset().top
+                    scrollTop: $("#" + i).offset().top,
                   },
                   100
                 );
-                setTimeout(function() {
+                setTimeout(function () {
                   cancel_auto_scroll = false;
                 }, 1000);
               }
@@ -457,6 +483,31 @@ async function onYouTubePlayerAPIReady() {
       }
     }, 1000);
 
+    // update blue line
+    setInterval(() => {
+      if (!just_clicked && previous_chapter != current_chapter) {
+        line_position1 = 0;
+        line_position2 = 0;
+        line_position3 = 0;
+        line_position4 = 0;
+        level = 1;
+        previous_chapter = current_chapter;
+        change_line(current_chapter);
+      }
+      if (current_chapter == 0) {
+        if (last_referenceNode != undefined) {
+          if (dark_mode == 0 && last_referenceNode.style.color != "#202020") {
+            last_referenceNode.style.color = "#202020";
+          } else if (
+            dark_mode == 1 &&
+            last_referenceNode.style.color != "#c0bdbd"
+          ) {
+            last_referenceNode.style.color = "#c0bdbd";
+          }
+        }
+      }
+    }, 200);
+
     // change panel
     viewCont.style.display = "block";
     linkCont.style.display = "none";
@@ -465,7 +516,7 @@ async function onYouTubePlayerAPIReady() {
     updateTimelineScrollbar();
 
     // erase the loading placeholder
-    setTimeout(function() {
+    setTimeout(function () {
       $("#placeholder").html("");
     }, 500);
   }
@@ -477,22 +528,22 @@ async function onYouTubePlayerAPIReady() {
   // EVENTS
 
   // resize
-  $(window).resize(function() {
+  $(window).resize(function () {
     create_chapter();
   });
 
   // keyboard state
 
-  $(window).on("blur", function() {
+  $(window).on("blur", function () {
     $("#keyboard").css("background-color", "#f4f4fa");
   });
-  $(window).on("focus", function() {
+  $(window).on("focus", function () {
     $("#keyboard").css("background-color", "#A6FBDE");
   });
 
   // link input
 
-  linkInput.oninput = function() {
+  linkInput.oninput = function () {
     if (linkInput.value) {
       ok.style.display = "block";
       ok.style.opacity = "1";
@@ -502,7 +553,7 @@ async function onYouTubePlayerAPIReady() {
     }
   };
 
-  linkInput.onkeydown = function(e) {
+  linkInput.onkeydown = function (e) {
     if (e.which == 13) {
       ok.click();
     }
@@ -510,7 +561,7 @@ async function onYouTubePlayerAPIReady() {
 
   // confirm link
 
-  ok.onclick = async function() {
+  ok.onclick = async function () {
     url = linkInput.value;
     if (url.includes("youtube.com")) {
       video_id = url.split("youtube.com/watch?v=")[1].slice(0, 11);
@@ -520,10 +571,11 @@ async function onYouTubePlayerAPIReady() {
 
     if (
       rem_tree.length == 0 &&
-      (video_id != undefined && video_id.length == 11)
+      video_id != undefined &&
+      video_id.length == 11
     ) {
       await RemNoteAPI.v0.create(linkInput.value, pluginId, {
-        positionAmongstSiblings: 0
+        positionAmongstSiblings: 0,
       });
       location.reload();
     } else if (rem_tree.length > 0) {
@@ -536,8 +588,8 @@ async function onYouTubePlayerAPIReady() {
 
   // take note
 
-  takeNote.onclick = function() {
-    $('[data-toggle="tooltip"]').on("click", function() {
+  takeNote.onclick = function () {
+    $('[data-toggle="tooltip"]').on("click", function () {
       $(this).tooltip("hide");
     });
 
@@ -551,37 +603,37 @@ async function onYouTubePlayerAPIReady() {
 
   // note input
 
-  $("#noteInput").focusout(function() {
-    setTimeout(function() {
+  $("#noteInput").focusout(function () {
+    setTimeout(function () {
       just_noted = false;
     }, 500);
   });
 
   // delay input
 
-  delayInput.onclick = function() {
-    $('[data-toggle="tooltip"]').on("click", function() {
+  delayInput.onclick = function () {
+    $('[data-toggle="tooltip"]').on("click", function () {
       $(this).tooltip();
     });
     delayInput.value = "";
     delay = 0;
   };
 
-  $(delayInput).on("onkeydown", function(event) {
+  $(delayInput).on("onkeydown", function (event) {
     // escape
     if (event.keyCode == 27) {
       document.activeElement.blur();
     }
   });
 
-  $(delayInput).on("focusout", function() {
+  $(delayInput).on("focusout", function () {
     if (isNaN(delayInput.value)) {
       delayInput.value = "";
       delay = 0;
     }
   });
 
-  $(delayInput).on("mouseenter", function() {
+  $(delayInput).on("mouseenter", function () {
     if (no_delay) {
       $(this).css("background", "#1044ec");
     } else {
@@ -590,7 +642,7 @@ async function onYouTubePlayerAPIReady() {
     $(this).css("font-weight", "bold");
   });
 
-  $(delayInput).on("mouseleave", function() {
+  $(delayInput).on("mouseleave", function () {
     if (no_delay) {
       $(this).css("background", "#586cf4");
     } else {
@@ -601,29 +653,33 @@ async function onYouTubePlayerAPIReady() {
   });
 
   // refresh
-  refresh.onclick = function() {
-    $('[data-toggle="tooltip"]').on("click", function() {
+  refresh.onclick = function () {
+    $('[data-toggle="tooltip"]').on("click", function () {
       $(this).tooltip();
     });
 
     $(this).css("font-weight", "bold");
-    setTimeout(function() {
+    setTimeout(function () {
       $("#refresh").css("font-weight", "normal");
     }, 750);
 
     timeline(1);
 
     updateTimelineScrollbar();
+
+    setTimeout(function () {
+      change_line(current_chapter);
+    }, 500);
   };
 
   // shortcuts
-  $("#shortcuts").on("click", function() {
-    $('[data-toggle="tooltip"]').on("click", function() {
+  $("#shortcuts").on("click", function () {
+    $('[data-toggle="tooltip"]').on("click", function () {
       $(this).tooltip();
     });
 
     $(this).css("font-weight", "bold");
-    setTimeout(function() {
+    setTimeout(function () {
       $("#shortcuts").css("font-weight", "normal");
     }, 750);
 
@@ -632,7 +688,7 @@ async function onYouTubePlayerAPIReady() {
 
   // tooltips
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
 
@@ -640,13 +696,13 @@ async function onYouTubePlayerAPIReady() {
 
   $("#close_modal, .btn-close")
     .not("#close-link-error")
-    .on("click", function() {
+    .on("click", function () {
       show_shortcuts();
     });
 
   // keyboard shortcuts
 
-  document.onkeydown = async function(event) {
+  document.onkeydown = async function (event) {
     let shortcut = "";
     let shortcuts = {};
 
@@ -657,8 +713,8 @@ async function onYouTubePlayerAPIReady() {
       MediaTrackNext: "next chapter",
       "shift+Home": "first chapter",
       "shift+End": "last chapter",
-      "shift+ArrowUp": "increase volume",
-      "shift+ArrowDown": "decrease volume",
+      "ctrl+ArrowUp": "increase volume",
+      "ctrl+ArrowDown": "decrease volume",
       Backspace: "repeat",
       Space: "play/pause",
       MediaPlayPause: "play/pause",
@@ -677,7 +733,15 @@ async function onYouTubePlayerAPIReady() {
       "shift+Period": "faster",
       KeyR: "refresh",
       KeyD: "delay switch",
-      F1: "help"
+      F1: "help",
+      Tab: "indent",
+      "shift+Tab": "unindent",
+      "shift+ArrowUp": "previous line",
+      "shift+ArrowDown": "next line",
+      "shift+ArrowLeft": "first line",
+      "shift+ArrowRight": "last line",
+      "alt+ArrowLeft": "previous rem",
+      "alt+ArrowRight": "next rem",
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -822,8 +886,12 @@ async function onYouTubePlayerAPIReady() {
           break;
         case "refresh":
           if ($("#noteInput").is(":focus") == false) {
-            timeline(true);
+            timeline(1);
           }
+
+          setTimeout(function () {
+            change_line(current_chapter);
+          }, 500);
           break;
         case "delay switch":
           if ($("#noteInput").is(":focus") == false) {
@@ -842,6 +910,92 @@ async function onYouTubePlayerAPIReady() {
         case "help":
           event.preventDefault();
           show_shortcuts();
+          break;
+        case "indent":
+          event.preventDefault();
+          create_tree_position();
+
+          if (
+            current_chapter > 0 &&
+            level < get_tree_depth(0, -1, rem_tree[current_chapter]) &&
+            level < 5
+          )
+            level++;
+
+          change_line(current_chapter);
+          break;
+        case "unindent":
+          event.preventDefault();
+          create_tree_position();
+          if (level > 1) level--;
+
+          if (level < 2) line_position1 = 0;
+          if (level < 3) line_position2 = 0;
+          if (level < 4) line_position3 = 0;
+          if (level < 5) line_position4 = 0;
+
+          change_line(current_chapter);
+          //}
+          break;
+        case "previous line":
+          //if (!writing_rem) {
+          if (level == 1) {
+            current_chapter--;
+            if (current_chapter > 0) {
+              document.getElementById(String(current_chapter)).click();
+            } else {
+              current_chapter = 1;
+            }
+          }
+          if (level == 2 && line_position1 > 0) line_position1--;
+          if (level == 3 && line_position2 > 0) line_position2--;
+          if (level == 4 && line_position3 > 0) line_position3--;
+          if (level == 5 && line_position4 > 0) line_position4--;
+
+          change_line(current_chapter);
+          break;
+        case "next line":
+          if (level == 1) {
+            current_chapter++;
+
+            if (current_chapter < rem_tree.length) {
+              document.getElementById(String(current_chapter)).click();
+            } else {
+              current_chapter = rem_tree.length - 1;
+            }
+          }
+          if (level == 2 && line_position1 < line_max_position1)
+            line_position1++;
+          if (level == 3 && line_position2 < line_max_position2)
+            line_position2++;
+          if (level == 4 && line_position3 < line_max_position3)
+            line_position3++;
+          if (level == 5 && line_position4 < line_max_position4)
+            line_position4++;
+
+          change_line(current_chapter);
+          break;
+        case "first line":
+          if (level == 2) line_position1 = 0;
+          if (level == 3) line_position2 = 0;
+          if (level == 4) line_position3 = 0;
+          if (level == 5) line_position4 = 0;
+
+          change_line(current_chapter);
+          break;
+        case "last line":
+          if (level == 2) line_position1 = line_max_position1;
+          if (level == 3) line_position2 = line_max_position2;
+          if (level == 4) line_position3 = line_max_position3;
+          if (level == 5) line_position4 = line_max_position4;
+
+          change_line(current_chapter);
+          break;
+        case "previous rem":
+          event.preventDefault();
+          break;
+        case "next rem":
+          event.preventDefault();
           break;
         default:
       }
@@ -866,7 +1020,7 @@ async function onYouTubePlayerAPIReady() {
 
   // note input
 
-  noteInput.onkeydown = async function(event) {
+  noteInput.onkeydown = async function (event) {
     var position;
 
     let shortcut = "";
@@ -882,7 +1036,7 @@ async function onYouTubePlayerAPIReady() {
       "shift+Enter": "ask a question",
       "shift+NumpadEnter": "ask a question",
       "ctrl+shift+Enter": "ask a child question",
-      "ctrl+shift+NumpadEnter": "ask a child question"
+      "ctrl+shift+NumpadEnter": "ask a child question",
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -907,6 +1061,16 @@ async function onYouTubePlayerAPIReady() {
         }
 
         writing_rem = true;
+
+        last_line_position1 = line_position1;
+        last_line_position2 = line_position2;
+        last_line_position3 = line_position3;
+        last_line_position4 = line_position4;
+        last_line_max_position1 = line_max_position1;
+        last_line_max_position2 = line_max_position2;
+        last_line_max_position3 = line_max_position3;
+        last_line_max_position4 = line_max_position4;
+
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
 
@@ -929,14 +1093,15 @@ async function onYouTubePlayerAPIReady() {
         just_noted = true;
 
         var inserted = false;
-        for (position = 1; position < rem_tree.length; position++) {
+        let rem_tree_len = rem_tree.length;
+        for (position = 1; position < rem_tree_len; position++) {
           const clock = rem_tree[position].name[0].text;
 
           if (clock === undefined) continue;
 
           if (formatedTimeToDuration(clock) > time) {
             const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
-              positionAmongstSiblings: position
+              positionAmongstSiblings: position,
             });
 
             rem_tree.splice(
@@ -952,7 +1117,7 @@ async function onYouTubePlayerAPIReady() {
 
         if (!inserted) {
           const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
-            positionAmongstSiblings: position
+            positionAmongstSiblings: position,
           });
           rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
         }
@@ -960,10 +1125,10 @@ async function onYouTubePlayerAPIReady() {
         update_timeline(position, time, text_input);
 
         clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
+        scroll_timeout = setTimeout(function () {
           $("html, body").animate(
             {
-              scrollTop: $("#" + position).offset().top
+              scrollTop: $("#" + position).offset().top,
             },
             0
           );
@@ -982,6 +1147,11 @@ async function onYouTubePlayerAPIReady() {
         }
 
         writing_rem = true;
+
+        update_lines_position();
+
+        last_level = level;
+
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
         var delay = Number(document.getElementById("delayInput").value);
@@ -989,9 +1159,9 @@ async function onYouTubePlayerAPIReady() {
 
         let chapter_note = current_chapter;
 
-        var current_rem = rem_tree[chapter_note];
-
         if (rem_tree.length > 1) rewind();
+
+        let time = player.playerInfo.currentTime - delay;
 
         let text_input = noteInput.value;
 
@@ -1001,22 +1171,188 @@ async function onYouTubePlayerAPIReady() {
 
         just_noted = true;
 
-        const last_rem = await RemNoteAPI.v0.create(
-          text_input,
-          current_rem._id
-        );
+        tree_position = [];
 
-        rem_tree[current_chapter].children.push(
-          await RemNoteAPI.v0.get(last_rem.remId)
-        );
+        let line_index = [];
+        line_index.length = 4;
 
-        update_note_child(null, null, null, text_input);
+        let child_child_array = [];
+        let current_rem;
+
+        switch (level) {
+          case 1:
+            current_rem = rem_tree[chapter_note];
+            child_child_array = current_rem.children;
+            break;
+          case 2:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            child_child_array = current_rem[line_index[0]].children;
+            break;
+          case 3:
+            current_rem = rem_tree[chapter_note].children;
+
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            child_child_array = current_rem[line_index[1]].children;
+            break;
+          case 4:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            child_child_array = current_rem[line_index[2]].children;
+            break;
+          case 5:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < current_rem.length - 1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children;
+            last_line_max_position4 = current_rem.length - 1;
+            line_index[3] =
+              last_line_position4 < last_line_max_position4
+                ? last_line_position4
+                : current_rem.length - 1;
+            tree_position.push(line_index[3]);
+
+            child_child_array = current_rem[line_index[3]].children;
+            break;
+          default:
+        }
+
+        let parentId;
+        switch (level) {
+          case 1:
+            parentId = current_rem._id;
+            break;
+          case 2:
+            parentId = current_rem[line_index[0]]._id;
+            break;
+          case 3:
+            parentId = current_rem[line_index[1]]._id;
+            break;
+          case 4:
+            parentId = current_rem[line_index[2]]._id;
+            break;
+          case 5:
+            parentId = current_rem[line_index[3]]._id;
+            break;
+        }
+
+        const last_rem = await RemNoteAPI.v0.create(text_input, parentId);
+
+        switch (level) {
+          case 1:
+            rem_tree[chapter_note].children.push(
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 2:
+            rem_tree[chapter_note].children[line_index[0]].children.push(
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 3:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children.push(await RemNoteAPI.v0.get(last_rem.remId));
+            break;
+          case 4:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children.push(
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 5:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children[line_index[3]].children.push(
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+        }
+
+        update_note_child(null, tree_position, null, text_input);
 
         clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
+        scroll_timeout = setTimeout(function () {
           $("html, body").animate(
             {
-              scrollTop: $("#" + chapter_note).offset().top
+              scrollTop: $("#" + chapter_note).offset().top,
             },
             100
           );
@@ -1032,8 +1368,13 @@ async function onYouTubePlayerAPIReady() {
           if (writing_rem) await sleep(100);
         }
 
-        writing_rem = true;
         if (rem_tree.length <= 1 || current_chapter == 0) break;
+
+        writing_rem = true;
+
+        update_lines_position();
+
+        last_level = level;
 
         var delay = Number(document.getElementById("delayInput").value);
         if (no_delay) delay = 0;
@@ -1056,33 +1397,170 @@ async function onYouTubePlayerAPIReady() {
 
         recoverFromNoteInput();
 
-        var current_rem = rem_tree[chapter_note];
+        tree_position = [];
 
-        var child_child_array = current_rem.children;
+        let line_index = [];
+        line_index.length = 4;
+
+        let child_child_array = [];
+        let current_rem;
+
+        switch (last_level) {
+          case 1:
+            current_rem = rem_tree[chapter_note];
+            child_child_array = current_rem.children;
+            break;
+          case 2:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            child_child_array = current_rem[line_index[0]].children;
+            break;
+          case 3:
+            current_rem = rem_tree[chapter_note].children;
+
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            child_child_array = current_rem[line_index[1]].children;
+            break;
+          case 4:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            child_child_array = current_rem[line_index[2]].children;
+            break;
+          case 5:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < current_rem.length - 1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children;
+            last_line_max_position4 = current_rem.length - 1;
+            line_index[3] =
+              last_line_position4 < last_line_max_position4
+                ? last_line_position4
+                : current_rem.length - 1;
+            tree_position.push(line_index[3]);
+
+            child_child_array = current_rem[line_index[3]].children;
+            break;
+          default:
+        }
+
+        let parentId;
+        switch (last_level) {
+          case 1:
+            parentId = current_rem._id;
+            break;
+          case 2:
+            parentId = current_rem[line_index[0]]._id;
+            break;
+          case 3:
+            parentId = current_rem[line_index[1]]._id;
+            break;
+          case 4:
+            parentId = current_rem[line_index[2]]._id;
+            break;
+          case 5:
+            parentId = current_rem[line_index[3]]._id;
+            break;
+        }
 
         var inserted = false;
         let count_no_timestamp = 0;
-        for (position = 0; position < child_child_array.length; position++) {
+        let child_child_array_len = child_child_array.length;
+        for (position = 0; position < child_child_array_len; position++) {
           if (child_child_array[position].name[0].text === undefined)
             count_no_timestamp++;
         }
 
+        let last_rem;
+
         for (
           position = 0;
-          position < child_child_array.length - count_no_timestamp;
+          position < child_child_array_len - count_no_timestamp;
           position++
         ) {
           const clock = child_child_array[position].name[0].text;
+
           if (clock === undefined) continue;
+
           if (formatedTimeToDuration(clock) > time) {
-            const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
-              positionAmongstSiblings: position
+            last_rem = await RemNoteAPI.v0.create(text, parentId, {
+              positionAmongstSiblings: position,
             });
-            rem_tree[chapter_note].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
 
             inserted = true;
             break;
@@ -1090,23 +1568,64 @@ async function onYouTubePlayerAPIReady() {
         }
 
         if (!inserted) {
-          const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
-            positionAmongstSiblings: position
+          last_rem = await RemNoteAPI.v0.create(text, parentId, {
+            positionAmongstSiblings: position,
           });
-          rem_tree[chapter_note].children.splice(
-            position,
-            0,
-            await RemNoteAPI.v0.get(last_rem.remId)
-          );
         }
 
-        update_note_child(chapter_note, position, time, text_input);
+        switch (last_level) {
+          case 1:
+            rem_tree[chapter_note].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 2:
+            rem_tree[chapter_note].children[line_index[0]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 3:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 4:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 5:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children[line_index[3]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+        }
+
+        tree_position.push(position);
+
+        update_note_child(chapter_note, tree_position, time, text_input);
 
         clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
+        scroll_timeout = setTimeout(function () {
           $("html, body").animate(
             {
-              scrollTop: $("#" + chapter_note).offset().top
+              scrollTop: $("#" + chapter_note).offset().top,
             },
             100
           );
@@ -1145,14 +1664,15 @@ async function onYouTubePlayerAPIReady() {
         just_noted = true;
 
         var inserted = false;
-        for (position = 1; position < rem_tree.length; position++) {
+        let rem_tree_len = rem_tree.length;
+        for (position = 1; position < rem_tree_len; position++) {
           const clock = rem_tree[position].name[0].text;
 
           if (clock === undefined) continue;
 
           if (formatedTimeToDuration(clock) > time) {
             const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
-              positionAmongstSiblings: position
+              positionAmongstSiblings: position,
             });
             rem_tree.splice(
               position,
@@ -1173,10 +1693,10 @@ async function onYouTubePlayerAPIReady() {
         update_timeline(position, time, text_input);
 
         clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
+        scroll_timeout = setTimeout(function () {
           $("html, body").animate(
             {
-              scrollTop: $("#" + position).offset().top
+              scrollTop: $("#" + position).offset().top,
             },
             0
           );
@@ -1195,6 +1715,10 @@ async function onYouTubePlayerAPIReady() {
         }
 
         writing_rem = true;
+
+        update_lines_position();
+
+        last_level = level;
 
         if (rem_tree.length <= 1 || current_chapter == 0) break;
 
@@ -1221,60 +1745,237 @@ async function onYouTubePlayerAPIReady() {
 
         player.playVideo();
 
-        var current_rem = rem_tree[chapter_note];
+        recoverFromNoteInput();
 
-        var child_child_array = current_rem.children;
+        tree_position = [];
+
+        let line_index = [];
+        line_index.length = 4;
+
+        let child_child_array = [];
+        let current_rem;
+
+        switch (last_level) {
+          case 1:
+            current_rem = rem_tree[chapter_note];
+            child_child_array = current_rem.children;
+            break;
+          case 2:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            child_child_array = current_rem[line_index[0]].children;
+            break;
+          case 3:
+            current_rem = rem_tree[chapter_note].children;
+
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            child_child_array = current_rem[line_index[1]].children;
+            break;
+          case 4:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < last_line_max_position1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            child_child_array = current_rem[line_index[2]].children;
+            break;
+          case 5:
+            current_rem = rem_tree[chapter_note].children;
+            last_line_max_position1 = current_rem.length - 1;
+            line_index[0] =
+              last_line_position1 < current_rem.length - 1
+                ? last_line_position1
+                : current_rem.length - 1;
+            tree_position.push(line_index[0]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children;
+            last_line_max_position2 = current_rem.length - 1;
+            line_index[1] =
+              last_line_position2 < last_line_max_position2
+                ? last_line_position2
+                : current_rem.length - 1;
+            tree_position.push(line_index[1]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children;
+            last_line_max_position3 = current_rem.length - 1;
+            line_index[2] =
+              last_line_position3 < last_line_max_position3
+                ? last_line_position3
+                : current_rem.length - 1;
+            tree_position.push(line_index[2]);
+
+            current_rem =
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children;
+            last_line_max_position4 = current_rem.length - 1;
+            line_index[3] =
+              last_line_position4 < last_line_max_position4
+                ? last_line_position4
+                : current_rem.length - 1;
+            tree_position.push(line_index[3]);
+
+            child_child_array = current_rem[line_index[3]].children;
+            break;
+          default:
+        }
+
+        let parentId;
+        switch (last_level) {
+          case 1:
+            parentId = current_rem._id;
+            break;
+          case 2:
+            parentId = current_rem[line_index[0]]._id;
+            break;
+          case 3:
+            parentId = current_rem[line_index[1]]._id;
+            break;
+          case 4:
+            parentId = current_rem[line_index[2]]._id;
+            break;
+          case 5:
+            parentId = current_rem[line_index[3]]._id;
+            break;
+        }
 
         var inserted = false;
         let count_no_timestamp = 0;
-        for (position = 0; position < child_child_array.length; position++) {
+        let child_child_array_len = child_child_array.length;
+        for (position = 0; position < child_child_array_len; position++) {
           if (child_child_array[position].name[0].text === undefined)
             count_no_timestamp++;
         }
 
+        let last_rem;
+
         for (
           position = 0;
-          position < child_child_array.length - count_no_timestamp;
+          position < child_child_array_len - count_no_timestamp;
           position++
         ) {
           const clock = child_child_array[position].name[0].text;
+
           if (clock === undefined) continue;
+
           if (formatedTimeToDuration(clock) > time) {
-            const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
-              positionAmongstSiblings: position
+            last_rem = await RemNoteAPI.v0.create(text, parentId, {
+              positionAmongstSiblings: position,
             });
 
-            rem_tree[chapter_note].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
-
             inserted = true;
-
             break;
           }
         }
 
         if (!inserted) {
-          const last_rem = await RemNoteAPI.v0.create(text, current_rem._id, {
-            positionAmongstSiblings: position
+          last_rem = await RemNoteAPI.v0.create(text, parentId, {
+            positionAmongstSiblings: position,
           });
-
-          rem_tree[chapter_note].children.splice(
-            position,
-            0,
-            await RemNoteAPI.v0.get(last_rem.remId)
-          );
         }
+
+        switch (last_level) {
+          case 1:
+            rem_tree[chapter_note].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 2:
+            rem_tree[chapter_note].children[line_index[0]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 3:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 4:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+          case 5:
+            rem_tree[chapter_note].children[line_index[0]].children[
+              line_index[1]
+            ].children[line_index[2]].children[line_index[3]].children.splice(
+              position,
+              0,
+              await RemNoteAPI.v0.get(last_rem.remId)
+            );
+            break;
+        }
+
+        tree_position.push(position);
 
         update_note_child(chapter_note, position, time, text_input);
 
         clearTimeout(scroll_timeout);
-        scroll_timeout = setTimeout(function() {
+        scroll_timeout = setTimeout(function () {
           $("html, body").animate(
             {
-              scrollTop: $("#" + chapter_note).offset().top
+              scrollTop: $("#" + chapter_note).offset().top,
             },
             100
           );
@@ -1293,6 +1994,19 @@ async function onYouTubePlayerAPIReady() {
 
   // FUNCTIONS
 
+  function get_tree_depth(counter, depth, data) {
+    if (counter == 0);
+    else if (counter == 1) data = data.children[line_position1];
+    else if (counter == 2) data = data.children[line_position2];
+    else if (counter == 3) data = data.children[line_position3];
+    else if (counter == 4) data = data.children[line_position4];
+    else data = data.children[data.children.length - 1];
+
+    if (data == undefined) depth = counter;
+    if (counter < 5) counter++;
+    return depth == -1 ? get_tree_depth(counter, depth, data) : depth;
+  }
+
   function updateTimelineScrollbar() {
     if (
       !scroll_visible &&
@@ -1310,7 +2024,7 @@ async function onYouTubePlayerAPIReady() {
   }
 
   function sleep(delay) {
-    return new Promise(resolve => setTimeout(resolve, delay));
+    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 
   function recoverFromNoteInput() {
@@ -1329,7 +2043,7 @@ async function onYouTubePlayerAPIReady() {
       if (enable_parameter) {
         const speed_parameter_value = parameters.get("playback_speed");
 
-        setTimeout(function() {
+        setTimeout(function () {
           if (speed_parameter_value != null) {
             player.setPlaybackRate(Number(speed_parameter_value));
           }
@@ -1404,7 +2118,7 @@ async function onYouTubePlayerAPIReady() {
   async function update_modal() {
     const modal_options = {
       backdrop: false,
-      keyboard: true
+      keyboard: true,
     };
 
     for (let i = 0; i < modal_list.length; i++) {
@@ -1458,7 +2172,7 @@ async function onYouTubePlayerAPIReady() {
       if (enable_parameter) {
         const speed_parameter_value = parameters.get("playback_speed");
 
-        setTimeout(function() {
+        setTimeout(function () {
           if (speed_parameter_value != null) {
             player.setPlaybackRate(parseFloat(speed_parameter_value));
           }
@@ -1526,10 +2240,10 @@ async function onYouTubePlayerAPIReady() {
         }
       }
 
-      $(input0).on("click", function() {
+      $(input0).on("click", function () {
         $("html, body").animate(
           {
-            scrollTop: $(this).offset().top
+            scrollTop: $(this).offset().top,
           },
           100
         );
@@ -1537,14 +2251,14 @@ async function onYouTubePlayerAPIReady() {
         player.seekTo(formatedTimeToDuration(clock), true);
       });
 
-      $(input0).on("mouseenter", function() {
+      $(input0).on("mouseenter", function () {
         $(this).css(
           "background",
           color_0_hover[(i - 1) % color_0_hover.length]
         );
       });
 
-      $(input0).on("mouseleave", function() {
+      $(input0).on("mouseleave", function () {
         $(this).css("background", color_0[(i - 1) % color_0.length]);
       });
 
@@ -1591,10 +2305,10 @@ async function onYouTubePlayerAPIReady() {
               }
             }
 
-            $(input1).on("click", function() {
+            $(input1).on("click", function () {
               $("html, body").animate(
                 {
-                  scrollTop: $(this).offset().top
+                  scrollTop: $(this).offset().top,
                 },
                 100
               );
@@ -1602,14 +2316,14 @@ async function onYouTubePlayerAPIReady() {
               player.seekTo(formatedTimeToDuration(clock), true);
             });
 
-            $(input1).on("mouseenter", function() {
+            $(input1).on("mouseenter", function () {
               $(this).css(
                 "background",
                 color_1_hover[(i - 1) % color_1_hover.length]
               );
             });
 
-            $(input1).on("mouseleave", function() {
+            $(input1).on("mouseleave", function () {
               $(this).css("background", color_1[(i - 1) % color_1.length]);
             });
 
@@ -1654,10 +2368,10 @@ async function onYouTubePlayerAPIReady() {
                   input2.rem = child2_rem.name[1].substr(1);
                 }
 
-                $(input2).on("click", function() {
+                $(input2).on("click", function () {
                   $("html, body").animate(
                     {
-                      scrollTop: $(this).offset().top
+                      scrollTop: $(this).offset().top,
                     },
                     100
                   );
@@ -1665,14 +2379,14 @@ async function onYouTubePlayerAPIReady() {
                   player.seekTo(formatedTimeToDuration(clock), true);
                 });
 
-                $(input2).on("mouseenter", function() {
+                $(input2).on("mouseenter", function () {
                   $(this).css(
                     "background",
                     color_2_hover[(i - 1) % color_2_hover.length]
                   );
                 });
 
-                $(input2).on("mouseleave", function() {
+                $(input2).on("mouseleave", function () {
                   $(this).css("background", color_2[(i - 1) % color_2.length]);
                 });
 
@@ -1711,10 +2425,10 @@ async function onYouTubePlayerAPIReady() {
                       input3.rem = child3_rem.name[1].substr(1);
                     }
 
-                    $(input3).on("click", function() {
+                    $(input3).on("click", function () {
                       $("html, body").animate(
                         {
-                          scrollTop: $(this).offset().top
+                          scrollTop: $(this).offset().top,
                         },
                         100
                       );
@@ -1722,14 +2436,14 @@ async function onYouTubePlayerAPIReady() {
                       player.seekTo(formatedTimeToDuration(clock), true);
                     });
 
-                    $(input3).on("mouseenter", function() {
+                    $(input3).on("mouseenter", function () {
                       $(this).css(
                         "background",
                         color_3_hover[(i - 1) % color_3_hover.length]
                       );
                     });
 
-                    $(input3).on("mouseleave", function() {
+                    $(input3).on("mouseleave", function () {
                       $(this).css(
                         "background",
                         color_3[(i - 1) % color_3.length]
@@ -1772,10 +2486,10 @@ async function onYouTubePlayerAPIReady() {
                           input4.rem = child4_rem.name[1].substr(1);
                         }
 
-                        $(input4).on("click", function() {
+                        $(input4).on("click", function () {
                           $("html, body").animate(
                             {
-                              scrollTop: $(this).offset().top
+                              scrollTop: $(this).offset().top,
                             },
                             100
                           );
@@ -1783,14 +2497,14 @@ async function onYouTubePlayerAPIReady() {
                           player.seekTo(formatedTimeToDuration(clock), true);
                         });
 
-                        $(input4).on("mouseenter", function() {
+                        $(input4).on("mouseenter", function () {
                           $(this).css(
                             "background",
                             color_4_hover[(i - 1) % color_4_hover.length]
                           );
                         });
 
-                        $(input4).on("mouseleave", function() {
+                        $(input4).on("mouseleave", function () {
                           $(this).css(
                             "background",
                             color_4[(i - 1) % color_4.length]
@@ -1837,10 +2551,10 @@ async function onYouTubePlayerAPIReady() {
                               input5.rem = child5_rem.name[1].substr(1);
                             }
 
-                            $(input5).on("click", function() {
+                            $(input5).on("click", function () {
                               $("html, body").animate(
                                 {
-                                  scrollTop: $(this).offset().top
+                                  scrollTop: $(this).offset().top,
                                 },
                                 100
                               );
@@ -1851,14 +2565,14 @@ async function onYouTubePlayerAPIReady() {
                               );
                             });
 
-                            $(input5).on("mouseenter", function() {
+                            $(input5).on("mouseenter", function () {
                               $(this).css(
                                 "background",
                                 color_5_hover[(i - 1) % color_5_hover.length]
                               );
                             });
 
-                            $(input5).on("mouseleave", function() {
+                            $(input5).on("mouseleave", function () {
                               $(this).css(
                                 "background",
                                 color_5[(i - 1) % color_5.length]
@@ -1910,6 +2624,7 @@ async function onYouTubePlayerAPIReady() {
     // dark mode
     if (dark_mode == 1) {
       $("li").css("color", "#c0bdbd");
+      change_line(current_chapter);
     }
   }
 
@@ -1944,10 +2659,10 @@ async function onYouTubePlayerAPIReady() {
     input0.value = durationToFormatedTime(time);
     input0.rem = text;
 
-    $(input0).on("click", function() {
+    $(input0).on("click", function () {
       $("html, body").animate(
         {
-          scrollTop: $("#" + input0.id).offset().top
+          scrollTop: $("#" + input0.id).offset().top,
         },
         100
       );
@@ -1959,14 +2674,14 @@ async function onYouTubePlayerAPIReady() {
     $(input0).addClass("me-2");
     input0.style.background = color_0[(position - 1) % color_0.length];
 
-    $(input0).on("mouseenter", function() {
+    $(input0).on("mouseenter", function () {
       $(this).css(
         "background",
         color_0_hover[(position - 1) % color_0_hover.length]
       );
     });
 
-    $(input0).on("mouseleave", function() {
+    $(input0).on("mouseleave", function () {
       $(this).css("background", color_0[(position - 1) % color_0.length]);
     });
 
@@ -1999,21 +2714,21 @@ async function onYouTubePlayerAPIReady() {
 
       $(input0).css("background", color_0[(i - 1) % color_0.length]);
 
-      $(input0).on("mouseenter", function() {
+      $(input0).on("mouseenter", function () {
         $(this).css(
           "background",
           color_0_hover[(i - 1) % color_0_hover.length]
         );
       });
 
-      $(input0).on("mouseleave", function() {
+      $(input0).on("mouseleave", function () {
         $(this).css("background", color_0[(i - 1) % color_0.length]);
       });
 
-      $(input0).on("click", function() {
+      $(input0).on("click", function () {
         $("html, body").animate(
           {
-            scrollTop: $("#" + i).offset().top
+            scrollTop: $("#" + i).offset().top,
           },
           100
         );
@@ -2034,18 +2749,18 @@ async function onYouTubePlayerAPIReady() {
 
         $(input1).css("background", color_1[(i - 1) % color_1.length]);
 
-        $(input1).on("mouseenter", function() {
+        $(input1).on("mouseenter", function () {
           $(this).css(
             "background",
             color_1_hover[(i - 1) % color_1_hover.length]
           );
         });
 
-        $(input1).on("mouseleave", function() {
+        $(input1).on("mouseleave", function () {
           $(this).css("background", color_1[(i - 1) % color_1.length]);
         });
 
-        $(input1).on("click", function() {
+        $(input1).on("click", function () {
           var clock = $(this).val();
           player.seekTo(formatedTimeToDuration(clock), true);
         });
@@ -2061,13 +2776,13 @@ async function onYouTubePlayerAPIReady() {
           $(line2).attr("id", id2);
 
           $(input2).css("background", color_2[(i - 1) % color_2.length]);
-          $(input2).on("mouseenter", function() {
+          $(input2).on("mouseenter", function () {
             $(this).css(
               "background",
               color_2_hover[(i - 1) % color_2_hover.length]
             );
           });
-          $(input2).on("mouseleave", function() {
+          $(input2).on("mouseleave", function () {
             $(this).css("background", color_2[(i - 1) % color_2.length]);
           });
 
@@ -2083,14 +2798,14 @@ async function onYouTubePlayerAPIReady() {
 
             $(input3).css("background", color_3[(i - 1) % color_3.length]);
 
-            $(input3).on("mouseenter", function() {
+            $(input3).on("mouseenter", function () {
               $(this).css(
                 "background",
                 color_3_hover[(i - 1) % color_3_hover.length]
               );
             });
 
-            $(input3).on("mouseleave", function() {
+            $(input3).on("mouseleave", function () {
               $(this).css("background", color_3[(i - 1) % color_3.length]);
             });
 
@@ -2105,13 +2820,13 @@ async function onYouTubePlayerAPIReady() {
               $(line4).attr("id", id4);
 
               $(input4).css("background", color_4[(i - 1) % color_4.length]);
-              $(input4).on("mouseenter", function() {
+              $(input4).on("mouseenter", function () {
                 $(this).css(
                   "background",
                   color_4_hover[(i - 1) % color_4_hover.length]
                 );
               });
-              $(input4).on("mouseleave", function() {
+              $(input4).on("mouseleave", function () {
                 $(this).css("background", color_4[(i - 1) % color_4.length]);
               });
 
@@ -2127,14 +2842,14 @@ async function onYouTubePlayerAPIReady() {
 
                 $(input5).css("background", color_5[(i - 1) % color_5.length]);
 
-                $(input5).on("mouseenter", function() {
+                $(input5).on("mouseenter", function () {
                   $(this).css(
                     "background",
                     color_5_hover[(i - 1) % color_5_hover.length]
                   );
                 });
 
-                $(input5).on("mouseleave", function() {
+                $(input5).on("mouseleave", function () {
                   $(this).css("background", color_5[(i - 1) % color_5.length]);
                 });
               }
@@ -2149,36 +2864,106 @@ async function onYouTubePlayerAPIReady() {
     // dark mode
     if (dark_mode == 1) {
       $("li").css("color", "#c0bdbd");
+      change_line(current_chapter);
     }
   }
 
-  function update_note_child(chapterId, position, time, text) {
+  function update_note_child(chapterId, tree_position, time, text) {
     delay = Number(document.getElementById("delayInput").value);
     if (no_delay) delay = 0;
 
     if (chapterId == undefined) chapterId = current_chapter;
 
-    var referenceNode = document.querySelector(
-      "#" + "_0-" + chapterId + " > ul"
-    );
-
     const li1 = document.createElement("li");
+    switch (last_level) {
+      case 1:
+        li1.id = "_0-" + chapterId + "_1-" + tree_position[0];
+        break;
+      case 2:
+        li1.id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1];
+        break;
+      case 3:
+        li1.id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          tree_position[2];
+        break;
+      case 4:
+        li1.id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          tree_position[2] +
+          "_4-" +
+          tree_position[3];
+        break;
+      case 5:
+        li1.id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          tree_position[2] +
+          "_4-" +
+          tree_position[3] +
+          "_5-" +
+          tree_position[4];
+        break;
+    }
 
     // ctrl + enter only
-    if (position != undefined) {
-      li1.id = "_0-" + chapterId + "_1-" + position;
+    if (time != undefined) {
+      let color, color_hover;
+      switch (last_level) {
+        case 1:
+          color = color_1[(chapterId - 1) % color_1.length];
+          color_hover = color_1_hover[(chapterId - 1) % color_1_hover.length];
+          break;
+        case 2:
+          color = color_2[(chapterId - 1) % color_2.length];
+          color_hover = color_2_hover[(chapterId - 1) % color_2_hover.length];
+          break;
+        case 3:
+          color = color_3[(chapterId - 1) % color_3.length];
+          color_hover = color_3_hover[(chapterId - 1) % color_3_hover.length];
+          break;
+        case 4:
+          color = color_4[(chapterId - 1) % color_4.length];
+          color_hover = color_4_hover[(chapterId - 1) % color_4_hover.length];
+          break;
+        case 5:
+          color = color_5[(chapterId - 1) % color_5.length];
+          color_hover = color_5_hover[(chapterId - 1) % color_5_hover.length];
+          break;
+      }
 
       const input1 = document.createElement("input");
       input1.type = "button";
       input1.value = durationToFormatedTime(time);
       input1.rem = text;
 
-      const color = chapterId;
-
-      $(input1).on("click", function() {
+      $(input1).on("click", function () {
         $("html, body").animate(
           {
-            scrollTop: $(this).offset().top
+            scrollTop: $(this).offset().top,
           },
           100
         );
@@ -2187,17 +2972,14 @@ async function onYouTubePlayerAPIReady() {
         player.seekTo(formatedTimeToDuration(clock), true);
       });
 
-      input1.style.background = color_1[(chapterId - 1) % color_1.length];
+      input1.style.background = color;
 
-      $(input1).on("mouseenter", function() {
-        $(this).css(
-          "background",
-          color_1_hover[(color - 1) % color_1_hover.length]
-        );
+      $(input1).on("mouseenter", function () {
+        $(this).css("background", color_hover);
       });
 
-      $(input1).on("mouseleave", function() {
-        $(this).css("background", color_1[(color - 1) % color_1.length]);
+      $(input1).on("mouseleave", function () {
+        $(this).css("background", color);
       });
       $(input1).addClass("me-2");
       li1.appendChild(input1);
@@ -2208,60 +2990,257 @@ async function onYouTubePlayerAPIReady() {
     li1.appendChild(newContent1);
 
     // ctrl + enter
-    if (position != undefined) {
-      var referenceNode = document.querySelector(
-        "#" + "_0-" + chapterId + " > ul"
-      );
+    let referenceNode;
+    if (time != undefined) {
+      referenceNode = select_node(chapterId, false);
 
-      if (position == 0 && referenceNode.children.length == 0) {
-        var referenceNode = document.querySelector(
-          "#" + "_0-" + chapterId + " > ul"
-        );
+      // first and unique
+      if (
+        tree_position[tree_position.length - 1] == 0 &&
+        referenceNode.children.length == 0
+      ) {
         referenceNode.appendChild(li1);
-      } else if (position == 0 && referenceNode.children.length > 0) {
-        var referenceNode = document.querySelector(
-          "#" + "_0-" + chapterId + "_1-" + position
-        );
-        referenceNode.parentNode.insertBefore(li1, referenceNode);
 
-        var referenceNode = document.querySelector(
-          "#" + "_0-" + chapterId + " > ul"
-        );
-        let children = referenceNode.children;
-        for (let i = 0; i < children.length; i++) {
-          children[i].id = "_0-" + chapterId + "_1-" + i;
-        }
+        update_node_id(referenceNode, chapterId, false);
+
+        // first
+      } else if (
+        tree_position[tree_position.length - 1] == 0 &&
+        referenceNode.children.length > 0
+      ) {
+        referenceNode.prepend(li1);
+
+        update_node_id(referenceNode, chapterId, false);
+
+        // after
       } else {
-        var referenceNode = document.querySelector(
-          "#" + "_0-" + chapterId + "_1-" + (position - 1)
-        );
-        referenceNode.parentNode.insertBefore(li1, referenceNode.nextSibling);
+        console.assert(last_level < 5, "last_level >= 5");
+
+        referenceNode = select_node(chapterId, true);
+
+        if (referenceNode != null) {
+          referenceNode.parentNode.insertBefore(li1, referenceNode.nextSibling);
+          update_node_id(referenceNode.parentNode, chapterId, true);
+        } else {
+          referenceNode = select_node(chapterId, false);
+          console.assert(referenceNode != null, "referenceNode == null");
+          referenceNode.appendChild(li1);
+          update_node_id(referenceNode, chapterId, false);
+        }
       }
 
-      var referenceNode = document.querySelector(
-        "#" + "_0-" + chapterId + " > ul"
-      );
-      let children = referenceNode.children;
-      for (let i = 0; i < children.length; i++) {
-        children[i].id = "_0-" + chapterId + "_1-" + i;
-      }
       // alt + enter
     } else {
-      var referenceNode = document.querySelector(
-        "#" + "_0-" + chapterId + " > ul"
-      );
-
+      referenceNode = select_node(chapterId, false);
       referenceNode.appendChild(li1);
-
-      let children = referenceNode.children;
-      for (let i = 0; i < children.length; i++) {
-        children[i].id = "_0-" + chapterId + "_1-" + i;
-      }
+      update_node_id(referenceNode, chapterId, false);
     }
 
     // dark mode
     if (dark_mode == 1) {
       $("li").css("color", "#c0bdbd");
+      change_line(current_chapter);
+    }
+  }
+
+  function select_node(chapterId, after) {
+    const node_level = after ? last_level + 1 : last_level;
+
+    console.assert(tree_position.length <= 4, "tree_position.length > 4");
+    console.assert(node_level <= 5, "node_level > 5");
+
+    let referenceNode;
+    if (node_level == 1) {
+      referenceNode = document.querySelector("#" + "_0-" + chapterId + " > ul");
+    } else if (node_level == 2) {
+      if (!after) {
+        referenceNode = document.querySelector(
+          "#" + "_0-" + chapterId + "_1-" + tree_position[0]
+        );
+
+        let ul = document.createElement("ul");
+        referenceNode.appendChild(ul);
+
+        referenceNode = document.querySelector(
+          "#" + "_0-" + chapterId + "_1-" + tree_position[0] + " > ul"
+        );
+      } else {
+        referenceNode = document.querySelector(
+          "#" + "_0-" + chapterId + "_1-" + (tree_position[0] - 1)
+        );
+      }
+    } else if (node_level == 3) {
+      if (!after) {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1]
+        );
+        let ul = document.createElement("ul");
+        referenceNode.appendChild(ul);
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            " > ul"
+        );
+      } else {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            (tree_position[1] - 1)
+        );
+      }
+    } else if (node_level == 4) {
+      if (!after) {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2]
+        );
+        let ul = document.createElement("ul");
+        referenceNode.appendChild(ul);
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            " > ul"
+        );
+      } else {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            (tree_position[2] - 1)
+        );
+      }
+    } else if (node_level == 5) {
+      if (!after) {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            tree_position[3]
+        );
+        let ul = document.createElement("ul");
+        referenceNode.appendChild(ul);
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            tree_position[3] +
+            " > ul"
+        );
+      } else {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            (tree_position[3] - 1)
+        );
+      }
+    }
+
+    return referenceNode;
+  }
+
+  function update_node_id(referenceNode, chapterId) {
+    const node_level = last_level;
+    let children = referenceNode.children;
+
+    for (let i = 0; i < children.length; i++) {
+      if (last_level == 1) {
+        children[i].id = "_0-" + chapterId + "_1-" + i;
+      } else if (last_level == 2) {
+        children[i].id =
+          "_0-" + chapterId + "_1-" + tree_position[0] + "_2-" + i;
+      } else if (last_level == 3) {
+        children[i].id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          i;
+      } else if (last_level == 4) {
+        children[i].id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          tree_position[2] +
+          "_4-" +
+          i;
+      } else if (last_level == 5) {
+        children[i].id =
+          "_0-" +
+          chapterId +
+          "_1-" +
+          tree_position[0] +
+          "_2-" +
+          tree_position[1] +
+          "_3-" +
+          tree_position[2] +
+          "_4-" +
+          tree_position[3] +
+          "_5-" +
+          i;
+      }
     }
   }
 
@@ -2363,26 +3342,26 @@ async function onYouTubePlayerAPIReady() {
           chapter[chapter.length - 1].style.background =
             color_0[(i - 2) % color_0.length];
 
-          $(chapter[chapter.length - 1]).click(function() {
+          $(chapter[chapter.length - 1]).click(function () {
             current_chapter = i - 1;
 
             $("html, body").animate(
               {
-                scrollTop: $("#" + (i - 1)).offset().top
+                scrollTop: $("#" + (i - 1)).offset().top,
               },
               100
             );
             player.seekTo(this.start, true);
           });
 
-          $(chapter[chapter.length - 1]).on("mouseenter", function() {
+          $(chapter[chapter.length - 1]).on("mouseenter", function () {
             $(this).css(
               "background",
               color_0_hover[(i - 2) % color_0_hover.length]
             );
           });
 
-          $(chapter[chapter.length - 1]).on("mouseleave", function() {
+          $(chapter[chapter.length - 1]).on("mouseleave", function () {
             $(this).css("background", color_0[(i - 2) % color_0.length]);
           });
 
@@ -2391,7 +3370,7 @@ async function onYouTubePlayerAPIReady() {
       }
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
     });
   }
@@ -2429,11 +3408,11 @@ async function onYouTubePlayerAPIReady() {
 
       temp_chapter.rem = rem.name[1];
 
-      $(temp_chapter).click(function() {
+      $(temp_chapter).click(function () {
         current_chapter = position;
         $("html, body").animate(
           {
-            scrollTop: $("#" + position).offset().top
+            scrollTop: $("#" + position).offset().top,
           },
           100
         );
@@ -2478,11 +3457,11 @@ async function onYouTubePlayerAPIReady() {
 
       temp_chapter.rem = rem.name[1];
 
-      $(temp_chapter).click(function() {
+      $(temp_chapter).click(function () {
         current_chapter = position;
         $("html, body").animate(
           {
-            scrollTop: $("#" + position).offset().top
+            scrollTop: $("#" + position).offset().top,
           },
           100
         );
@@ -2534,11 +3513,11 @@ async function onYouTubePlayerAPIReady() {
 
       temp_chapter.rem = rem.name[1];
 
-      $(temp_chapter).click(function() {
+      $(temp_chapter).click(function () {
         current_chapter = position;
         $("html, body").animate(
           {
-            scrollTop: $("#" + position).offset().top
+            scrollTop: $("#" + position).offset().top,
           },
           100
         );
@@ -2594,11 +3573,11 @@ async function onYouTubePlayerAPIReady() {
 
       temp_chapter.rem = rem.name[1];
 
-      $(temp_chapter).click(function() {
+      $(temp_chapter).click(function () {
         current_chapter = position;
         $("html, body").animate(
           {
-            scrollTop: $("#" + position).offset().top
+            scrollTop: $("#" + position).offset().top,
           },
           100
         );
@@ -2639,19 +3618,19 @@ async function onYouTubePlayerAPIReady() {
 
       referenceNode.style.background = color_0[(i - 1) % color_0.length];
 
-      $(referenceNode).on("mouseenter", function() {
+      $(referenceNode).on("mouseenter", function () {
         $(this).css(
           "background",
           color_0_hover[(i - 1) % color_0_hover.length]
         );
       });
 
-      $(referenceNode).on("mouseleave", function() {
+      $(referenceNode).on("mouseleave", function () {
         $(this).css("background", color_0[(i - 1) % color_0.length]);
       });
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
     });
   }
@@ -2682,11 +3661,10 @@ async function onYouTubePlayerAPIReady() {
               m < rem.children[j].children[k].children[l].children.length;
               m++
             ) {
-              rem.children[j].children[k].children[l].children[
-                m
-              ] = await RemNoteAPI.v0.get(
-                rem.children[j].children[k].children[l].children[m]
-              );
+              rem.children[j].children[k].children[l].children[m] =
+                await RemNoteAPI.v0.get(
+                  rem.children[j].children[k].children[l].children[m]
+                );
               for (
                 let n = 0;
                 n <
@@ -2709,5 +3687,165 @@ async function onYouTubePlayerAPIReady() {
       rem_tree.push(rem);
     }
     return await true;
+  }
+
+  function change_line(chapter) {
+    create_tree_position();
+
+    let referenceNode;
+    let query = "";
+    if (level >= 1) query += "#_0-" + chapter;
+    if (writing_rem) {
+      if (level >= 2) query += "_1-" + tree_position[0];
+      if (level >= 3) query += "_2-" + tree_position[1];
+      if (level >= 4) query += "_3-" + tree_position[2];
+      if (level >= 5) query += "_4-" + tree_position[3];
+    } else {
+      if (level >= 2) query += "_1-" + last_tree_position[0];
+      if (level >= 3) query += "_2-" + last_tree_position[1];
+      if (level >= 4) query += "_3-" + last_tree_position[2];
+      if (level >= 5) query += "_4-" + last_tree_position[3];
+    }
+    referenceNode = document.querySelector(query);
+
+    if (referenceNode != undefined) {
+      if (last_referenceNode != undefined) {
+        if (dark_mode == 0 && last_referenceNode.style.color != "#202020") {
+          last_referenceNode.style.color = "#202020";
+        } else if (
+          dark_mode == 1 &&
+          last_referenceNode.style.color != "#c0bdbd"
+        ) {
+          last_referenceNode.style.color = "#c0bdbd";
+        }
+      }
+
+      referenceNode.style.color = "#586cf4";
+      last_referenceNode = referenceNode;
+    }
+  }
+
+  function create_tree_position() {
+    if (level < 2 || level > 5) return;
+
+    if (previous_chapter != current_chapter || current_chapter == 0) return;
+
+    let chapter_note = current_chapter;
+    let time = player.playerInfo.currentTime - delay;
+
+    last_tree_position = [];
+    let line_index = [];
+    line_index.length = 4;
+
+    let current_rem;
+
+    switch (level) {
+      case 2:
+        current_rem = rem_tree[chapter_note].children;
+        line_max_position1 = current_rem.length - 1;
+        line_index[0] =
+          line_position1 < line_max_position1
+            ? line_position1
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[0]);
+        break;
+      case 3:
+        current_rem = rem_tree[chapter_note].children;
+
+        line_max_position1 = current_rem.length - 1;
+        line_index[0] =
+          line_position1 < line_max_position1
+            ? line_position1
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[0]);
+
+        current_rem = rem_tree[chapter_note].children[line_index[0]].children;
+
+        line_max_position2 = current_rem.length - 1;
+        line_index[1] =
+          line_position2 < line_max_position2
+            ? line_position2
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[1]);
+        break;
+      case 4:
+        current_rem = rem_tree[chapter_note].children;
+        line_max_position1 = current_rem.length - 1;
+        line_index[0] =
+          line_position1 < line_max_position1
+            ? line_position1
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[0]);
+
+        current_rem = rem_tree[chapter_note].children[line_index[0]].children;
+        line_max_position2 = current_rem.length - 1;
+        line_index[1] =
+          line_position2 < line_max_position2
+            ? line_position2
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[1]);
+
+        current_rem =
+          rem_tree[chapter_note].children[line_index[0]].children[line_index[1]]
+            .children;
+        line_max_position3 = current_rem.length - 1;
+        line_index[2] =
+          line_position3 < line_max_position3
+            ? line_position3
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[2]);
+        break;
+      case 5:
+        current_rem = rem_tree[chapter_note].children;
+        line_max_position1 = current_rem.length - 1;
+        line_index[0] =
+          line_position1 < current_rem.length - 1
+            ? line_position1
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[0]);
+
+        current_rem = rem_tree[chapter_note].children[line_index[0]].children;
+        line_max_position2 = current_rem.length - 1;
+        line_index[1] =
+          line_position2 < line_max_position2
+            ? line_position2
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[1]);
+
+        current_rem =
+          rem_tree[chapter_note].children[line_index[0]].children[line_index[1]]
+            .children;
+        line_max_position3 = current_rem.length - 1;
+        line_index[2] =
+          line_position3 < line_max_position3
+            ? line_position3
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[2]);
+
+        current_rem =
+          rem_tree[chapter_note].children[line_index[0]].children[line_index[1]]
+            .children[line_index[2]].children;
+        line_max_position4 = current_rem.length - 1;
+        line_index[3] =
+          line_position4 < line_max_position4
+            ? line_position4
+            : current_rem.length - 1;
+        last_tree_position.push(line_index[3]);
+        break;
+      default:
+    }
+
+    if (!writing_rem) tree_position = last_tree_position;
+  }
+
+  function update_lines_position() {
+    last_line_position1 = line_position1;
+    last_line_position2 = line_position2;
+    last_line_position3 = line_position3;
+    last_line_position4 = line_position4;
+    last_line_max_position1 = line_max_position1;
+    last_line_max_position2 = line_max_position2;
+    last_line_max_position3 = line_max_position3;
+    last_line_max_position4 = line_max_position4;
   }
 }
