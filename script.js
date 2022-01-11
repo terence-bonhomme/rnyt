@@ -288,7 +288,8 @@ async function onYouTubePlayerAPIReady() {
         $("#refresh > img").css("filter", filter_out);
       });
 
-      $("#global").css("filter", "hue-rotate(180deg) invert(1)");
+      $("#right").css("filter", "hue-rotate(180deg) invert(1)");
+      $("#left").css("filter", "hue-rotate(180deg) invert(1)");
     }
 
     // width %
@@ -1360,6 +1361,8 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
+        
+        updateTimelineScrollbar();
 
         break;
       }
@@ -1633,6 +1636,8 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
+        
+        updateTimelineScrollbar();
 
         break;
       }
@@ -1983,8 +1988,10 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
+        
+        updateTimelineScrollbar();
 
-        break;
+        break;        
       }
 
       default: {
