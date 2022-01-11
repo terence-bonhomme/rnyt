@@ -11,7 +11,7 @@
 }
 
 label {
-  color: #63637B;
+  color: #63637b;
   user-select: none;
 }
 
@@ -162,7 +162,7 @@ input.delay_placeholder::-webkit-input-placeholder {
 }
 
 #takeNote {
-  color: #63637B;
+  color: #63637b;
   text-align: center;
   display: block;
   cursor: pointer;
@@ -207,7 +207,7 @@ input.delay_placeholder::-webkit-input-placeholder {
   position: relative;
   text-align: center;
   background: #f4f4fa;
-  color: #63637B;
+  color: #63637b;
   padding: 3px 6px;
   width: 80px;
   border: none;
@@ -215,7 +215,7 @@ input.delay_placeholder::-webkit-input-placeholder {
 }
 
 #refresh {
-  color: #63637B;
+  color: #63637b;
   text-align: center;
   display: block;
   cursor: pointer;
@@ -260,7 +260,7 @@ input.delay_placeholder::-webkit-input-placeholder {
   height: 40px;
   width: 5px;
   z-index: 2;
-  color: #63637B;
+  color: #63637b;
 }
 
 #commands {
@@ -271,7 +271,7 @@ input.delay_placeholder::-webkit-input-placeholder {
 }
 
 #left {
-  position: fixed;
+  position: fixed !important;
 }
 
 #right {
@@ -282,7 +282,7 @@ input.delay_placeholder::-webkit-input-placeholder {
 }
 
 #shortcuts {
-  color: #63637B;
+  color: #63637b;
   text-align: center;
   display: block;
   cursor: pointer;

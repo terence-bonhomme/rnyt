@@ -71,7 +71,7 @@
     </div>
 
     <div id="viewCont" content="width=device-width, initial-scale=1">
-      <div id="global" class="row ">
+      <div id="global" class="row">
         <div id="left" class="">
           <div id="ytplayer" class="rounded"></div>
           <div id="line" class=""></div>
@@ -84,7 +84,7 @@
             <div class="col">
               <div
                 id="takeNote"
-                class="d-flex justify-content-center mt-1 "
+                class="d-flex justify-content-center mt-1"
                 data-toggle="tooltip"
                 title="Input your note and type enter."
               >
@@ -101,9 +101,7 @@
                   width="18px"
                   class="mt-1 d-md-none"
                 />
-                <div class="d-none d-md-block">
-                  Take Note
-                </div>
+                <div class="d-none d-md-block">Take Note</div>
               </div>
             </div>
 
@@ -149,7 +147,7 @@
             <div class="col">
               <div
                 id="refresh"
-                class="d-flex justify-content-center mt-1 "
+                class="d-flex justify-content-center mt-1"
                 data-toggle="tooltip"
                 title="Edit the plugin's rems and refresh to display them."
               >
@@ -165,16 +163,14 @@
                   width="20px"
                   class="mt-1 d-md-none"
                 />
-                <div class="d-none d-md-block">
-                  Refresh
-                </div>
+                <div class="d-none d-md-block">Refresh</div>
               </div>
             </div>
 
             <div class="col">
               <div
                 id="shortcuts"
-                class="d-flex justify-content-center mt-1 "
+                class="d-flex justify-content-center mt-1"
                 data-toggle="tooltip"
                 title="Read the keyboard shortcuts."
               >
@@ -184,9 +180,7 @@
                   width="15px"
                   class="me-2 mt-1 d-none d-md-block"
                 />
-                <div class="d-none d-md-block">
-                  Shortcuts
-                </div>
+                <div class="d-none d-md-block">Shortcuts</div>
               </div>
             </div>
           </div>
@@ -240,18 +234,14 @@
             aria-labelledby="mainModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="mainModalToggle">
-                    Shortcuts
-                  </h5>
+                  <h5 class="modal-title" id="mainModalToggle">Shortcuts</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
-                  <p>
-                    You can use qwerty and azerty.
-                  </p>
+                  <p>You can use qwerty and azerty.</p>
                   <p>
                     You may ask for another popular keyboard layout on the forum
                     if you have an issue.
@@ -288,12 +278,10 @@
             aria-labelledby="noteModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="noteModalToggle">
-                    Note
-                  </h5>
+                  <h5 class="modal-title" id="noteModalToggle">Note</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -304,11 +292,9 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="key">
-                          Enter
-                        </span>
+                        <span class="key"> Enter </span>
                       </td>
-                      <td>enter a parent note with a timestamp</td>
+                      <td>enter a chapter (or note) with a timestamp</td>
                     </tr>
                     <tr>
                       <td>
@@ -335,9 +321,111 @@
                   >
                     Back
                   </button>
-                  <button class="btn btn-light disabled">
+                  <button class="btn btn-light disabled">Note</button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#navigateModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Navigate
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#questionModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Question
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#other2ModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade"
+            id="navigateModalToggle"
+            aria-hidden="true"
+            aria-labelledby="noteModalToggleLabel"
+            tabindex="-1"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="navigateModalToggle">Navigate</h5>
+                  <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm">
+                    <tr>
+                      <th>Shortcut</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Tab</span>
+                      </td>
+                      <td>next level</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">Tab</span>
+                      </td>
+                      <td>previous level</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡅</span>
+                      </td>
+                      <td>previous line</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡇</span>
+                      </td>
+                      <td>next line</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡄</span>
+                      </td>
+                      <td>first line</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="key">Shift</span>
+                        <span class="key">🡆</span>
+                      </td>
+                      <td>last line</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    data-bs-target="#mainModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Back
+                  </button>
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#noteModalToggle"
+                    data-bs-toggle="modal"
+                  >
                     Note
                   </button>
+                  <button class="btn btn-light disabled">Navigate</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#questionModalToggle"
@@ -364,12 +452,10 @@
             aria-labelledby="noteModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="other2ModalToggle">
-                    Other
-                  </h5>
+                  <h5 class="modal-title" id="other2ModalToggle">Other</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -419,14 +505,19 @@
                   </button>
                   <button
                     class="btn btn-light"
+                    data-bs-target="#navigateModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Navigate
+                  </button>
+                  <button
+                    class="btn btn-light"
                     data-bs-target="#questionModalToggle"
                     data-bs-toggle="modal"
                   >
                     Question
                   </button>
-                  <button class="btn btn-light disabled">
-                    Other
-                  </button>
+                  <button class="btn btn-light disabled">Other</button>
                 </div>
               </div>
             </div>
@@ -439,12 +530,10 @@
             aria-labelledby="noteModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="questionModalToggle">
-                    Question
-                  </h5>
+                  <h5 class="modal-title" id="questionModalToggle">Question</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -485,9 +574,14 @@
                   >
                     Note
                   </button>
-                  <button class="btn btn-light disabled">
-                    Question
+                  <button
+                    class="btn btn-light"
+                    data-bs-target="#navigateModalToggle"
+                    data-bs-toggle="modal"
+                  >
+                    Navigate
                   </button>
+                  <button class="btn btn-light disabled">Question</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#other2ModalToggle"
@@ -509,12 +603,10 @@
             aria-labelledby="playModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="playModalToggle">
-                    Play
-                  </h5>
+                  <h5 class="modal-title" id="playModalToggle">Play</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -541,9 +633,7 @@
                   >
                     Back
                   </button>
-                  <button class="btn btn-light disabled">
-                    Play
-                  </button>
+                  <button class="btn btn-light disabled">Play</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#jumpModalToggle"
@@ -591,12 +681,10 @@
             aria-labelledby="jumpModalToggleLabel"
             tabindex="-1"
           >
-            <div class="modal-dialog ">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="jumpModalToggle">
-                    Jump
-                  </h5>
+                  <h5 class="modal-title" id="jumpModalToggle">Jump</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -645,9 +733,7 @@
                   >
                     Play
                   </button>
-                  <button class="btn btn-light disabled">
-                    Jump
-                  </button>
+                  <button class="btn btn-light disabled">Jump</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#soundModalToggle"
@@ -691,9 +777,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="soundModalToggle">
-                    Sound
-                  </h5>
+                  <h5 class="modal-title" id="soundModalToggle">Sound</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -708,14 +792,14 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="key">Shift</span>
+                        <span class="key">Ctrl</span>
                         <span class="key">🡅</span>
                       </td>
                       <td>volume up</td>
                     </tr>
                     <tr>
                       <td>
-                        <span class="key">Shift</span>
+                        <span class="key">Ctrl</span>
                         <span class="key">🡇</span>
                       </td>
                       <td>volume down</td>
@@ -744,9 +828,7 @@
                   >
                     Jump
                   </button>
-                  <button class="btn btn-light disabled">
-                    Sound
-                  </button>
+                  <button class="btn btn-light disabled">Sound</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#multimediaModalToggle"
@@ -783,9 +865,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="chapterModalToggle">
-                    Chapter
-                  </h5>
+                  <h5 class="modal-title" id="chapterModalToggle">Chapter</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -865,9 +945,7 @@
                   >
                     Multimedia
                   </button>
-                  <button class="btn btn-light disabled">
-                    Chapter
-                  </button>
+                  <button class="btn btn-light disabled">Chapter</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#otherModalToggle"
@@ -944,9 +1022,7 @@
                   >
                     Sound
                   </button>
-                  <button class="btn btn-light disabled">
-                    Multimedia
-                  </button>
+                  <button class="btn btn-light disabled">Multimedia</button>
                   <button
                     class="btn btn-light"
                     data-bs-target="#chapterModalToggle"
@@ -976,9 +1052,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="chapterModalToggle">
-                    Other
-                  </h5>
+                  <h5 class="modal-title" id="chapterModalToggle">Other</h5>
                   <button type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
@@ -1044,9 +1118,7 @@
                   >
                     Chapter
                   </button>
-                  <button class="btn btn-light disabled">
-                    Other
-                  </button>
+                  <button class="btn btn-light disabled">Other</button>
                 </div>
               </div>
             </div>
