@@ -486,14 +486,8 @@ async function onYouTubePlayerAPIReady() {
 
     // update blue line
     setInterval(() => {
-      if (!just_clicked && previous_chapter != current_chapter) {
-        line_position1 = 0;
-        line_position2 = 0;
-        line_position3 = 0;
-        line_position4 = 0;
-        level = 1;
+      if (previous_chapter != current_chapter) {
         previous_chapter = current_chapter;
-        change_line(current_chapter);
       }
       if (current_chapter == 0) {
         if (last_referenceNode != undefined) {
@@ -1361,7 +1355,7 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
-        
+
         updateTimelineScrollbar();
 
         break;
@@ -1636,7 +1630,7 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
-        
+
         updateTimelineScrollbar();
 
         break;
@@ -1988,10 +1982,10 @@ async function onYouTubePlayerAPIReady() {
 
         text_input = "";
         writing_rem = false;
-        
+
         updateTimelineScrollbar();
 
-        break;        
+        break;
       }
 
       default: {
@@ -2221,6 +2215,12 @@ async function onYouTubePlayerAPIReady() {
       let id0 = "_0-" + i;
       li0.id = id0;
 
+      $(li0).on("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        click_line($(this)[0]);
+      });
+
       if (i < rem_tree.length) ul0.appendChild(li0);
 
       // input
@@ -2295,6 +2295,12 @@ async function onYouTubePlayerAPIReady() {
             let id1 = id0 + "_1-" + n1;
             li1.id = id1;
 
+            $(li1).on("click", function (event) {
+              event.preventDefault();
+              event.stopPropagation();
+              click_line($(this)[0]);
+            });
+
             const child1_rem = child0_rem.children[n1];
 
             const input1 = document.createElement("input");
@@ -2362,6 +2368,12 @@ async function onYouTubePlayerAPIReady() {
                 let id2 = id1 + "_2-" + n2;
                 li2.id = id2;
 
+                $(li2).on("click", function (event) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  click_line($(this)[0]);
+                });
+
                 const child2_rem = child1_rem.children[n2];
 
                 const input2 = document.createElement("input");
@@ -2418,6 +2430,12 @@ async function onYouTubePlayerAPIReady() {
                     const li3 = document.createElement("li");
                     let id3 = id2 + "_3-" + n3;
                     li3.id = id3;
+
+                    $(li3).on("click", function (event) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      click_line($(this)[0]);
+                    });
 
                     const child3_rem = child2_rem.children[n3];
 
@@ -2478,6 +2496,12 @@ async function onYouTubePlayerAPIReady() {
                         const li4 = document.createElement("li");
                         let id4 = id3 + "_4-" + n4;
                         li4.id = id4;
+
+                        $(li4).on("click", function (event) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          click_line($(this)[0]);
+                        });
 
                         const child4_rem = child3_rem.children[n4];
 
@@ -2543,6 +2567,12 @@ async function onYouTubePlayerAPIReady() {
                             const li5 = document.createElement("li");
                             let id5 = id4 + "_5-" + n5;
                             li5.id = id5;
+
+                            $(li5).on("click", function (event) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              click_line($(this)[0]);
+                            });
 
                             const child5_rem = child4_rem.children[n5];
 
@@ -2658,6 +2688,12 @@ async function onYouTubePlayerAPIReady() {
 
     const li0 = document.createElement("li");
     li0.id = "#" + "_0-" + position;
+
+    $(li0).on("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      click_line($(this)[0]);
+    });
 
     const input0 = document.createElement("input");
     input0.type = "button";
@@ -2936,6 +2972,12 @@ async function onYouTubePlayerAPIReady() {
         break;
     }
 
+    $(li1).on("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      click_line($(this)[0]);
+    });
+
     // ctrl + enter only
     if (time != undefined) {
       let color, color_hover;
@@ -3053,8 +3095,7 @@ async function onYouTubePlayerAPIReady() {
   function select_node(chapterId, after) {
     const node_level = after ? last_level + 1 : last_level;
 
-    console.assert(tree_position.length <= 4, "tree_position.length > 4");
-    console.assert(node_level <= 5, "node_level > 5");
+    if (tree_position.length > 4 || node_level > 5) return;
 
     let referenceNode;
     if (node_level == 1) {
@@ -3713,6 +3754,7 @@ async function onYouTubePlayerAPIReady() {
       if (level >= 4) query += "_3-" + last_tree_position[2];
       if (level >= 5) query += "_4-" + last_tree_position[3];
     }
+
     referenceNode = document.querySelector(query);
 
     if (referenceNode != undefined) {
@@ -3854,5 +3896,45 @@ async function onYouTubePlayerAPIReady() {
     last_line_max_position2 = line_max_position2;
     last_line_max_position3 = line_max_position3;
     last_line_max_position4 = line_max_position4;
+  }
+
+  function click_line(line) {
+    const id_position = line.id;
+
+    const chapter = parseInt(
+      id_position.match(/_0-[0-9]+/g)[0].replace("_0-", "")
+    );
+
+    level = 1;
+    if (id_position.match(/_1-[0-9]+/g)) {
+      line_position1 = parseInt(
+        id_position.match(/_1-[0-9]+/g)[0].replace("_1-", "")
+      );
+      level = 2;
+    }
+    if (id_position.match(/_2-[0-9]+/g)) {
+      line_position2 = parseInt(
+        id_position.match(/_2-[0-9]+/g)[0].replace("_2-", "")
+      );
+      level = 3;
+    }
+    if (id_position.match(/_3-[0-9]+/g)) {
+      line_position3 = parseInt(
+        id_position.match(/_3-[0-9]+/g)[0].replace("_3-", "")
+      );
+      level = 4;
+    }
+    if (id_position.match(/_4-[0-9]+/g)) {
+      line_position4 = parseInt(
+        id_position.match(/_4-[0-9]+/g)[0].replace("_4-", "")
+      );
+      level = 5;
+    }
+
+    if (chapter != current_chapter) {
+      current_chapter = chapter;
+      document.getElementById(String(chapter)).click();
+    }
+    change_line(chapter);
   }
 }
