@@ -3038,7 +3038,7 @@ async function onYouTubePlayerAPIReady() {
 
     li1.appendChild(newContent1);
 
-    // ctrl + enter
+    // ctrl + enter or ctrl + shift + enter
     let referenceNode;
     if (time != undefined) {
       referenceNode = select_node(chapterId, false);
@@ -3063,8 +3063,6 @@ async function onYouTubePlayerAPIReady() {
 
         // after
       } else {
-        console.assert(last_level < 5, "last_level >= 5");
-
         referenceNode = select_node(chapterId, true);
 
         if (referenceNode != null) {
@@ -3072,7 +3070,6 @@ async function onYouTubePlayerAPIReady() {
           update_node_id(referenceNode.parentNode, chapterId, true);
         } else {
           referenceNode = select_node(chapterId, false);
-          console.assert(referenceNode != null, "referenceNode == null");
           referenceNode.appendChild(li1);
           update_node_id(referenceNode, chapterId, false);
         }
@@ -3093,9 +3090,10 @@ async function onYouTubePlayerAPIReady() {
   }
 
   function select_node(chapterId, after) {
+    //console.log(last_level)
     const node_level = after ? last_level + 1 : last_level;
 
-    if (tree_position.length > 4 || node_level > 5) return;
+    //if(tree_position.length > 4 || node_level > 5) return;
 
     let referenceNode;
     if (node_level == 1) {
@@ -3235,6 +3233,58 @@ async function onYouTubePlayerAPIReady() {
             tree_position[2] +
             "_4-" +
             (tree_position[3] - 1)
+        );
+      }
+    } else if (node_level == 6) {
+      if (!after) {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            tree_position[3] +
+            "_5-" +
+            tree_position[4]
+        );
+        let ul = document.createElement("ul");
+        referenceNode.appendChild(ul);
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            tree_position[3] +
+            "_5-" +
+            tree_position[4] +
+            " > ul"
+        );
+      } else {
+        referenceNode = document.querySelector(
+          "#" +
+            "_0-" +
+            chapterId +
+            "_1-" +
+            tree_position[0] +
+            "_2-" +
+            tree_position[1] +
+            "_3-" +
+            tree_position[2] +
+            "_4-" +
+            tree_position[3] +
+            "_5-" +
+            (tree_position[4] - 1)
         );
       }
     }
