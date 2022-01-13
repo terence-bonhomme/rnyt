@@ -790,6 +790,9 @@ async function onYouTubePlayerAPIReady() {
           } else {
             current_chapter = 1;
           }
+
+          level = 1;
+          reset_line_position();
           break;
         case "next chapter":
           current_chapter++;
@@ -799,14 +802,23 @@ async function onYouTubePlayerAPIReady() {
           } else {
             current_chapter = rem_tree.length - 1;
           }
+
+          level = 1;
+          reset_line_position();
           break;
         case "first chapter":
           current_chapter = 1;
           document.getElementById(String(current_chapter)).click();
+
+          level = 1;
+          reset_line_position();
           break;
         case "last chapter":
           current_chapter = rem_tree.length - 1;
           document.getElementById(String(current_chapter)).click();
+
+          level = 1;
+          reset_line_position();
           break;
         case "repeat":
           if ($("#noteInput").is(":focus") == false) {
@@ -933,7 +945,6 @@ async function onYouTubePlayerAPIReady() {
           //}
           break;
         case "previous line":
-          //if (!writing_rem) {
           if (level == 1) {
             current_chapter--;
             if (current_chapter > 0) {
@@ -3082,6 +3093,8 @@ async function onYouTubePlayerAPIReady() {
       update_node_id(referenceNode, chapterId, false);
     }
 
+    update_id();
+
     // dark mode
     if (dark_mode == 1) {
       $("li").css("color", "#c0bdbd");
@@ -3090,10 +3103,7 @@ async function onYouTubePlayerAPIReady() {
   }
 
   function select_node(chapterId, after) {
-    //console.log(last_level)
     const node_level = after ? last_level + 1 : last_level;
-
-    //if(tree_position.length > 4 || node_level > 5) return;
 
     let referenceNode;
     if (node_level == 1) {
@@ -3290,6 +3300,59 @@ async function onYouTubePlayerAPIReady() {
     }
 
     return referenceNode;
+  }
+
+  function update_id() {
+    for (let i = 1; i <= rem_tree.length; i++) {
+      let line0 = "#note > ul > li:nth-child(" + i + ")";
+      let id0 = "_0-" + i;
+      $(line0).attr("id", id0);
+
+      // level 1
+
+      let len_j = $(line0 + " > ul li").length;
+      for (let j = 1; j <= len_j; j++) {
+        let line1 = line0 + "> ul > li:nth-child(" + j + ")";
+        let id1 = id0 + "_1-" + (j - 1);
+        $(line1).attr("id", id1);
+
+        // level 2
+
+        let len_k = $(line1 + " > ul li").length;
+        for (let k = 1; k <= len_k; k++) {
+          let line2 = line1 + " > ul > li:nth-child(" + k + ")";
+          let id2 = id1 + "_2-" + (k - 1);
+          $(line2).attr("id", id2);
+
+          // level 3
+
+          let len_l = $(line2 + " > ul li").length;
+          for (let l = 1; l <= len_l; l++) {
+            let line3 = line2 + " > ul > li:nth-child(" + l + ")";
+            let id3 = id2 + "_3-" + (l - 1);
+            $(line3).attr("id", id3);
+
+            // level 4
+
+            let len_m = $(line3 + " > ul li").length;
+            for (let m = 1; m <= len_m; m++) {
+              let line4 = line3 + "> ul > li:nth-child(" + m + ")";
+              let id4 = id3 + "_4-" + (m - 1);
+              $(line4).attr("id", id4);
+
+              // level 5
+
+              let len_n = $(line4 + " > ul li").length;
+              for (let n = 1; n <= len_n; n++) {
+                let line5 = line4 + " > ul > li:nth-child(" + n + ")";
+                let id5 = id4 + "_5-" + (n - 1);
+                $(line5).attr("id", id5);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   function update_node_id(referenceNode, chapterId) {
@@ -3946,6 +4009,13 @@ async function onYouTubePlayerAPIReady() {
     last_line_max_position2 = line_max_position2;
     last_line_max_position3 = line_max_position3;
     last_line_max_position4 = line_max_position4;
+  }
+
+  function reset_line_position() {
+    line_position1 = 0;
+    line_position2 = 0;
+    line_position3 = 0;
+    line_position4 = 0;
   }
 
   function click_line(line) {
