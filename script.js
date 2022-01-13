@@ -15,9 +15,10 @@ async function onYouTubePlayerAPIReady() {
   var video_id;
 
   var scroll_timeout;
+  var click_timeout;
 
   var cancel_auto_scroll = false;
-  var paused = false;
+  var paused = false;  
 
   const player_margin = 30;
 
@@ -456,38 +457,45 @@ async function onYouTubePlayerAPIReady() {
     }, 200);
 
     // auto scroll while playing
-    setInterval(() => {
-      if (typeof player.getDuration === "function") {
-        let player_current_time = parseInt(player.playerInfo.currentTime);
+      setInterval(() => {
+        if (typeof player.getDuration === "function") {
+          let player_current_time = parseInt(player.playerInfo.currentTime);
 
-        for (let i = 1; i < rem_tree.length; i++) {
-          if (document.getElementById(String(i)) !== null) {
-            if (document.getElementById(String(i)).value == "0") break;
-            if (
-              player_current_time ==
-              formatedTimeToDuration(document.getElementById(String(i)).value)
-            ) {
-              if (!cancel_auto_scroll) {
+          const rem_tree_len = rem_tree.length;
+          for (let i = 1; i < rem_tree_len; i++) {
+            if (document.getElementById(String(i)) !== null) {
+              if (document.getElementById(String(i)).value == "0") break;
+              if (
+                player_current_time ==
+                formatedTimeToDuration(document.getElementById(String(i)).value)
+              ) {
+                 if (!just_clicked && !cancel_auto_scroll) {
                 $("html, body").animate(
                   {
                     scrollTop: $("#" + i).offset().top,
                   },
                   100
                 );
-                setTimeout(function () {
-                  cancel_auto_scroll = false;
-                }, 1000);
+                cancel_auto_scroll = true;
+
+                level = 1;
+                reset_line_position();
+                change_line(i);
+                   break;
+                    }
               }
             }
           }
         }
-      }
-    }, 1000);
+      }, 1000);
+   
 
     // update blue line
     setInterval(() => {
       if (previous_chapter != current_chapter) {
         previous_chapter = current_chapter;
+        cancel_auto_scroll = false;
+        just_clicked = false;
       }
       if (current_chapter == 0) {
         if (last_referenceNode != undefined) {
@@ -793,6 +801,8 @@ async function onYouTubePlayerAPIReady() {
 
           level = 1;
           reset_line_position();
+
+          change_line(current_chapter);
           break;
         case "next chapter":
           current_chapter++;
@@ -805,6 +815,8 @@ async function onYouTubePlayerAPIReady() {
 
           level = 1;
           reset_line_position();
+
+          change_line(current_chapter);
           break;
         case "first chapter":
           current_chapter = 1;
@@ -812,6 +824,8 @@ async function onYouTubePlayerAPIReady() {
 
           level = 1;
           reset_line_position();
+
+          change_line(current_chapter);
           break;
         case "last chapter":
           current_chapter = rem_tree.length - 1;
@@ -819,6 +833,8 @@ async function onYouTubePlayerAPIReady() {
 
           level = 1;
           reset_line_position();
+
+          change_line(current_chapter);
           break;
         case "repeat":
           if ($("#noteInput").is(":focus") == false) {
@@ -1144,6 +1160,10 @@ async function onYouTubePlayerAPIReady() {
         writing_rem = false;
 
         updateTimelineScrollbar();
+
+        level = 1;
+        reset_line_position();
+        change_line(current_chapter + 1);
 
         break;
       }
@@ -1717,6 +1737,10 @@ async function onYouTubePlayerAPIReady() {
 
         updateTimelineScrollbar();
 
+        level = 1;
+        reset_line_position();
+        change_line(current_chapter + 1);
+
         break;
       }
       case "ask a child question": {
@@ -2226,11 +2250,7 @@ async function onYouTubePlayerAPIReady() {
       let id0 = "_0-" + i;
       li0.id = id0;
 
-      $(li0).on("click", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        click_line($(this)[0]);
-      });
+      line_mouse_events(li0);
 
       if (i < rem_tree.length) ul0.appendChild(li0);
 
@@ -2265,6 +2285,7 @@ async function onYouTubePlayerAPIReady() {
           },
           100
         );
+
         var clock = $(this).val();
         player.seekTo(formatedTimeToDuration(clock), true);
       });
@@ -2306,11 +2327,7 @@ async function onYouTubePlayerAPIReady() {
             let id1 = id0 + "_1-" + n1;
             li1.id = id1;
 
-            $(li1).on("click", function (event) {
-              event.preventDefault();
-              event.stopPropagation();
-              click_line($(this)[0]);
-            });
+            line_mouse_events(li1);
 
             const child1_rem = child0_rem.children[n1];
 
@@ -2336,6 +2353,7 @@ async function onYouTubePlayerAPIReady() {
                 },
                 100
               );
+
               const clock = $(this).val();
               player.seekTo(formatedTimeToDuration(clock), true);
             });
@@ -2379,11 +2397,7 @@ async function onYouTubePlayerAPIReady() {
                 let id2 = id1 + "_2-" + n2;
                 li2.id = id2;
 
-                $(li2).on("click", function (event) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  click_line($(this)[0]);
-                });
+                line_mouse_events(li2);
 
                 const child2_rem = child1_rem.children[n2];
 
@@ -2405,6 +2419,7 @@ async function onYouTubePlayerAPIReady() {
                     },
                     100
                   );
+
                   const clock = $(this).val();
                   player.seekTo(formatedTimeToDuration(clock), true);
                 });
@@ -2442,11 +2457,7 @@ async function onYouTubePlayerAPIReady() {
                     let id3 = id2 + "_3-" + n3;
                     li3.id = id3;
 
-                    $(li3).on("click", function (event) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      click_line($(this)[0]);
-                    });
+                    line_mouse_events(li3);
 
                     const child3_rem = child2_rem.children[n3];
 
@@ -2468,6 +2479,7 @@ async function onYouTubePlayerAPIReady() {
                         },
                         100
                       );
+
                       const clock = $(this).val();
                       player.seekTo(formatedTimeToDuration(clock), true);
                     });
@@ -2508,11 +2520,7 @@ async function onYouTubePlayerAPIReady() {
                         let id4 = id3 + "_4-" + n4;
                         li4.id = id4;
 
-                        $(li4).on("click", function (event) {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          click_line($(this)[0]);
-                        });
+                        line_mouse_events(li4);
 
                         const child4_rem = child3_rem.children[n4];
 
@@ -2535,6 +2543,7 @@ async function onYouTubePlayerAPIReady() {
                             },
                             100
                           );
+
                           var clock = $(this).val();
                           player.seekTo(formatedTimeToDuration(clock), true);
                         });
@@ -2579,11 +2588,7 @@ async function onYouTubePlayerAPIReady() {
                             let id5 = id4 + "_5-" + n5;
                             li5.id = id5;
 
-                            $(li5).on("click", function (event) {
-                              event.preventDefault();
-                              event.stopPropagation();
-                              click_line($(this)[0]);
-                            });
+                            line_mouse_events(li5);
 
                             const child5_rem = child4_rem.children[n5];
 
@@ -2606,6 +2611,7 @@ async function onYouTubePlayerAPIReady() {
                                 },
                                 100
                               );
+
                               const clock = $(this).val();
                               player.seekTo(
                                 formatedTimeToDuration(clock),
@@ -2700,11 +2706,7 @@ async function onYouTubePlayerAPIReady() {
     const li0 = document.createElement("li");
     li0.id = "#" + "_0-" + position;
 
-    $(li0).on("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      click_line($(this)[0]);
-    });
+    line_mouse_events(li0);
 
     const input0 = document.createElement("input");
     input0.type = "button";
@@ -2720,7 +2722,6 @@ async function onYouTubePlayerAPIReady() {
         },
         100
       );
-
       var clock = $("input#" + position).val();
       player.seekTo(formatedTimeToDuration(clock), true);
     });
@@ -2801,6 +2802,8 @@ async function onYouTubePlayerAPIReady() {
 
         $(line1).attr("id", id1);
 
+        line_mouse_events(line1);
+
         $(input1).css("background", color_1[(i - 1) % color_1.length]);
 
         $(input1).on("mouseenter", function () {
@@ -2829,6 +2832,8 @@ async function onYouTubePlayerAPIReady() {
 
           $(line2).attr("id", id2);
 
+          line_mouse_events(line2);
+
           $(input2).css("background", color_2[(i - 1) % color_2.length]);
           $(input2).on("mouseenter", function () {
             $(this).css(
@@ -2849,6 +2854,8 @@ async function onYouTubePlayerAPIReady() {
             let input3 = line3 + " > input";
 
             $(line3).attr("id", id3);
+
+            line_mouse_events(line3);
 
             $(input3).css("background", color_3[(i - 1) % color_3.length]);
 
@@ -2872,6 +2879,7 @@ async function onYouTubePlayerAPIReady() {
               let input4 = line4 + " > input";
 
               $(line4).attr("id", id4);
+              line_mouse_events(line4);
 
               $(input4).css("background", color_4[(i - 1) % color_4.length]);
               $(input4).on("mouseenter", function () {
@@ -2893,6 +2901,8 @@ async function onYouTubePlayerAPIReady() {
                 let input5 = line5 + " > input";
 
                 $(line5).attr("id", id5);
+
+                line_mouse_events(line5);
 
                 $(input5).css("background", color_5[(i - 1) % color_5.length]);
 
@@ -3505,14 +3515,16 @@ async function onYouTubePlayerAPIReady() {
 
           $(chapter[chapter.length - 1]).click(function () {
             current_chapter = i - 1;
-
             $("html, body").animate(
               {
                 scrollTop: $("#" + (i - 1)).offset().top,
               },
               100
             );
+
             player.seekTo(this.start, true);
+
+            change_line(current_chapter);
           });
 
           $(chapter[chapter.length - 1]).on("mouseenter", function () {
@@ -3577,7 +3589,10 @@ async function onYouTubePlayerAPIReady() {
           },
           100
         );
+
         player.seekTo(this.delay, true);
+
+        change_line(current_chapter);
       });
 
       $(temp_chapter).attr("data-toggle", "tooltip");
@@ -3620,13 +3635,17 @@ async function onYouTubePlayerAPIReady() {
 
       $(temp_chapter).click(function () {
         current_chapter = position;
+
         $("html, body").animate(
           {
             scrollTop: $("#" + position).offset().top,
           },
           100
         );
+
         player.seekTo(this.delay, true);
+
+        change_line(current_chapter);
       });
 
       $(temp_chapter).attr("data-toggle", "tooltip");
@@ -3682,7 +3701,10 @@ async function onYouTubePlayerAPIReady() {
           },
           100
         );
+
         player.seekTo(this.delay, true);
+
+        change_line(current_chapter);
       });
 
       $(temp_chapter).attr("data-toggle", "tooltip");
@@ -3742,7 +3764,10 @@ async function onYouTubePlayerAPIReady() {
           },
           100
         );
+
         player.seekTo(this.delay, true);
+
+        change_line(current_chapter);
       });
 
       $(temp_chapter).attr("data-toggle", "tooltip");
@@ -3872,17 +3897,20 @@ async function onYouTubePlayerAPIReady() {
 
     if (referenceNode != undefined) {
       if (last_referenceNode != undefined) {
-        if (dark_mode == 0 && last_referenceNode.style.color != "#202020") {
-          last_referenceNode.style.color = "#202020";
+        if (
+          dark_mode == 0 &&
+          $(last_referenceNode).css("color") != "rgb(32, 32, 32)"
+        ) {
+          $(last_referenceNode).css("color", "#202020");
         } else if (
           dark_mode == 1 &&
-          last_referenceNode.style.color != "#c0bdbd"
+          $(last_referenceNode).css("color") != "rgb(192, 189, 189)"
         ) {
-          last_referenceNode.style.color = "#c0bdbd";
+          $(last_referenceNode).css("color", "#c0bdbd");
         }
       }
 
-      referenceNode.style.color = "#586cf4";
+      $(referenceNode).css("color", "#102eec");
       last_referenceNode = referenceNode;
     }
   }
@@ -4020,41 +4048,84 @@ async function onYouTubePlayerAPIReady() {
 
   function click_line(line) {
     const id_position = line.id;
+    
+    just_clicked = true;
+    clearTimeout(click_timeout);
+      click_timeout = setTimeout(function () {
+        just_clicked = false;
+      }, 10000);
 
     const chapter = parseInt(
       id_position.match(/_0-[0-9]+/g)[0].replace("_0-", "")
     );
+    if (chapter != current_chapter) {
+      const clock = $("#" + chapter).val();
+      player.seekTo(formatedTimeToDuration(clock), true);
+      current_chapter = chapter;
+      previous_chapter = current_chapter;
+    }
 
     level = 1;
-    if (id_position.match(/_1-[0-9]+/g)) {
-      line_position1 = parseInt(
-        id_position.match(/_1-[0-9]+/g)[0].replace("_1-", "")
-      );
+    const match_level1 = id_position.match(/_1-[0-9]+/g);
+    if (match_level1) {
+      line_position1 = parseInt(match_level1[0].replace("_1-", ""));
       level = 2;
     }
-    if (id_position.match(/_2-[0-9]+/g)) {
-      line_position2 = parseInt(
-        id_position.match(/_2-[0-9]+/g)[0].replace("_2-", "")
-      );
+    const match_level2 = id_position.match(/_2-[0-9]+/g);
+    if (match_level2) {
+      line_position2 = parseInt(match_level2[0].replace("_2-", ""));
       level = 3;
     }
-    if (id_position.match(/_3-[0-9]+/g)) {
-      line_position3 = parseInt(
-        id_position.match(/_3-[0-9]+/g)[0].replace("_3-", "")
-      );
+    const match_level3 = id_position.match(/_3-[0-9]+/g);
+    if (match_level3) {
+      line_position3 = parseInt(match_level3[0].replace("_3-", ""));
       level = 4;
     }
-    if (id_position.match(/_4-[0-9]+/g)) {
-      line_position4 = parseInt(
-        id_position.match(/_4-[0-9]+/g)[0].replace("_4-", "")
-      );
+    const match_level4 = id_position.match(/_4-[0-9]+/g);
+    if (match_level4) {
+      line_position4 = parseInt(match_level4[0].replace("_4-", ""));
       level = 5;
     }
 
-    if (chapter != current_chapter) {
-      current_chapter = chapter;
-      document.getElementById(String(chapter)).click();
-    }
     change_line(chapter);
+  }
+
+  function line_mouse_events(line) {
+    $(line).on("mouseover", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (
+        !$(this)
+          .attr("id")
+          .match(/_5-[0-9]+/g)
+      ) {
+        if (dark_mode == 0) {
+          if ($(this).css("color") == "rgb(32, 32, 32)")
+            $(this).css("color", "#00BCD4");
+        } else {
+          if ($(this).css("color") == "rgb(192, 189, 189)")
+            $(this).css("color", "#00BCD4");
+        }
+      }
+    });
+
+    $(line).on("mouseout", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const is_good_color = $(this).css("color") == "rgb(0, 188, 212)";
+      if (dark_mode == 0) {
+        if (is_good_color) $(this).css("color", "#202020");
+      } else {
+        if (is_good_color) $(this).css("color", "#c0bdbd");
+      }
+    });
+
+    $(line).on("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      click_line($(this)[0]);
+    });
   }
 }
