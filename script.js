@@ -2990,12 +2990,8 @@ async function onYouTubePlayerAPIReady() {
           tree_position[4];
         break;
     }
-
-    $(li1).on("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      click_line($(this)[0]);
-    });
+    
+    line_mouse_events(li1)
 
     // ctrl + enter only
     if (time != undefined) {
