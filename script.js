@@ -18,7 +18,7 @@ async function onYouTubePlayerAPIReady() {
   var click_timeout;
 
   var cancel_auto_scroll = false;
-  var paused = false;  
+  var paused = false;
 
   const player_margin = 30;
 
@@ -457,19 +457,19 @@ async function onYouTubePlayerAPIReady() {
     }, 200);
 
     // auto scroll while playing
-      setInterval(() => {
-        if (typeof player.getDuration === "function") {
-          let player_current_time = parseInt(player.playerInfo.currentTime);
+    setInterval(() => {
+      if (typeof player.getDuration === "function") {
+        let player_current_time = parseInt(player.playerInfo.currentTime);
 
-          const rem_tree_len = rem_tree.length;
-          for (let i = 1; i < rem_tree_len; i++) {
-            if (document.getElementById(String(i)) !== null) {
-              if (document.getElementById(String(i)).value == "0") break;
-              if (
-                player_current_time ==
-                formatedTimeToDuration(document.getElementById(String(i)).value)
-              ) {
-                 if (!just_clicked && !cancel_auto_scroll) {
+        const rem_tree_len = rem_tree.length;
+        for (let i = 1; i < rem_tree_len; i++) {
+          if (document.getElementById(String(i)) !== null) {
+            if (document.getElementById(String(i)).value == "0") break;
+            if (
+              player_current_time ==
+              formatedTimeToDuration(document.getElementById(String(i)).value)
+            ) {
+              if (!just_clicked || !cancel_auto_scroll) {
                 $("html, body").animate(
                   {
                     scrollTop: $("#" + i).offset().top,
@@ -477,25 +477,23 @@ async function onYouTubePlayerAPIReady() {
                   100
                 );
                 cancel_auto_scroll = true;
-
-                level = 1;
-                reset_line_position();
-                change_line(i);
-                   break;
-                    }
+                break;
               }
             }
           }
         }
-      }, 1000);
-   
+      }
+    }, 1000);
 
     // update blue line
     setInterval(() => {
-      if (previous_chapter != current_chapter) {
+      if (previous_chapter != current_chapter && !just_clicked) {
+        level = 1;
+        reset_line_position();
+        change_line(current_chapter);
+
         previous_chapter = current_chapter;
         cancel_auto_scroll = false;
-        just_clicked = false;
       }
       if (current_chapter == 0) {
         if (last_referenceNode != undefined) {
@@ -4046,23 +4044,23 @@ async function onYouTubePlayerAPIReady() {
     line_position4 = 0;
   }
 
-  function click_line(line) {
-    const id_position = line.id;
-    
+  async function video_jump(chapter) {
+    const clock = $("#" + chapter).val();
+    player.seekTo(formatedTimeToDuration(clock), true);
+  }
+
+  async function click_line(line) {
     just_clicked = true;
-    clearTimeout(click_timeout);
-      click_timeout = setTimeout(function () {
-        just_clicked = false;
-      }, 10000);
+    const id_position = line.id;
 
     const chapter = parseInt(
       id_position.match(/_0-[0-9]+/g)[0].replace("_0-", "")
     );
     if (chapter != current_chapter) {
-      const clock = $("#" + chapter).val();
-      player.seekTo(formatedTimeToDuration(clock), true);
       current_chapter = chapter;
       previous_chapter = current_chapter;
+
+      await video_jump(chapter);
     }
 
     level = 1;
@@ -4088,6 +4086,11 @@ async function onYouTubePlayerAPIReady() {
     }
 
     change_line(chapter);
+
+    clearTimeout(click_timeout);
+    click_timeout = setTimeout(function () {
+      just_clicked = false;
+    }, 500);
   }
 
   function line_mouse_events(line) {
