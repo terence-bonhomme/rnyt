@@ -33,7 +33,7 @@ ul {
 li {
   color: #202020;
   margin-left: -10px;
-  margin-top: 5px;
+  padding-top: 5px;
   list-style-position: outside;
 }
 
