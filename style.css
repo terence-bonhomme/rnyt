@@ -252,6 +252,7 @@ input.delay_placeholder::-webkit-input-placeholder {
 .chapter {
   position: fixed;
   height: 40px;
+  cursor: pointer;
 }
 
 #play_pointer {
