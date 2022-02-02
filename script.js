@@ -208,8 +208,6 @@ async function onYouTubePlayerAPIReady() {
 
   var settings = await RemNoteAPI.v0.get_by_name("RemNote YT");
 
-  //return;
-
   var parameters = new Map();
 
   if (enable_parameter) {
@@ -244,6 +242,20 @@ async function onYouTubePlayerAPIReady() {
           ": "
         )[1]
       );
+      const setting6 = await RemNoteAPI.v0.get(settings.children[5]);
+      if (setting6.found) {
+        parameters.set(
+          "font_size",
+          (await RemNoteAPI.v0.get(settings.children[5])).nameAsMarkdown.split(
+            ": "
+          )[1]
+        );
+      } else {
+        await RemNoteAPI.v0.create("font_size: 16", settings._id, {
+          positionAmongstSiblings: 5,
+        });
+        parameters.set("font_size", 16);
+      }
     } else {
       settings = await RemNoteAPI.v0.create("RemNote YT");
 
@@ -252,12 +264,14 @@ async function onYouTubePlayerAPIReady() {
       await RemNoteAPI.v0.create("playback_speed: 1", settings.remId);
       await RemNoteAPI.v0.create("delay: 0", settings.remId);
       await RemNoteAPI.v0.create("caption: 0", settings.remId);
+      await RemNoteAPI.v0.create("font_size: 16", settings.remId);
 
       parameters.set("dark_mode", 0);
       parameters.set("width", "65");
       parameters.set("playback_speed", 1);
       parameters.set("delay", 0);
       parameters.set("caption", 0);
+      parameters.set("font_size", 16);
     }
 
     // dark mode
@@ -334,6 +348,9 @@ async function onYouTubePlayerAPIReady() {
         enable_caption = 1;
       }
     }
+
+    // font size
+    $("#note").css("font-size", parameters.get("font_size") + "px");
   }
 
   // show the needed panel
@@ -2990,8 +3007,8 @@ async function onYouTubePlayerAPIReady() {
           tree_position[4];
         break;
     }
-    
-    line_mouse_events(li1)
+
+    line_mouse_events(li1);
 
     // ctrl + enter only
     if (time != undefined) {
