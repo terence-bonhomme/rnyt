@@ -2,7 +2,9 @@
 
 take notes in RemNote with a Youtube video
 
-plugin for RemNote (https://www.remnote.io/) with only read and create permissions
+plugin for [RemNote](https://www.remnote.io/) with only read and create permissions
+
+![preview](https://cdn.glitch.global/be28f3c3-fd03-4a8f-b93a-e1fdc84bea7d/rnyt.gif?v=1643991722685)
 
 ## Project
 
@@ -14,43 +16,44 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 
 ### information
 
-- it uses YouTube Player API for iframe Embeds (https://developers.google.com/youtube/iframe_api_reference)
-- it uses Glitch (https://glitch.com/) 
+- it uses [YouTube Player API for iframe Embeds](https://developers.google.com/youtube/iframe_api_reference)
+- if you want to read a video that is not on YouTube, see this [project](https://github.com/terence-bonhomme/rnhp)
+- it uses [Glitch](https://glitch.com/)
 - the plugin has weaknesses, read the "Warning" part
 
 ## Description
 
-- create timestamps like chapters, add child notes with or without timestamps
-- review you video notes later
+- create timestamps like chapters, add a child note with or without timestamp (6 levels)
+- review your video notes later
 - jump to the timestamps with your mouse or your keyboard
 - control the player with shortcuts
-- set the default settings, so you don't have to do your settings again
+- set the default settings so you don't have to do your settings again
 - put questions and get the answer with a video link
-- modify your rems in Remnote
+- modify your rems in RemNote
 
-## Quick start
+## Quickstart
 
 ### Short presentation video
 
 [![Watch the video](https://img.youtube.com/vi/eUwJnBIlHsI/0.jpg)](https://youtu.be/eUwJnBIlHsI)
 
-### How to add the plugin ?
+### How to add the plugin?
 
-- Plugin Name : rnyt (by example)
-- Plugin URL : https://local-maroon-badger.glitch.me 
-- CSS Height : find your height or empty
-- Permissions : Read and Create
-- Location : inline
+- Plugin Name: rnyt (by example)
+- Plugin URL: https://local-maroon-badger.glitch.me
+- CSS Height : 600 (by example)
+- Permissions: Read and Create
+- Location: inline
 
-### How to use the plugin ?
+### How to use the plugin?
 
-- copy paste your video link in RemNote (youtube.com or you.tube)
-- go into the rem
-- insert the plugin
-- click on the video to start
-- input a delay to rewind the video when you take a note
+1. copy-paste your video link in RemNote (youtube.com or you.tube)
+2. go into the rem
+3. insert the plugin
+4. click on the video to start
+5. input a delay to rewind the video when you take a note
 
-### How to change the default settings ?
+### How to change the default settings?
 
 - you can skip and use these settings later
 - go into RemNote YT
@@ -59,9 +62,11 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
   - playback_speed: 1 (0.25, 0.5, ..., 2)
   - delay: 0 (seconds)
   - caption: 0 (or 1)
-  
+  - font_size: 16 (px value)
+
 ## Tips
 
+- "Full width" is recommended (RemNote > Settings > Interface > Global Interface > Full Width)
 - remember at least the shortcuts to input your notes and the left/right keys to move
 - you can rewind/forward while you have an empty text input to target the best time (it doesn't cancel the delay)
 - enable/disable the delay with "d" if you want to make many notes in a row
@@ -71,9 +76,9 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 ### Project
 
 - the plugin is still in development, you could find some bugs
-- the Glitch project that you added is not used for developping, but the project can sometimes be updated
+- the Glitch project that you added is not used for development, but the project can sometimes be updated
 - a plugin could be broken after an update from RemNote, it could be fixed by me or someone else
-- the plugin's design follows the "read and create" permissions, at best it can create rems among siblings
+- the plugin's design follows the "Read and Create" permissions, at best it can create rems among siblings
 
 ### Usage
 
@@ -81,10 +86,10 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 - plugin name
   - always use the same name, but you can change the link and the height
   - if you change the name, you will need to add another plugin in RemNote to be able to use all the plugins you've used
-  - if you don't want the settings, use -np in the plugin name : example rnyt -np (warning : it is like a new name)  
-  - use an useless name like "rnyt" to avoid noise when you search in RemNote
-- the plugin can't modify the rems, so it won't correct the misplaced rems
-- be careful when you edit you rems into RemNote
+  - if you don't want the settings, use -np in the plugin name: example rnyt -np (warning: it is like a new name)
+  - use a useless name like "rnyt" to avoid noise when you search in RemNote
+- the plugin can't modify the rems so that it won't correct the misplaced rems
+- be careful when you edit your rems into RemNote
   - the timestamps are mandatory on the top level
   - follow the chronological order
   - the child notes with a timestamp are inserted before child notes without a timestamp
@@ -96,4 +101,4 @@ plugin for RemNote (https://www.remnote.io/) with only read and create permissio
 
 ## Acknowledgement
 
-- project started from https://youtubetoremnote.glitch.me/ by AllThingsRemNote
+- project started from [youtubetoremnote.glitch.me](https://youtubetoremnote.glitch.me/) by AllThingsRemNote
