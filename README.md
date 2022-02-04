@@ -4,7 +4,7 @@ take notes in RemNote with a Youtube video
 
 plugin for [RemNote](https://www.remnote.io/) with only read and create permissions
 
-![preview](https://cdn.glitch.global/be28f3c3-fd03-4a8f-b93a-e1fdc84bea7d/rnyt.gif?v=1643991722685)
+![](https://media.giphy.com/media/TzhputbJboWqJyCIPP/giphy.gif)
 
 ## Project
 
