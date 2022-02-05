@@ -62,7 +62,6 @@ async function onYouTubePlayerAPIReady() {
   var last_line_max_position3 = 0;
   var last_line_max_position4 = 0;
 
-  var w_parameter = 0;
   var dark_mode = 0;
 
   var shortcuts_displayed = false;
@@ -323,11 +322,40 @@ async function onYouTubePlayerAPIReady() {
 
       document.getElementById("right").style.left = width_parameter + "%";
 
-      if (width_parameter <= 40) {
-        w_parameter = 35;
-        $("#commands")
-          .removeClass("row row-cols-4 mt-3")
-          .addClass("row row-cols-2 mt-3");
+      if (width_parameter <= 51) {
+        $(".text_button").removeClass("d-md-block");
+        $("#keyboard_label").removeClass("d-lg-block");
+      }
+
+      if (width_parameter <= 20) {
+        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-1");
+        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
+        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+      } else if (width_parameter <= 25) {
+        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-2");
+        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
+        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+      } else if (width_parameter <= 35) {
+        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-3");
+        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-2");
+        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+        //$("#keyboard_container").addClass("d-none d-sm-block");
+      } else if (width_parameter <= 45) {
+        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-4");
+        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-3");
+        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-2");
+        //$("#keyboard_container").addClass("d-none d-sm-block");
+      }
+
+      switch (true) {
+        case width_parameter <= 20:
+          $("#delayed").remove();
+        case width_parameter <= 25:
+          $("#keyboard_container").remove();
+        case width_parameter <= 35:
+          $("#refresh").remove();
+        case width_parameter <= 45:
+          $("#shortcuts").remove();
       }
     }
 
@@ -415,7 +443,7 @@ async function onYouTubePlayerAPIReady() {
     // make the video
 
     player = new YT.Player("ytplayer", {
-      height: clientHeight - 100 - w_parameter,
+      height: clientHeight - 100,
       videoId: video_id,
       playerVars: {
         cc_load_policy: enable_caption,
