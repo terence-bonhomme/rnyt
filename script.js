@@ -706,8 +706,10 @@ async function onYouTubePlayerAPIReady() {
       $(this).tooltip();
     });
 
+    $("#refresh > img").css({"height": "20px", "width": "20px"});
     $(this).css("font-weight", "bold");
     setTimeout(function () {
+      $("#refresh > img").css({"height": "18px", "width": "18px"});
       $("#refresh").css("font-weight", "normal");
     }, 750);
 
@@ -726,8 +728,10 @@ async function onYouTubePlayerAPIReady() {
       $(this).tooltip();
     });
 
+    $("#shortcuts > img").css({"height": "17px", "width": "17px"});
     $(this).css("font-weight", "bold");
     setTimeout(function () {
+      $("#shortcuts > img").css({"height": "15px", "width": "15px"});
       $("#shortcuts").css("font-weight", "normal");
     }, 750);
 
