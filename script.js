@@ -2322,7 +2322,7 @@ async function onYouTubePlayerAPIReady() {
       }
 
       $(input0).on("click", function () {
-         just_clicked = true;
+        just_clicked = true;
         $("html, body").animate(
           {
             scrollTop: $(this).offset().top,
@@ -2637,6 +2637,8 @@ async function onYouTubePlayerAPIReady() {
                             li5.id = id5;
 
                             line_mouse_events(li5);
+
+                            $(li5).css("cursor", "auto");
 
                             const child5_rem = child4_rem.children[n5];
 
@@ -2953,6 +2955,7 @@ async function onYouTubePlayerAPIReady() {
                 let input5 = line5 + " > input";
 
                 $(line5).attr("id", id5);
+                $(line5).css("cursor", "auto");
 
                 line_mouse_events(line5);
 
@@ -3044,6 +3047,8 @@ async function onYouTubePlayerAPIReady() {
           tree_position[4];
         break;
     }
+
+    if (last_level == 5) $(li1).css("cursor", "auto");
 
     line_mouse_events(li1);
 
@@ -4099,7 +4104,7 @@ async function onYouTubePlayerAPIReady() {
     player.seekTo(formatedTimeToDuration(clock), true);
   }
 
-  async function click_line(line) {    
+  async function click_line(line) {
     const id_position = line.id;
 
     const chapter = parseInt(
@@ -4109,9 +4114,9 @@ async function onYouTubePlayerAPIReady() {
       current_chapter = chapter;
       previous_chapter = current_chapter;
 
-      if(!just_clicked) await video_jump(chapter);
+      if (!just_clicked) await video_jump(chapter);
     }
-    
+
     just_clicked = true;
 
     level = 1;
