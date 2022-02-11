@@ -2322,6 +2322,7 @@ async function onYouTubePlayerAPIReady() {
       }
 
       $(input0).on("click", function () {
+         just_clicked = true;
         $("html, body").animate(
           {
             scrollTop: $(this).offset().top,
@@ -2390,6 +2391,7 @@ async function onYouTubePlayerAPIReady() {
             }
 
             $(input1).on("click", function () {
+              just_clicked = true;
               $("html, body").animate(
                 {
                   scrollTop: $(this).offset().top,
@@ -2456,6 +2458,7 @@ async function onYouTubePlayerAPIReady() {
                 }
 
                 $(input2).on("click", function () {
+                  just_clicked = true;
                   $("html, body").animate(
                     {
                       scrollTop: $(this).offset().top,
@@ -2516,6 +2519,7 @@ async function onYouTubePlayerAPIReady() {
                     }
 
                     $(input3).on("click", function () {
+                      just_clicked = true;
                       $("html, body").animate(
                         {
                           scrollTop: $(this).offset().top,
@@ -2580,6 +2584,7 @@ async function onYouTubePlayerAPIReady() {
                         }
 
                         $(input4).on("click", function () {
+                          just_clicked = true;
                           $("html, body").animate(
                             {
                               scrollTop: $(this).offset().top,
@@ -2648,6 +2653,7 @@ async function onYouTubePlayerAPIReady() {
                             }
 
                             $(input5).on("click", function () {
+                              just_clicked = true;
                               $("html, body").animate(
                                 {
                                   scrollTop: $(this).offset().top,
@@ -2759,6 +2765,7 @@ async function onYouTubePlayerAPIReady() {
     input0.rem = text;
 
     $(input0).on("click", function () {
+      just_clicked = true;
       $("html, body").animate(
         {
           scrollTop: $("#" + input0.id).offset().top,
@@ -2824,6 +2831,7 @@ async function onYouTubePlayerAPIReady() {
       });
 
       $(input0).on("click", function () {
+        just_clicked = true;
         $("html, body").animate(
           {
             scrollTop: $("#" + i).offset().top,
@@ -2861,6 +2869,7 @@ async function onYouTubePlayerAPIReady() {
         });
 
         $(input1).on("click", function () {
+          just_clicked = true;
           var clock = $(this).val();
           player.seekTo(formatedTimeToDuration(clock), true);
         });
@@ -4090,8 +4099,7 @@ async function onYouTubePlayerAPIReady() {
     player.seekTo(formatedTimeToDuration(clock), true);
   }
 
-  async function click_line(line) {
-    just_clicked = true;
+  async function click_line(line) {    
     const id_position = line.id;
 
     const chapter = parseInt(
@@ -4101,8 +4109,10 @@ async function onYouTubePlayerAPIReady() {
       current_chapter = chapter;
       previous_chapter = current_chapter;
 
-      await video_jump(chapter);
+      if(!just_clicked) await video_jump(chapter);
     }
+    
+    just_clicked = true;
 
     level = 1;
     const match_level1 = id_position.match(/_1-[0-9]+/g);
