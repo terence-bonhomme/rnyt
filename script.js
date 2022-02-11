@@ -516,7 +516,7 @@ async function onYouTubePlayerAPIReady() {
               player_current_time ==
               formatedTimeToDuration(document.getElementById(String(i)).value)
             ) {
-              if (!just_clicked || !cancel_auto_scroll) {
+              if (!just_clicked && !cancel_auto_scroll) {
                 $("html, body").animate(
                   {
                     scrollTop: $("#" + i).offset().top,
@@ -530,7 +530,7 @@ async function onYouTubePlayerAPIReady() {
           }
         }
       }
-    }, 1000);
+    }, 200);
 
     // update blue line
     setInterval(() => {
