@@ -70,8 +70,10 @@ async function onYouTubePlayerAPIReady() {
 
   var text_input = "";
   var writing_rem = false;
+
   var just_noted = false;
   var just_clicked = false;
+  var just_scrolled = false;
 
   var scroll_visible = false;
 
@@ -746,6 +748,10 @@ async function onYouTubePlayerAPIReady() {
       show_shortcuts();
     });
 
+  // mouse wheel
+
+  $("#right").on("wheel", replaceScroll);
+
   // keyboard shortcuts
 
   document.onkeydown = async function (event) {
@@ -788,6 +794,12 @@ async function onYouTubePlayerAPIReady() {
       "shift+ArrowRight": "last line",
       "alt+ArrowLeft": "previous rem",
       "alt+ArrowRight": "next rem",
+      ArrowUp: "scroll top",
+      ArrowDown: "scroll bottom",
+      PageUp: "long scroll top",
+      PageDown: "long scroll bottom",
+      Home: "scroll begin",
+      End: "scroll end",
     };
 
     if (event.ctrlKey) shortcut += "ctrl+";
@@ -1078,6 +1090,70 @@ async function onYouTubePlayerAPIReady() {
       case "cancel":
         player.pauseVideo();
         recoverFromNoteInput();
+        break;
+      case "scroll top":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop(
+            $(window).scrollTop() - parameters.get("font_size") * 2
+          );
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
+        break;
+      case "scroll bottom":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop(
+            $(window).scrollTop() + parameters.get("font_size") * 2
+          );
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
+        break;
+      case "long scroll top":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop($(window).scrollTop() - 16 * 15);
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
+        break;
+      case "long scroll bottom":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop($(window).scrollTop() + 16 * 15);
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
+        break;
+      case "scroll begin":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop(0);
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
+        break;
+      case "scroll end":
+        event.preventDefault();
+        if (!just_scrolled) {
+          just_scrolled = true;
+          $(window).scrollTop(9999999);
+          setTimeout(function () {
+            just_scrolled = false;
+          }, 100);
+        }
         break;
       default:
     }
@@ -4186,5 +4262,21 @@ async function onYouTubePlayerAPIReady() {
       event.stopPropagation();
       click_line($(this)[0]);
     });
+  }
+
+  function replaceScroll() {
+    if (!just_scrolled) {
+      just_scrolled = true;
+      if (event.deltaY < 0) {
+        $(window).scrollTop($(window).scrollTop() - 16 * 20);
+      } else if (event.deltaY > 0) {
+        $(window).scrollTop($(window).scrollTop() + 16 * 20);
+      }
+      setTimeout(function () {
+        just_scrolled = false;
+      }, 10);
+    }
+
+    return false;
   }
 }
