@@ -1140,23 +1140,27 @@ async function onYouTubePlayerAPIReady() {
         }
         break;
       case "scroll begin":
-        event.preventDefault();
-        if (!just_scrolled) {
-          just_scrolled = true;
-          $(window).scrollTop(0);
-          setTimeout(function () {
-            just_scrolled = false;
-          }, 100);
+        if (!$("#noteInput").is(":focus")) {
+          event.preventDefault();
+          if (!just_scrolled) {
+            just_scrolled = true;
+            $(window).scrollTop(0);
+            setTimeout(function () {
+              just_scrolled = false;
+            }, 100);
+          }
         }
         break;
       case "scroll end":
-        event.preventDefault();
-        if (!just_scrolled) {
-          just_scrolled = true;
-          $(window).scrollTop(9999999);
-          setTimeout(function () {
-            just_scrolled = false;
-          }, 100);
+        if (!$("#noteInput").is(":focus")) {
+          event.preventDefault();
+          if (!just_scrolled) {
+            just_scrolled = true;
+            $(window).scrollTop(9999999);
+            setTimeout(function () {
+              just_scrolled = false;
+            }, 100);
+          }
         }
         break;
       default:
