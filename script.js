@@ -706,10 +706,10 @@ async function onYouTubePlayerAPIReady() {
       $(this).tooltip();
     });
 
-    $("#refresh > img").css({"height": "20px", "width": "20px"});
+    $("#refresh > img").css({ height: "20px", width: "20px" });
     $(this).css("font-weight", "bold");
     setTimeout(function () {
-      $("#refresh > img").css({"height": "18px", "width": "18px"});
+      $("#refresh > img").css({ height: "18px", width: "18px" });
       $("#refresh").css("font-weight", "normal");
     }, 750);
 
@@ -728,10 +728,10 @@ async function onYouTubePlayerAPIReady() {
       $(this).tooltip();
     });
 
-    $("#shortcuts > img").css({"height": "17px", "width": "17px"});
+    $("#shortcuts > img").css({ height: "17px", width: "17px" });
     $(this).css("font-weight", "bold");
     setTimeout(function () {
-      $("#shortcuts > img").css({"height": "15px", "width": "15px"});
+      $("#shortcuts > img").css({ height: "15px", width: "15px" });
       $("#shortcuts").css("font-weight", "normal");
     }, 750);
 
@@ -1140,23 +1140,27 @@ async function onYouTubePlayerAPIReady() {
         }
         break;
       case "scroll begin":
-        event.preventDefault();
-        if (!just_scrolled) {
-          just_scrolled = true;
-          $(window).scrollTop(0);
-          setTimeout(function () {
-            just_scrolled = false;
-          }, 100);
+        if (!$("#noteInput").is(":focus")) {
+          event.preventDefault();
+          if (!just_scrolled) {
+            just_scrolled = true;
+            $(window).scrollTop(0);
+            setTimeout(function () {
+              just_scrolled = false;
+            }, 100);
+          }
         }
         break;
       case "scroll end":
-        event.preventDefault();
-        if (!just_scrolled) {
-          just_scrolled = true;
-          $(window).scrollTop(9999999);
-          setTimeout(function () {
-            just_scrolled = false;
-          }, 100);
+        if (!$("#noteInput").is(":focus")) {
+          event.preventDefault();
+          if (!just_scrolled) {
+            just_scrolled = true;
+            $(window).scrollTop(9999999);
+            setTimeout(function () {
+              just_scrolled = false;
+            }, 100);
+          }
         }
         break;
       default:
@@ -1223,11 +1227,13 @@ async function onYouTubePlayerAPIReady() {
 
         let time = player.playerInfo.currentTime - delay;
 
+        let note = updateLatexInline(noteInput.value);
+
         var text = `[${durationToFormatedTime(
           time
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
-          noteInput.value
-        }`;
+        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
+          time
+        )}) ${note}`;
 
         text_input = noteInput.value;
 
@@ -1311,6 +1317,8 @@ async function onYouTubePlayerAPIReady() {
         if (rem_tree.length > 1) rewind();
 
         let time = player.playerInfo.currentTime - delay;
+
+        let note = updateLatexInline(noteInput.value);
 
         let text_input = noteInput.value;
 
@@ -1461,7 +1469,7 @@ async function onYouTubePlayerAPIReady() {
             break;
         }
 
-        const last_rem = await RemNoteAPI.v0.create(text_input, parentId);
+        const last_rem = await RemNoteAPI.v0.create(note, parentId);
 
         switch (level) {
           case 1:
@@ -1536,11 +1544,13 @@ async function onYouTubePlayerAPIReady() {
 
         let time = player.playerInfo.currentTime - delay;
 
+        let note = updateLatexInline(noteInput.value);
+
         var text = `[${durationToFormatedTime(
           time
-        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(time)}) ${
-          noteInput.value
-        }`;
+        )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
+          time
+        )}) ${note}`;
 
         text_input = noteInput.value;
 
@@ -1693,8 +1703,12 @@ async function onYouTubePlayerAPIReady() {
         let count_no_timestamp = 0;
         let child_child_array_len = child_child_array.length;
         for (position = 0; position < child_child_array_len; position++) {
-          if (child_child_array[position].name[0].text === undefined)
+          if (
+            child_child_array[position].name[0].text === undefined ||
+            !child_child_array[position].name[0].text.match(/\d+:\d+/)
+          ) {
             count_no_timestamp++;
+          }
         }
 
         let last_rem;
@@ -1802,11 +1816,13 @@ async function onYouTubePlayerAPIReady() {
 
         let time = player.playerInfo.currentTime - delay;
 
+        let note = updateLatexInline(noteInput.value);
+
         var text = `[${durationToFormatedTime(
           time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
           time
-        )}) answer << ${noteInput.value}`;
+        )}) answer << ${note}`;
 
         text_input = noteInput.value;
 
@@ -1888,11 +1904,13 @@ async function onYouTubePlayerAPIReady() {
 
         let time = player.playerInfo.currentTime - delay;
 
+        let note = updateLatexInline(noteInput.value);
+
         var text = `[${durationToFormatedTime(
           time
         )}](https://youtube.com/watch?v=${video_id}&t=${Math.floor(
           time
-        )}) answer << ${noteInput.value}`;
+        )}) answer << ${note}`;
 
         text_input = noteInput.value;
 
@@ -2049,8 +2067,12 @@ async function onYouTubePlayerAPIReady() {
         let count_no_timestamp = 0;
         let child_child_array_len = child_child_array.length;
         for (position = 0; position < child_child_array_len; position++) {
-          if (child_child_array[position].name[0].text === undefined)
+          if (
+            child_child_array[position].name[0].text === undefined ||
+            !child_child_array[position].name[0].text.match(/\d+:\d+/)
+          ) {
             count_no_timestamp++;
+          }
         }
 
         let last_rem;
@@ -2393,11 +2415,6 @@ async function onYouTubePlayerAPIReady() {
 
         if (rem.name.length > 1) {
           input0.value = rem.name[0].text;
-          if (rem.content != undefined) {
-            input0.rem = rem.content[0];
-          } else {
-            input0.rem = rem.name[1].substr(1);
-          }
         }
       }
 
@@ -2425,17 +2442,9 @@ async function onYouTubePlayerAPIReady() {
         $(this).css("background", color_0[(i - 1) % color_0.length]);
       });
 
-      // text
-      if (rem.name.length > 1) {
-        li0.appendChild(input0);
-        if (rem.content != undefined) {
-          var newContent0 = document.createTextNode(" " + rem.content[0]);
-        } else {
-          var newContent0 = document.createTextNode("" + rem.name[1]);
-        }
-      } else {
-        var newContent0 = document.createTextNode("" + rem.name[0]);
-      }
+      if (hasTimestamp(rem)) li0.appendChild(input0);
+
+      const newContent0 = createNewContent(rem, true);
 
       li0.appendChild(newContent0);
 
@@ -2463,11 +2472,6 @@ async function onYouTubePlayerAPIReady() {
 
             if (child1_rem.name.length > 1) {
               input1.value = child1_rem.name[0].text;
-              if (rem.content != undefined) {
-                input1.rem = rem.content[0];
-              } else {
-                input1.rem = rem.name[1].substr(1);
-              }
             }
 
             $(input1).on("click", function () {
@@ -2494,22 +2498,9 @@ async function onYouTubePlayerAPIReady() {
               $(this).css("background", color_1[(i - 1) % color_1.length]);
             });
 
-            if (child1_rem.name.length > 1) {
-              li1.appendChild(input1);
-              if (child1_rem.content != undefined) {
-                var newContent1 = document.createTextNode(
-                  " " + child1_rem.content[0]
-                );
-              } else {
-                var newContent1 = document.createTextNode(
-                  "" + child1_rem.name[1]
-                );
-              }
-            } else {
-              var newContent1 = document.createTextNode(
-                "" + child1_rem.name[0]
-              );
-            }
+            if (hasTimestamp(child1_rem)) li1.appendChild(input1);
+
+            const newContent1 = createNewContent(child1_rem);
 
             li1.appendChild(newContent1);
             ul1.appendChild(li1);
@@ -2534,7 +2525,6 @@ async function onYouTubePlayerAPIReady() {
 
                 if (child2_rem.name.length > 1) {
                   input2.value = child2_rem.name[0].text;
-                  input2.rem = child2_rem.name[1].substr(1);
                 }
 
                 $(input2).on("click", function () {
@@ -2561,16 +2551,9 @@ async function onYouTubePlayerAPIReady() {
                   $(this).css("background", color_2[(i - 1) % color_2.length]);
                 });
 
-                if (child2_rem.name.length > 1) {
-                  li2.appendChild(input2);
-                  var newContent2 = document.createTextNode(
-                    "" + child2_rem.name[1]
-                  );
-                } else {
-                  var newContent2 = document.createTextNode(
-                    "" + child2_rem.name[0]
-                  );
-                }
+                if (hasTimestamp(child2_rem)) li2.appendChild(input2);
+
+                const newContent2 = createNewContent(child2_rem);
 
                 li2.appendChild(newContent2);
                 ul2.appendChild(li2);
@@ -2595,7 +2578,6 @@ async function onYouTubePlayerAPIReady() {
 
                     if (child3_rem.name.length > 1) {
                       input3.value = child3_rem.name[0].text;
-                      input3.rem = child3_rem.name[1].substr(1);
                     }
 
                     $(input3).on("click", function () {
@@ -2625,16 +2607,9 @@ async function onYouTubePlayerAPIReady() {
                       );
                     });
 
-                    if (child3_rem.name.length > 1) {
-                      li3.appendChild(input3);
-                      var newContent3 = document.createTextNode(
-                        "" + child3_rem.name[1]
-                      );
-                    } else {
-                      var newContent3 = document.createTextNode(
-                        "" + child3_rem.name[0]
-                      );
-                    }
+                    if (hasTimestamp(child3_rem)) li3.appendChild(input3);
+
+                    const newContent3 = createNewContent(child3_rem);
 
                     li3.appendChild(newContent3);
                     ul3.appendChild(li3);
@@ -2660,7 +2635,6 @@ async function onYouTubePlayerAPIReady() {
 
                         if (child4_rem.name.length > 1) {
                           input4.value = child4_rem.name[0].text;
-                          input4.rem = child4_rem.name[1].substr(1);
                         }
 
                         $(input4).on("click", function () {
@@ -2690,16 +2664,9 @@ async function onYouTubePlayerAPIReady() {
                           );
                         });
 
-                        if (child4_rem.name.length > 1) {
-                          li4.appendChild(input4);
-                          var newContent4 = document.createTextNode(
-                            "" + child4_rem.name[1]
-                          );
-                        } else {
-                          var newContent4 = document.createTextNode(
-                            "" + child4_rem.name[0]
-                          );
-                        }
+                        if (hasTimestamp(child4_rem)) li4.appendChild(input4);
+
+                        const newContent4 = createNewContent(child4_rem);
 
                         li4.appendChild(newContent4);
                         ul4.appendChild(li4);
@@ -2731,7 +2698,6 @@ async function onYouTubePlayerAPIReady() {
 
                             if (child5_rem.name.length > 1) {
                               input5.value = child5_rem.name[0].text;
-                              input5.rem = child5_rem.name[1].substr(1);
                             }
 
                             $(input5).on("click", function () {
@@ -2764,16 +2730,10 @@ async function onYouTubePlayerAPIReady() {
                               );
                             });
 
-                            if (child5_rem.name.length > 1) {
+                            if (hasTimestamp(child5_rem))
                               li5.appendChild(input5);
-                              var newContent5 = document.createTextNode(
-                                "" + child5_rem.name[1]
-                              );
-                            } else {
-                              var newContent5 = document.createTextNode(
-                                "" + child5_rem.name[0]
-                              );
-                            }
+
+                            const newContent5 = createNewContent(child5_rem);
 
                             li5.appendChild(newContent5);
                             ul5.appendChild(li5);
@@ -2811,6 +2771,9 @@ async function onYouTubePlayerAPIReady() {
       $("li").css("color", "#c0bdbd");
       change_line(current_chapter);
     }
+
+    // LaTeX
+    renderLatex();
   }
 
   async function update_timeline(position, time, text) {
@@ -2844,7 +2807,6 @@ async function onYouTubePlayerAPIReady() {
     input0.id = position;
 
     input0.value = durationToFormatedTime(time);
-    input0.rem = text;
 
     $(input0).on("click", function () {
       just_clicked = true;
@@ -3065,6 +3027,9 @@ async function onYouTubePlayerAPIReady() {
       $("li").css("color", "#c0bdbd");
       change_line(current_chapter);
     }
+
+    // LaTeX
+    renderLatex();
   }
 
   function update_note_child(chapterId, tree_position, time, text) {
@@ -3161,7 +3126,6 @@ async function onYouTubePlayerAPIReady() {
       const input1 = document.createElement("input");
       input1.type = "button";
       input1.value = durationToFormatedTime(time);
-      input1.rem = text;
 
       $(input1).on("click", function () {
         $("html, body").animate(
@@ -3243,6 +3207,9 @@ async function onYouTubePlayerAPIReady() {
       $("li").css("color", "#c0bdbd");
       change_line(current_chapter);
     }
+
+    // LaTeX
+    renderLatex();
   }
 
   function select_node(chapterId, after) {
@@ -4282,5 +4249,66 @@ async function onYouTubePlayerAPIReady() {
     }
 
     return false;
+  }
+
+  // LaTeX
+
+  function renderLatex() {
+    renderMathInElement(document.body, {
+      delimiters: [{ left: "$$", right: "$$", display: false }],
+      throwOnError: false,
+    });
+  }
+
+  function chainRemName(rem, hasTimestamp) {
+    let text = "";
+    for (let i = hasTimestamp ? 1 : 0; i < rem.name.length; i++) {
+      if (rem.name[i].text == undefined) {
+        text += rem.name[i];
+      } else {
+        text += "$$" + rem.name[i].text + "$$";
+      }
+    }
+    return text;
+  }
+
+  function chainRemContent(rem) {
+    let text = "";
+    for (let i = 0; i < rem.content.length; i++) {
+      if (rem.content[i].text == undefined) {
+        text += rem.content[i];
+      } else {
+        text += "$$" + rem.content[i].text + "$$";
+      }
+    }
+    return text;
+  }
+
+  function updateLatexInline(note) {
+    if (note.match(/\$\$.*\$\$/g) != null) note = note.replaceAll("$$", "$");
+    return note;
+  }
+
+  // note
+
+  function createNewContent(rem, isTopLevel) {
+    let newContent;
+    if (rem.content != undefined) {
+      newContent = document.createTextNode(" " + chainRemContent(rem));
+    } else {
+      if (hasTimestamp(rem)) {
+        newContent = document.createTextNode(chainRemName(rem, true));
+      } else {
+        newContent = document.createTextNode(chainRemName(rem));
+      }
+    }
+    return newContent;
+  }
+
+  function hasTimestamp(rem) {
+    return (
+      rem.name[0].text != undefined &&
+      rem.name[0].text.match(/^\d+:\d{2}/) != null
+    );
   }
 }
