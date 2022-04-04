@@ -205,182 +205,201 @@ async function onYouTubePlayerAPIReady() {
   // parameters
 
   const plugin_markdown = plugin_rem.nameAsMarkdown;
-  const enable_parameter = plugin_markdown.match(/-np/gi) == null;
 
   var settings = await RemNoteAPI.v0.get_by_name("RemNote YT");
+
+  let enable_parameter =
+    plugin_markdown.match(/-np/gi) == null || settings.found;
 
   var parameters = new Map();
 
   if (enable_parameter) {
     if (settings.found) {
-      parameters.set(
-        "dark_mode",
-        (await RemNoteAPI.v0.get(settings.children[0])).nameAsMarkdown.split(
-          ": "
-        )[1]
-      );
-      parameters.set(
-        "width",
-        (await RemNoteAPI.v0.get(settings.children[1])).nameAsMarkdown.split(
-          ": "
-        )[1]
-      );
-      parameters.set(
-        "playback_speed",
-        (await RemNoteAPI.v0.get(settings.children[2])).nameAsMarkdown.split(
-          ": "
-        )[1]
-      );
-      parameters.set(
-        "delay",
-        (await RemNoteAPI.v0.get(settings.children[3])).nameAsMarkdown.split(
-          ": "
-        )[1]
-      );
-      parameters.set(
-        "caption",
-        (await RemNoteAPI.v0.get(settings.children[4])).nameAsMarkdown.split(
-          ": "
-        )[1]
-      );
-      const setting6 = await RemNoteAPI.v0.get(settings.children[5]);
-      if (setting6.found) {
+      // setting dark mode
+      const setting_dark_mode = await RemNoteAPI.v0.get(settings.children[0]);
+      const regex_dark_mode = /^dark_mode: [01]$/;
+      if (
+        setting_dark_mode.found &&
+        setting_dark_mode.nameAsMarkdown.match(regex_dark_mode) != null
+      ) {
         parameters.set(
-          "font_size",
-          (await RemNoteAPI.v0.get(settings.children[5])).nameAsMarkdown.split(
-            ": "
-          )[1]
+          "dark_mode",
+          setting_dark_mode.nameAsMarkdown.split(": ")[1]
         );
+      }
+
+      // setting width
+      const setting_width = await RemNoteAPI.v0.get(settings.children[1]);
+      const regex_width = /^width: (\d{1,2}|100)(\.\d+)?$/;
+      if (
+        setting_width.found &&
+        setting_width.nameAsMarkdown.match(regex_width) != null
+      ) {
+        parameters.set("width", setting_width.nameAsMarkdown.split(": ")[1]);
+      }
+
+      // setting speed
+      const setting_speed = await RemNoteAPI.v0.get(settings.children[2]);
+      const regex_speed = /^playback_speed: \d+(\.\d+)?$/;
+      if (
+        setting_speed.found &&
+        setting_speed.nameAsMarkdown.match(regex_speed) != null
+      ) {
+        parameters.set(
+          "playback_speed",
+          setting_speed.nameAsMarkdown.split(": ")[1]
+        );
+      }
+
+      // setting delay
+      const setting_delay = await RemNoteAPI.v0.get(settings.children[3]);
+      const regex_delay = /^delay: \d{1,5}$/;
+
+      if (
+        setting_delay.found &&
+        setting_delay.nameAsMarkdown.match(regex_delay) != null
+      ) {
+        parameters.set("delay", setting_delay.nameAsMarkdown.split(": ")[1]);
+      }
+
+      // setting caption
+      const setting_caption = await RemNoteAPI.v0.get(settings.children[4]);
+      const regex_caption = /^caption: [01]$/;
+      if (
+        setting_caption.found &&
+        setting_caption.nameAsMarkdown.match(regex_caption) != null
+      ) {
+        parameters.set(
+          "caption",
+          setting_caption.nameAsMarkdown.split(": ")[1]
+        );
+      }
+
+      // setting font size
+      const setting_font_size = await RemNoteAPI.v0.get(settings.children[5]);
+      const regex_font_size = /^font_size: \d{1,3}$/;
+      if (setting_font_size.found) {
+        if (setting_font_size.nameAsMarkdown.match(regex_font_size) != null) {
+          parameters.set(
+            "font_size",
+            setting_font_size.nameAsMarkdown.split(": ")[1]
+          );
+        }
       } else {
         await RemNoteAPI.v0.create("font_size: 16", settings._id, {
           positionAmongstSiblings: 5,
         });
         parameters.set("font_size", 16);
       }
-    } else {
-      settings = await RemNoteAPI.v0.create("RemNote YT");
 
-      await RemNoteAPI.v0.create("dark_mode: 0", settings.remId);
-      await RemNoteAPI.v0.create("width: 65", settings.remId);
-      await RemNoteAPI.v0.create("playback_speed: 1", settings.remId);
-      await RemNoteAPI.v0.create("delay: 0", settings.remId);
-      await RemNoteAPI.v0.create("caption: 0", settings.remId);
-      await RemNoteAPI.v0.create("font_size: 16", settings.remId);
+      // dark mode
 
-      parameters.set("dark_mode", 0);
-      parameters.set("width", "65");
-      parameters.set("playback_speed", 1);
-      parameters.set("delay", 0);
-      parameters.set("caption", 0);
-      parameters.set("font_size", 16);
-    }
+      dark_mode = parameters.get("dark_mode");
+      if (dark_mode == 1) {
+        let gray1 = "#c0bdbd";
+        let gray2 = "#272525";
 
-    // dark mode
+        document.getElementById("html").style.background = "#f5f5f5";
+        $("#linkInput").css("background", "black");
+        $(
+          "#linkInput, #ok, #takeNote, #keyboard_label, #refresh, #shortcuts"
+        ).css("color", gray1);
 
-    dark_mode = parameters.get("dark_mode");
-    if (dark_mode == 1) {
-      let gray1 = "#c0bdbd";
-      let gray2 = "#272525";
+        let filter_out =
+          "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
+        let filter_over =
+          "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)";
 
-      document.getElementById("html").style.background = "#f5f5f5";
-      $("#linkInput").css("background", "black");
-      $(
-        "#linkInput, #ok, #takeNote, #keyboard_label, #refresh, #shortcuts"
-      ).css("color", gray1);
+        $("img").css("filter", filter_out);
 
-      let filter_out =
-        "invert(90%) sepia(8%) saturate(1062%) hue-rotate(200deg) brightness(82%) contrast(84%)";
-      let filter_over =
-        "invert(46%) sepia(8%) saturate(1062%) hue-rotate(210deg) brightness(82%) contrast(84%)";
+        $("#refresh, #takenote, #shortcuts").on("mouseover", function () {
+          $(this).css("color", gray2);
+          $("#refresh > img").css("filter", filter_over);
+        });
+        $("#refresh, #takenote, #shortcuts").on("mouseout", function () {
+          $(this).css("color", gray1);
+          $("#refresh > img").css("filter", filter_out);
+        });
 
-      $("img").css("filter", filter_out);
-
-      $("#refresh, #takenote, #shortcuts").on("mouseover", function () {
-        $(this).css("color", gray2);
-        $("#refresh > img").css("filter", filter_over);
-      });
-      $("#refresh, #takenote, #shortcuts").on("mouseout", function () {
-        $(this).css("color", gray1);
-        $("#refresh > img").css("filter", filter_out);
-      });
-
-      $("#right").css("filter", "hue-rotate(180deg) invert(1)");
-      $("#left").css("filter", "hue-rotate(180deg) invert(1)");
-    }
-
-    // width %
-
-    var width_parameter = parameters.get("width");
-
-    if (width_parameter != undefined) {
-      document.getElementById("ytplayer").style.width = width_parameter + "%";
-
-      document.getElementById("commands").style.width = width_parameter + "%";
-
-      document.getElementById("noteInput").style.width = width_parameter + "%";
-
-      document.getElementById("right").style.width =
-        100 - width_parameter + "%";
-
-      document.getElementById("right").style.left = width_parameter + "%";
-
-      if (width_parameter <= 51) {
-        $(".text_button").removeClass("d-md-block");
-        $("#keyboard_label").removeClass("d-lg-block");
+        $("#right").css("filter", "hue-rotate(180deg) invert(1)");
+        $("#left").css("filter", "hue-rotate(180deg) invert(1)");
       }
 
-      if (width_parameter <= 20) {
-        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-1");
-        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
-        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
-      } else if (width_parameter <= 25) {
-        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-2");
-        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
-        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
-      } else if (width_parameter <= 35) {
-        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-3");
-        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-2");
-        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
-        //$("#keyboard_container").addClass("d-none d-sm-block");
-      } else if (width_parameter <= 45) {
-        $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-4");
-        $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-3");
-        $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-2");
-        //$("#keyboard_container").addClass("d-none d-sm-block");
+      // width %
+
+      var width_parameter = parameters.get("width");
+
+      if (width_parameter != undefined) {
+        document.getElementById("ytplayer").style.width = width_parameter + "%";
+
+        document.getElementById("commands").style.width = width_parameter + "%";
+
+        document.getElementById("noteInput").style.width =
+          width_parameter + "%";
+
+        document.getElementById("right").style.width =
+          100 - width_parameter + "%";
+
+        document.getElementById("right").style.left = width_parameter + "%";
+
+        if (width_parameter <= 51) {
+          $(".text_button").removeClass("d-md-block");
+          $("#keyboard_label").removeClass("d-lg-block");
+        }
+
+        if (width_parameter <= 20) {
+          $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-1");
+          $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
+          $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+        } else if (width_parameter <= 25) {
+          $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-2");
+          $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-1");
+          $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+        } else if (width_parameter <= 35) {
+          $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-3");
+          $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-2");
+          $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-1");
+          //$("#keyboard_container").addClass("d-none d-sm-block");
+        } else if (width_parameter <= 45) {
+          $("#commands").removeClass("row-cols-lg-5").addClass("row-cols-lg-4");
+          $("#commands").removeClass("row-cols-md-4").addClass("row-cols-md-3");
+          $("#commands").removeClass("row-cols-sm-3").addClass("row-cols-sm-2");
+          //$("#keyboard_container").addClass("d-none d-sm-block");
+        }
+
+        switch (true) {
+          case width_parameter <= 20:
+            $("#delayed").remove();
+          case width_parameter <= 25:
+            $("#keyboard_container").remove();
+          case width_parameter <= 35:
+            $("#refresh").remove();
+          case width_parameter <= 45:
+            $("#shortcuts").remove();
+        }
       }
 
-      switch (true) {
-        case width_parameter <= 20:
-          $("#delayed").remove();
-        case width_parameter <= 25:
-          $("#keyboard_container").remove();
-        case width_parameter <= 35:
-          $("#refresh").remove();
-        case width_parameter <= 45:
-          $("#shortcuts").remove();
+      // delay
+
+      var delay_parameter_value = parameters.get("delay");
+      if (delay_parameter_value != undefined) {
+        delay = delay_parameter_value[0];
+        if (delay > 0) delayInput.value = delay_parameter_value;
       }
-    }
 
-    // delay
+      // caption
 
-    var delay_parameter_value = parameters.get("delay");
-    if (delay_parameter_value != undefined) {
-      delay = delay_parameter_value[0];
-      if (delay > 0) delayInput.value = delay_parameter_value;
-    }
-
-    // caption
-
-    var enable_caption = 0;
-    var caption_parameter_value = parameters.get("caption");
-    if (caption_parameter_value != undefined) {
-      if (caption_parameter_value == 1) {
-        enable_caption = 1;
+      var enable_caption = 0;
+      var caption_parameter_value = parameters.get("caption");
+      if (caption_parameter_value != undefined) {
+        if (caption_parameter_value == 1) {
+          enable_caption = 1;
+        }
       }
-    }
 
-    // font size
-    $("#note").css("font-size", parameters.get("font_size") + "px");
+      // font size
+      $("#note").css("font-size", parameters.get("font_size") + "px");
+    }
   }
 
   // show the needed panel
