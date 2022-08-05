@@ -2397,6 +2397,8 @@ async function onYouTubePlayerAPIReady() {
 
   // function to load when the youtube video is ready
   async function timeline(refresh) {
+    await sleep(500)
+    
     // playback speed
     if (refresh != 1) {
       if (enable_parameter) {
