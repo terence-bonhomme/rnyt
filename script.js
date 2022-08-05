@@ -1274,11 +1274,9 @@ async function onYouTubePlayerAPIReady() {
               positionAmongstSiblings: position,
             });
 
-            rem_tree.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            let added_rem = await RemNoteAPI.v0.get(last_rem.remId);
+            added_rem.children = new Array();
+            rem_tree.splice(position, 0, added_rem);
 
             inserted = true;
             break;
@@ -1289,7 +1287,10 @@ async function onYouTubePlayerAPIReady() {
           const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
             positionAmongstSiblings: position,
           });
-          rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
+
+          let added_rem = await RemNoteAPI.v0.get(last_rem.remId);
+          added_rem.children = new Array();
+          rem_tree.push(added_rem);
         }
 
         update_timeline(position, time, text_input);
@@ -1490,34 +1491,67 @@ async function onYouTubePlayerAPIReady() {
 
         const last_rem = await RemNoteAPI.v0.create(note, parentId);
 
+        let rem_added = await RemNoteAPI.v0.get(last_rem.remId);
+        rem_added.children = new Array();
         switch (level) {
           case 1:
-            rem_tree[chapter_note].children.push(
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            if (rem_tree[chapter_note].children == undefined)
+              rem_tree[chapter_note].children = new Array();
+            rem_tree[chapter_note].children.push(rem_added);
             break;
           case 2:
+            if (
+              rem_tree[chapter_note].children[line_index[0]].children ==
+              undefined
+            )
+              rem_tree[chapter_note].children[line_index[0]].children =
+                new Array();
             rem_tree[chapter_note].children[line_index[0]].children.push(
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
           case 3:
+            if (
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children == undefined
+            )
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children = new Array();
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children.push(await RemNoteAPI.v0.get(last_rem.remId));
+            ].children.push(rem_added);
             break;
           case 4:
+            if (
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children == undefined
+            )
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children = new Array();
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children[line_index[2]].children.push(
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            ].children[line_index[2]].children.push(rem_added);
             break;
           case 5:
+            if (
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children[line_index[3]].children ==
+              undefined
+            )
+              rem_tree[chapter_note].children[line_index[0]].children[
+                line_index[1]
+              ].children[line_index[2]].children[line_index[3]].children =
+                new Array();
+
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
             ].children[line_index[2]].children[line_index[3]].children.push(
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
         }
@@ -1599,6 +1633,10 @@ async function onYouTubePlayerAPIReady() {
                 : current_rem.length - 1;
             tree_position.push(line_index[0]);
 
+            if (current_rem[line_index[0]].children == undefined) {
+              current_rem[line_index[0]].children = new Array();
+            }
+
             child_child_array = current_rem[line_index[0]].children;
             break;
           case 3:
@@ -1620,6 +1658,10 @@ async function onYouTubePlayerAPIReady() {
                 ? last_line_position2
                 : current_rem.length - 1;
             tree_position.push(line_index[1]);
+
+            if (current_rem[line_index[1]].children == undefined) {
+              current_rem[line_index[1]].children = new Array();
+            }
 
             child_child_array = current_rem[line_index[1]].children;
             break;
@@ -1651,6 +1693,10 @@ async function onYouTubePlayerAPIReady() {
                 ? last_line_position3
                 : current_rem.length - 1;
             tree_position.push(line_index[2]);
+
+            if (current_rem[line_index[2]].children == undefined) {
+              current_rem[line_index[2]].children = new Array();
+            }
 
             child_child_array = current_rem[line_index[2]].children;
             break;
@@ -1693,6 +1739,10 @@ async function onYouTubePlayerAPIReady() {
                 ? last_line_position4
                 : current_rem.length - 1;
             tree_position.push(line_index[3]);
+
+            if (current_rem[line_index[3]].children == undefined) {
+              current_rem[line_index[3]].children = new Array();
+            }
 
             child_child_array = current_rem[line_index[3]].children;
             break;
@@ -1757,38 +1807,28 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
+        let rem_added = await RemNoteAPI.v0.get(last_rem.remId);
+        rem_added.children = new Array();
         switch (last_level) {
           case 1:
-            rem_tree[chapter_note].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            rem_tree[chapter_note].children.splice(position, 0, rem_added);
             break;
           case 2:
             rem_tree[chapter_note].children[line_index[0]].children.splice(
               position,
               0,
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
           case 3:
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            ].children.splice(position, 0, rem_added);
             break;
           case 4:
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children[line_index[2]].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            ].children[line_index[2]].children.splice(position, 0, rem_added);
             break;
           case 5:
             rem_tree[chapter_note].children[line_index[0]].children[
@@ -1796,7 +1836,7 @@ async function onYouTubePlayerAPIReady() {
             ].children[line_index[2]].children[line_index[3]].children.splice(
               position,
               0,
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
         }
@@ -1862,11 +1902,9 @@ async function onYouTubePlayerAPIReady() {
             const last_rem = await RemNoteAPI.v0.create(text, pluginId, {
               positionAmongstSiblings: position,
             });
-            rem_tree.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            let added_rem = await RemNoteAPI.v0.get(last_rem.remId);
+            added_rem.children = new Array();
+            rem_tree.splice(position, 0, added_rem);
 
             inserted = true;
             break;
@@ -1875,7 +1913,9 @@ async function onYouTubePlayerAPIReady() {
 
         if (!inserted) {
           const last_rem = await RemNoteAPI.v0.create(text, pluginId);
-          rem_tree.push(await RemNoteAPI.v0.get(last_rem.remId));
+          let added_rem = await RemNoteAPI.v0.get(last_rem.remId);
+          added_rem.children = new Array();
+          rem_tree.push(added_rem);
         }
 
         update_timeline(position, time, text_input);
@@ -1898,7 +1938,7 @@ async function onYouTubePlayerAPIReady() {
         level = 1;
         reset_line_position();
         change_line(current_chapter + 1);
-
+        
         break;
       }
       case "ask a child question": {
@@ -2121,38 +2161,28 @@ async function onYouTubePlayerAPIReady() {
           });
         }
 
+        let rem_added = await RemNoteAPI.v0.get(last_rem.remId);
+        rem_added.children = new Array();
         switch (last_level) {
           case 1:
-            rem_tree[chapter_note].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            rem_tree[chapter_note].children.splice(position, 0, rem_added);
             break;
           case 2:
             rem_tree[chapter_note].children[line_index[0]].children.splice(
               position,
               0,
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
           case 3:
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            ].children.splice(position, 0, rem_added);
             break;
           case 4:
             rem_tree[chapter_note].children[line_index[0]].children[
               line_index[1]
-            ].children[line_index[2]].children.splice(
-              position,
-              0,
-              await RemNoteAPI.v0.get(last_rem.remId)
-            );
+            ].children[line_index[2]].children.splice(position, 0, rem_added);
             break;
           case 5:
             rem_tree[chapter_note].children[line_index[0]].children[
@@ -2160,7 +2190,7 @@ async function onYouTubePlayerAPIReady() {
             ].children[line_index[2]].children[line_index[3]].children.splice(
               position,
               0,
-              await RemNoteAPI.v0.get(last_rem.remId)
+              rem_added
             );
             break;
         }
@@ -2202,8 +2232,8 @@ async function onYouTubePlayerAPIReady() {
     else if (counter == 4) data = data.children[line_position4];
     else data = data.children[data.children.length - 1];
 
-    if (data == undefined) depth = counter;
-    if (counter < 5) counter++;
+    if (data.children.length == 0) depth = counter + 1;
+    else if (counter < 5) counter++;
     return depth == -1 ? get_tree_depth(counter, depth, data) : depth;
   }
 
@@ -2489,7 +2519,7 @@ async function onYouTubePlayerAPIReady() {
             $(input1).addClass("me-2");
             input1.style.background = color_1[(i - 1) % color_1.length];
 
-            if (child1_rem.name.length > 1) {
+            if (child1_rem.name != undefined && child1_rem.name.length > 1) {
               input1.value = child1_rem.name[0].text;
             }
 
@@ -3945,14 +3975,35 @@ async function onYouTubePlayerAPIReady() {
 
     rem_tree = [];
 
+    if (plugin_rem.children == undefined) return;
+
     for (let i = 0; i < plugin_rem.children.length; i++) {
       let rem = await RemNoteAPI.v0.get(plugin_rem.children[i]);
+
+      if (rem.children == undefined) {
+        rem.children = new Array();
+      }
+
       for (let j = 0; j < rem.children.length; j++) {
         rem.children[j] = await RemNoteAPI.v0.get(rem.children[j]);
+
+        if (rem.children[j].children == undefined) {
+          rem.children[j].children = new Array();
+        }
+
         for (let k = 0; k < rem.children[j].children.length; k++) {
           rem.children[j].children[k] = await RemNoteAPI.v0.get(
             rem.children[j].children[k]
           );
+
+          if (rem.children[j].children[k].children == undefined) {
+            rem.children[j].children[k].children = new Array();
+          }
+
+          if (rem.children[j].children[k].children == undefined) {
+            rem.children = new Array();
+          }
+
           for (
             let l = 0;
             l < rem.children[j].children[k].children.length;
@@ -3961,6 +4012,11 @@ async function onYouTubePlayerAPIReady() {
             rem.children[j].children[k].children[l] = await RemNoteAPI.v0.get(
               rem.children[j].children[k].children[l]
             );
+
+            if (rem.children[j].children[k].children[l].children == undefined) {
+              rem.children[j].children[k].children[l].children = new Array();
+            }
+
             for (
               let m = 0;
               m < rem.children[j].children[k].children[l].children.length;
@@ -3970,6 +4026,15 @@ async function onYouTubePlayerAPIReady() {
                 await RemNoteAPI.v0.get(
                   rem.children[j].children[k].children[l].children[m]
                 );
+
+              if (
+                rem.children[j].children[k].children[l].children[m].children ==
+                undefined
+              ) {
+                rem.children[j].children[k].children[l].children[m].children =
+                  new Array();
+              }
+
               for (
                 let n = 0;
                 n <
@@ -3984,6 +4049,16 @@ async function onYouTubePlayerAPIReady() {
                     n
                   ]
                 );
+                              if (
+                rem.children[j].children[k].children[l].children[m].children[
+                  n
+                ].children ==
+                undefined
+              ) {
+                rem.children[j].children[k].children[l].children[m].children[
+                  n
+                ].children = new Array();
+                              }
               }
             }
           }
