@@ -8,6 +8,10 @@ plugin for [RemNote](https://www.remnote.io/) with only read and create permissi
 
 ## Project
 
+### notice
+
+The plugin can not be installed since the RemNote plugin system was revamped. The previous installation guide is outdated. Only users with the plugin installed before the RemNote 1.8 update can use it. The plugin system is still in alpha and is not available for users. This plugin will need an update after this to be able to work with the new plugin system. You will be notified when it is ready.
+
 ### me
 
 - I get a tool to learn with Youtube videos into RemNote
@@ -39,11 +43,7 @@ plugin for [RemNote](https://www.remnote.io/) with only read and create permissi
 
 ### How to add the plugin?
 
-- Plugin Name: rnyt (by example)
-- Plugin URL: https://local-maroon-badger.glitch.me
-- CSS Height : 600 (by example)
-- Permissions: Read and Create
-- Location: inline
+- check the notice above
 
 ### How to use the plugin?
 
