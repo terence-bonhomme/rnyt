@@ -1,0 +1,21 @@
+{
+  "manifestVersion": 1,
+  "id": "player",
+  "name": "RNYT",
+  "author": "remnote",
+  "repoUrl": "https://github.com/terence-bonhomme/rnyt",
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "description": "",
+  "requestNative": false,
+  "requiredScopes": [
+    {
+      "type": "All",
+      "level": "ReadCreateModify"
+    }
+  ],
+  "enableOnMobile": true
+}

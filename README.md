@@ -1,104 +1,51 @@
-# rnyt
+# Presentation
 
-take notes in RemNote with a Youtube video
+Take notes from YouTube videos. The plugin suspends the video while you type your note. Each note has a clickable timestamp on the side. So you can replay the most important parts of the video with your notes.
 
-plugin for [RemNote](https://www.remnote.io/) with only read and create permissions
+# Notice
 
-![](https://media.giphy.com/media/TzhputbJboWqJyCIPP/giphy.gif)
+The plugin is still in the development phase, but you can try it in dev mode.
 
-## Project
+Many features from the previous version still need to be implemented.
 
-### notice
+The goal is to merge rnyt and rnhp. It will not be limited to YouTube.
 
-The plugin can not be installed since the RemNote plugin system was revamped. The previous installation guide is outdated. Only users with the plugin installed before the RemNote 1.8 update can use it. The plugin system is still in alpha and is not available for users. This plugin will need an update after this to be able to work with the new plugin system. You will be notified when it is ready.
+# How to
 
-### me
+## Setup
 
-- I get a tool to learn with Youtube videos into RemNote
-- I make something that can be useful for others
-- I learn Javascript, jQuery, CSS, Bootstrap
+Use your terminal for the following lines.
 
-### information
+- `git clone https://github.com/terence-bonhomme/rnyt.git`
+- `npm install`
+- `npm audit` (optional)
 
-- it uses [YouTube Player API for iframe Embeds](https://developers.google.com/youtube/iframe_api_reference)
-- if you want to read a video that is not on YouTube, see this [project](https://github.com/terence-bonhomme/rnhp)
-- it uses [Glitch](https://glitch.com/)
-- the plugin has weaknesses, read the "Warning" part
+## Launch
 
-## Description
+- from the plugin directory, type in your terminal `npm run dev`
+- on RemNote: Plugin Explorer > Build > Develop from localhost > Develop
 
-- create timestamps like chapters, add a child note with or without timestamp (6 levels)
-- review your video notes later
-- jump to the timestamps with your mouse or your keyboard
-- control the player with shortcuts
-- set the default settings so you don't have to do your settings again
-- put questions and get the answer with a video link
-- modify your rems in RemNote
+## Quick tour
 
-## Quickstart
+After a video URL or an embed video, type the command `/rnyt`. A widget should appear on the top. To close the widget, you need to reload the page.
 
-### Short presentation video
+Push `enter` to take a note and `enter` again to confirm. Timestamps appear on the side. They are sorted by time, and they are clickable. They persist after using the plugin.
 
-[![Watch the video](https://img.youtube.com/vi/eUwJnBIlHsI/0.jpg)](https://youtu.be/eUwJnBIlHsI)
+The notes are children of the video's rem.
 
-### How to add the plugin?
+On the settings, the height and the delay can be modified.
 
-- check the notice above
+## Hotkeys
 
-### How to use the plugin?
+- `space`: play/pause
+- `enter`: take/confirm a note
+- `left`/`right`: backward/forward
+- `esc`: cancel a note
 
-1. copy-paste your video link in RemNote (youtube.com or you.tube)
-2. go into the rem
-3. insert the plugin
-4. click on the video to start
-5. input a delay to rewind the video when you take a note
+# Known issues
 
-### How to change the default settings?
-
-- you can skip and use these settings later
-- go into RemNote YT
-  - dark_mode : 0 (or 1)
-  - width: 65 (% value)
-  - playback_speed: 1 (0.25, 0.5, ..., 2)
-  - delay: 0 (seconds)
-  - caption: 0 (or 1)
-  - font_size: 16 (px value)
-
-## Tips
-
-- "Full width" is recommended (RemNote > Settings > Interface > Global Interface > Full Width)
-- remember at least the shortcuts to input your notes and the left/right keys to move
-- you can rewind/forward while you have an empty text input to target the best time (it doesn't cancel the delay)
-- enable/disable the delay with "d" if you want to make many notes in a row
-
-## Warning
-
-### Project
-
-- the plugin is still in development, you could find some bugs
-- the Glitch project that you added is not used for development, but the project can sometimes be updated
-- a plugin could be broken after an update from RemNote, it could be fixed by me or someone else
-- the plugin's design follows the "Read and Create" permissions, at best it can create rems among siblings
-
-### Usage
-
-- don't delete the "RemNote YT" rem, it can break the plugin
-- plugin name
-  - always use the same name, but you can change the link and the height
-  - if you change the name, you will need to add another plugin in RemNote to be able to use all the plugins you've used
-  - if you don't want the settings, use -np in the plugin name: example rnyt -np (warning: it is like a new name)
-  - use a useless name like "rnyt" to avoid noise when you search in RemNote
-- the plugin can't modify the rems so that it won't correct the misplaced rems
-- be careful when you edit your rems into RemNote
-  - the timestamps are mandatory on the top level
-  - follow the chronological order
-  - the child notes with a timestamp are inserted before child notes without a timestamp
-- the child notes are linked to the current chapter, you can change it into RemNote
-- show one plugin at a time to avoid duplicates
-- in the settings, change only the numbers and don't write units
-- refresh could fix some displaying bugs
-- the plugin has been tested with dozens of notes only
-
-## Acknowledgement
-
-- project started from [youtubetoremnote.glitch.me](https://youtubetoremnote.glitch.me/) by AllThingsRemNote
+- It might create an issue with the height. You need to check the plugin settings and reload the page.
+- The old notes still need to be supported. The first child note is not a URL.
+- The plugin does not create proper links. They are not clickable on RemNote.
+- It uses the "modify" permission to set a text on a new rem.
+- One level only to write notes.
