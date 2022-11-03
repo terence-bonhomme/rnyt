@@ -19,7 +19,7 @@ export const toggleInputNote = (displayingCommands: boolean) => {
     input?.replace("h-8", "h-0");
     input?.add("invisible");
 
-    commands?.replace("h-8", "h-0");
+    commands?.replace("h-0", "h-8");
     commands?.remove("invisible");
   }
 };
