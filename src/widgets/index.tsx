@@ -34,6 +34,44 @@ const onActivate = async (plugin: ReactRNPlugin) => {
       const delay = parseInt(localStorage.getItem('delay') as string);
       localStorage.setItem('delay', await plugin.settings.getSetting('delay'))
 
+      // commands
+
+      // type a note command
+
+      await plugin.settings.registerStringSetting({
+        id: 'type',
+        title: 'Type a note',
+        defaultValue: 'enter',
+      });
+      localStorage.setItem('type', await plugin.settings.getSetting('type'));
+
+      // pause setting command
+
+      await plugin.settings.registerStringSetting({
+        id: 'pause',
+        title: 'Pause',
+        defaultValue: 'space',
+      });
+      localStorage.setItem('pause', await plugin.settings.getSetting('pause'));
+
+      // forward setting command
+
+      await plugin.settings.registerStringSetting({
+        id: 'forward',
+        title: 'Forward',
+        defaultValue: 'right',
+      });
+      localStorage.setItem('forward', await plugin.settings.getSetting('forward'));
+
+      // backward setting command
+
+      await plugin.settings.registerStringSetting({
+        id: 'backward',
+        title: 'Backward',
+        defaultValue: 'left',
+      });
+      localStorage.setItem('backward', await plugin.settings.getSetting('backward'));
+
       // widget
 
       await plugin.app.registerWidget('widget', WidgetLocation.Pane, {
@@ -47,6 +85,9 @@ const onActivate = async (plugin: ReactRNPlugin) => {
       setPause();
     },
   });
+
+  await plugin.app.registerCommand
+
 }
 
 /**

@@ -7,12 +7,13 @@ import { togglePlay, pause, forward, backward, backwardDelay } from './video';
  * Hotkeys to control the video when the text input is not shown.
  */
 export class KeyboardHotkey extends React.Component {
-  onKeyUp(keyName: any) {
+  async onKeyUp(keyName: any) {
+
     switch (keyName) {
       /**
        * Type a note
        */
-      case 'Enter': {
+      case localStorage.getItem('type'): {
         pause();
         switchToInput();
         backwardDelay();
@@ -21,21 +22,21 @@ export class KeyboardHotkey extends React.Component {
       /**
        * Pause
        */
-      case 'Space': {
+      case localStorage.getItem('pause'): {
         togglePlay();
         break;
       }
       /**
        * Forward 5 seconds
        */
-      case 'right': {
+      case localStorage.getItem('forward'): {
         forward();
         break;
       }
       /**
        * Backward 5 seconds
        */
-      case 'left': {
+      case localStorage.getItem('backward'): {
         backward();
         break;
       }
@@ -44,9 +45,14 @@ export class KeyboardHotkey extends React.Component {
 
   // all hotkeys are grouped in Hotkeys' keyname
   render() {
+    const keys: string = 
+      String(localStorage.getItem('type')) + ', ' +
+      String(localStorage.getItem('pause')) + ', ' + 
+      String(localStorage.getItem('forward')) + ', ' + 
+      String(localStorage.getItem('backward'));
     return (
       <Hotkeys
-        keyName="Enter, Space, right, left"
+        keyName={keys}
         onKeyUp={this.onKeyUp.bind(this)}
       />
     )
