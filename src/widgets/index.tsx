@@ -85,9 +85,6 @@ const onActivate = async (plugin: ReactRNPlugin) => {
       setPause();
     },
   });
-
-  await plugin.app.registerCommand
-
 }
 
 /**
