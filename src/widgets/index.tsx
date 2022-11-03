@@ -23,9 +23,6 @@ const onActivate = async (plugin: ReactRNPlugin) => {
       });
       localStorage.setItem('height', await plugin.settings.getSetting('height'))
       const height = parseInt(localStorage.getItem('height') as string);
-      await plugin.app.registerWidget('widget', WidgetLocation.DocumentAboveToolbar, {
-        dimensions: { height: height, width: '100%' },
-      });
 
       // delay setting
 
@@ -36,6 +33,14 @@ const onActivate = async (plugin: ReactRNPlugin) => {
       });
       const delay = parseInt(localStorage.getItem('delay') as string);
       localStorage.setItem('delay', await plugin.settings.getSetting('delay'))
+
+      // widget
+
+      await plugin.app.registerWidget('widget', WidgetLocation.Pane, {
+        dimensions: { height: 'auto', width: '100%' },
+      });
+
+      await plugin.window.openWidgetInPane('widget');
 
       // playing state
 
