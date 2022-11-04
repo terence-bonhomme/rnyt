@@ -9,10 +9,9 @@ import InputNoteInput from '../components/note-input';
 export const Widget = () => {
   const plugin = usePlugin();
 
-  let height = useTracker(() => plugin.settings.getSetting<number>('height'));
-  // height could not be detected
-  if (!height) height = 500;
   const Y_OFFSET = 90;
+  let heightSetting = useTracker(() => plugin.settings.getSetting<number>('height'));
+  let height = heightSetting ? heightSetting - Y_OFFSET : 0;
 
   const [delay, setDelay] = useState(localStorage.getItem('delay'));
 
