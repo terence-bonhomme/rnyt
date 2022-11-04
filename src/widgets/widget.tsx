@@ -5,11 +5,11 @@ import { isPlaying } from '../components/video';
 import ReactPlayer from 'react-player';
 import { jumpToTimestamp, getRemTimeStamp as getRemTimeStamp, switchToInput } from '../components/utils';
 import InputNoteInput from '../components/note-input';
+import { COMMANDS_HEIGHT } from '../lib/constants';
 
 export const Widget = () => {
   const plugin = usePlugin();
 
-  const COMMANDS_HEIGHT = 90;
   let heightSetting = useTracker(() => plugin.settings.getSetting<number>('height'));
   let height = heightSetting ? heightSetting : 0;
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { addLine, durationToFormatedTime, formatedTimeToDuration, toggleInputNote, getRemTimeStamp } from './utils';
 import { RNPlugin, usePlugin } from '@remnote/plugin-sdk'
 import { start } from './video';
+import { ENTER_KEYCODE, ESCAPE_KEYCODE } from '../lib/constants';
 
 /**
  * The component for the text input used by the user to type notes
@@ -85,7 +86,7 @@ export const InputNoteInput: React.FunctionComponent = () => {
        * 
        * Confirm the note typed
        */
-      case 13: {
+      case ENTER_KEYCODE: {
         toggleInputNote(false);
         const position = await writeNoteWithTimestamp(plugin, note);
         if (position != undefined) addLine(note, position);
@@ -98,7 +99,7 @@ export const InputNoteInput: React.FunctionComponent = () => {
        * 
        * Cancel the note typed
        */
-      case 27: {
+      case ESCAPE_KEYCODE: {
         setNote('');
         toggleInputNote(false);
         start();
