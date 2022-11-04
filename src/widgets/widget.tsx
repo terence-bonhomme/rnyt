@@ -15,6 +15,9 @@ export const Widget = () => {
 
   const [delay, setDelay] = useState(localStorage.getItem('delay'));
 
+  const [speed, setSpeed] = useState(Number(localStorage.getItem('speed')));
+  if (!speed) setSpeed(1);
+
   const [play, setPlay] = useState(false);
 
   const [videoId, setVideoId] = useState(localStorage.getItem('id'));
@@ -111,7 +114,7 @@ export const Widget = () => {
             played={0}
             loaded={0}
             duration={0}
-            playbackRate={1.0}
+            playbackRate={speed}
             loop={false}
             width={`auto`}
             height={height - Y_OFFSET}
