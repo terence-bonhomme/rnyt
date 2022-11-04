@@ -107,7 +107,7 @@ export const Widget = () => {
             controls={true}
             playing={play}
             ref={player}
-            pip:false
+            pip={false}
             light={false}
             volume={0.5}
             muted={false}
