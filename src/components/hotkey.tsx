@@ -1,7 +1,7 @@
 import React from 'react';
 import Hotkeys from 'react-hot-keys';
-import { switchToInput } from './utils';
-import { togglePlay, pause, forward, backward, backwardDelay } from './video';
+import { switchToInput } from '../lib/utils';
+import { togglePlay, pause, forward, backward, backwardDelay } from '../lib/video';
 
 /**
  * Hotkeys to control the video when the text input is not shown.

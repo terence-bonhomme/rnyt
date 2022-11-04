@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { addLine, durationToFormatedTime, formatedTimeToDuration, toggleInputNote, getRemTimeStamp } from './utils';
+import { addLine, durationToFormatedTime, formatedTimeToDuration, toggleInputNote, getRemTimeStamp } from '../lib/utils';
 import { RNPlugin, usePlugin } from '@remnote/plugin-sdk'
-import { start } from './video';
+import { start } from '../lib/video';
 import { ENTER_KEYCODE, ESCAPE_KEYCODE } from '../lib/constants';
 
 /**

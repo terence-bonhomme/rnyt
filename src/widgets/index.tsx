@@ -1,7 +1,7 @@
 import { declareIndexPlugin, ReactRNPlugin, WidgetLocation } from '@remnote/plugin-sdk';
 import '../style.css';
 import '../App.css';
-import { setPause } from '../components/video';
+import { setPause } from '../lib/video';
 
 const onActivate = async (plugin: ReactRNPlugin) => {
   await plugin.app.registerCommand({

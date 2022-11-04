@@ -1,9 +1,9 @@
 import { renderWidget, usePlugin, useTracker } from '@remnote/plugin-sdk';
 import KeyboardHotkey from '../components/hotkey';
 import { useRef, useState } from 'react';
-import { isPlaying } from '../components/video';
+import { isPlaying } from '../lib/video';
 import ReactPlayer from 'react-player';
-import { jumpToTimestamp, getRemTimeStamp as getRemTimeStamp, switchToInput } from '../components/utils';
+import { jumpToTimestamp, getRemTimeStamp as getRemTimeStamp, switchToInput } from '../lib/utils';
 import InputNoteInput from '../components/note-input';
 import { COMMANDS_HEIGHT } from '../lib/constants';
 
