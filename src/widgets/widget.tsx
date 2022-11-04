@@ -9,9 +9,9 @@ import InputNoteInput from '../components/note-input';
 export const Widget = () => {
   const plugin = usePlugin();
 
-  const Y_OFFSET = 90;
+  const COMMANDS_HEIGHT = 90;
   let heightSetting = useTracker(() => plugin.settings.getSetting<number>('height'));
-  let height = heightSetting ? heightSetting - Y_OFFSET : 0;
+  let height = heightSetting ? heightSetting : 0;
 
   const [delay, setDelay] = useState(localStorage.getItem('delay'));
 
@@ -117,7 +117,7 @@ export const Widget = () => {
             playbackRate={speed}
             loop={false}
             width={`auto`}
-            height={height - Y_OFFSET}
+            height={height - COMMANDS_HEIGHT}
           />
 
           {/**
