@@ -21,6 +21,11 @@ export const Widget = () => {
 
   const [previousInserted, setPreviousInserted] = useState(false);
 
+  const typeKey: string = String(localStorage.getItem('type'));
+  const pauseKey: string = String(localStorage.getItem('pause'));
+  const forwardKey: string = String(localStorage.getItem('forward'));
+  const backwardKey: string = String(localStorage.getItem('backward'));
+
   // get the react player component to control the video
   const player = useRef<ReactPlayer>(null)
 
@@ -78,7 +83,12 @@ export const Widget = () => {
       {/**
         * Hotkeys when the video is playing
         */}
-      <KeyboardHotkey />
+      <KeyboardHotkey 
+        type={typeKey} 
+        pause={pauseKey}
+        forward={forwardKey}
+        backward={backwardKey}
+      />
 
       {/**
         * The video width could be updated with the class
