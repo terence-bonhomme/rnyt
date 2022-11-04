@@ -21,8 +21,6 @@ const onActivate = async (plugin: ReactRNPlugin) => {
         title: 'Height',
         defaultValue: 580,
       });
-      localStorage.setItem('height', await plugin.settings.getSetting('height'))
-      const height = parseInt(localStorage.getItem('height') as string);
 
       // delay setting
 
@@ -31,7 +29,6 @@ const onActivate = async (plugin: ReactRNPlugin) => {
         title: 'Delay',
         defaultValue: 0,
       });
-      const delay = parseInt(localStorage.getItem('delay') as string);
       localStorage.setItem('delay', await plugin.settings.getSetting('delay'))
 
       // commands
